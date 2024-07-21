@@ -1,18 +1,21 @@
-import { Alert, Pressable, StyleSheet } from "react-native";
-
-// import EditScreenInfo from "@/components/EditScreenInfo";
-import { Text, View } from "@/components/Themed";
+import { Alert, StyleSheet } from "react-native";
+import { Text, View, Pressable, useThemeColor } from "@/components/Themed";
 import { Agenda, AgendaEntry } from "react-native-calendars";
 import events from "@/assets/data/events.json";
+import { useColorScheme } from "@/components/useColorScheme.web";
 
 export default function TabOneScreen() {
+  const colorScheme = useColorScheme();
+  const backgroundColor = useThemeColor({}, "background");
+  const textColor = useThemeColor({}, "text");
+
   const renderItem = (reservation: AgendaEntry, isFirst: boolean) => {
     const fontSize = isFirst ? 16 : 14;
-    const color = isFirst ? "black" : "#43515c";
+    // const color = isFirst ? "black" : "#43515c";
 
     return (
       <Pressable style={[styles.item, { height: reservation.height }]} onPress={() => Alert.alert(reservation.name)}>
-        <Text style={{ fontSize, color }}>{reservation.name}</Text>
+        <Text style={{ fontSize }}>{reservation.name}</Text>
       </Pressable>
     );
   };
@@ -27,11 +30,26 @@ export default function TabOneScreen() {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.title}>Tab One</Text> */}
-      {/* <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> */}
-      {/*
-      <EditScreenInfo path="app/(tabs)/index.tsx" /> */}
-      <Agenda items={events} selected="2024-07-14" renderItem={renderItem} renderEmptyDate={renderEmptyDate} />
+      <Agenda
+        items={events}
+        showClosingKnob={true}
+        minDate="2024-07-13"
+        pastScrollRange={2}
+        futureScrollRange={3}
+        selected="2024-07-15"
+        renderItem={renderItem}
+        renderEmptyDate={renderEmptyDate}
+        theme={{
+          calendarBackground: backgroundColor,
+          textSectionTitleColor: textColor,
+          dayTextColor: textColor,
+          todayTextColor: "#00adf5",
+          selectedDayBackgroundColor: "#00adf5",
+          selectedDayTextColor: "#ffffff",
+          monthTextColor: textColor,
+          indicatorColor: textColor,
+        }}
+      />
     </View>
   );
 }
@@ -39,21 +57,8 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: "center",
-    // justifyContent: "center",
   },
-  // title: {
-  //   fontSize: 20,
-  //   fontWeight: "bold",
-  // },
-  // separator: {
-  //   marginVertical: 30,
-  //   height: 1,
-  //   width: "80%",
-  // },
-
   item: {
-    backgroundColor: "white",
     flex: 1,
     borderRadius: 5,
     padding: 10,
