@@ -7,9 +7,10 @@ import Colors from "@/constants/Colors";
 function TabBar({ state, descriptors, navigation }: any) {
   const textColor = useThemeColor({}, "text");
   const colorScheme = useColorScheme();
+  const shadowColor = Colors[colorScheme ?? "light"].text;
 
   return (
-    <View style={styles.tabBar}>
+    <View style={[styles.tabBar, { shadowColor }]}>
       {state.routes.map((route: any, index: any) => {
         const { options } = descriptors[route.key];
 
@@ -61,9 +62,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 15,
     borderCurve: "continuous",
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 5 },
-    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 2,
     shadowOpacity: 0.1,
     elevation: 1,
   },

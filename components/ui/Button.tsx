@@ -1,5 +1,6 @@
+import Colors from "@/constants/Colors";
 import React from "react";
-import { Text, StyleSheet, Pressable } from "react-native";
+import { Text, StyleSheet, Pressable, useColorScheme } from "react-native";
 
 type ButtonProps = {
   onPress: () => void;
@@ -10,8 +11,10 @@ type ButtonProps = {
 };
 
 const Button = ({ onPress, text, type = "PRIMARY", bgColor, fgColor }: ButtonProps) => {
+  const colorScheme = useColorScheme();
+  const defaultBgColor = Colors[colorScheme ?? "light"].tabIconSelected;
   return (
-    <Pressable onPress={onPress} style={[styles.container, styles[`container_${type}`], bgColor ? { backgroundColor: bgColor } : {}]}>
+    <Pressable onPress={onPress} style={[styles.container, styles[`container_${type}`], bgColor ? { backgroundColor: bgColor } : { backgroundColor: defaultBgColor }]}>
       <Text style={[styles.text, styles[`text_${type}`], fgColor ? { color: fgColor } : {}]}>{text}</Text>
     </Pressable>
   );

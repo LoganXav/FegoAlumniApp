@@ -3,9 +3,10 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
-import { Text as DefaultText, View as DefaultView, Pressable as DefaultPressable, PressableStateCallbackType } from "react-native";
+import { TextInput as DefaultTextInput, Text as DefaultText, View as DefaultView, Pressable as DefaultPressable, PressableStateCallbackType, StyleSheet } from "react-native";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "./useColorScheme";
+import React, { useState } from "react";
 
 type ThemeProps = {
   lightColor?: string;
@@ -14,6 +15,7 @@ type ThemeProps = {
 
 export type TextProps = ThemeProps & DefaultText["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
+export type TextInputProps = ThemeProps & DefaultTextInput["props"];
 export type PressableProps = ThemeProps & React.ComponentProps<typeof DefaultPressable>;
 
 export function useThemeColor(props: { light?: string; dark?: string }, colorName: keyof typeof Colors.light & keyof typeof Colors.dark) {
@@ -49,3 +51,47 @@ export function Pressable(props: PressableProps) {
 
   return <DefaultPressable style={computedStyle} {...otherProps} />;
 }
+
+export function TextField(props: TextInputProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const [isFocused, setIsFocused] = useState(false);
+  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+  const colorScheme = useColorScheme();
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
+  return (
+    <DefaultView
+      style={[
+        styles.container,
+        {
+          borderColor: isFocused ? Colors[colorScheme ?? "light"].tint : Colors[colorScheme ?? "light"].grey,
+        },
+      ]}
+    >
+      <DefaultTextInput style={[styles.textInput, { color }, style]} onFocus={handleFocus} onBlur={handleBlur} {...otherProps} />
+    </DefaultView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    height: 48,
+    borderRadius: 8,
+    borderWidth: 1,
+    paddingLeft: 16,
+    justifyContent: "center",
+  },
+  textInput: {
+    fontSize: 16,
+    width: "100%",
+    height: "100%",
+  },
+});
