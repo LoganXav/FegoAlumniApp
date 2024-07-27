@@ -7,9 +7,9 @@ import { Text, View } from "@/components/Themed";
 export default function AddEventScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add Event</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/add-event.tsx" />
+      <Text style={styles.title}>Fill out this form to register a new event</Text>
+      {/* <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> */}
+      {/* <EditScreenInfo path="app/add-event.tsx" /> */}
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
@@ -20,12 +20,13 @@ export default function AddEventScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    padding: 15,
+    // alignItems: "center",
+    // justifyContent: "center",
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    // fontWeight: "bold",
   },
   separator: {
     marginVertical: 30,
