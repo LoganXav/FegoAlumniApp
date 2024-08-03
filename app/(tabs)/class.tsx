@@ -1,20 +1,19 @@
 import { Dimensions, FlatList, StyleSheet } from "react-native";
 
 import { View } from "@/components/Themed";
-
 import * as Animatable from "react-native-animatable";
 import { useEffect, useRef } from "react";
 import { Animations } from "@/constants/animations";
 import EmptyListInfo from "@/components/empty-list-info";
 import { useNavigation } from "expo-router";
-import ListItem from "@/components/class-list-item";
+import ClassListItem from "@/components/class-list-item";
 
 export default function TabTwoScreen({}) {
   const navigation = useNavigation();
   const viewRef = useRef(null);
   const animation = Animations[Math.floor(Math.random() * Animations.length)];
 
-  const renderItem = ({ item, index }: { item: Record<string, any>; index: number }) => <ListItem item={item} index={index} animation={animation} />;
+  const renderItem = ({ item, index }: { item: Record<string, any>; index: number }) => <ClassListItem item={item} index={index} animation={animation} />;
 
   const ListEmptyComponent = () => {
     return (
@@ -48,13 +47,5 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
     alignItems: "center",
     justifyContent: "center",
-  },
-  listItem: {
-    height: 200,
-    width: Dimensions.get("window").width / 2 - 16,
-
-    borderBottomWidth: 0.1,
-    margin: 8,
-    borderRadius: 5,
   },
 });

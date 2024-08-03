@@ -50,7 +50,7 @@ export default function TabLayout() {
           title: "Directory",
           tabBarIcon: ({ color }) => <TabBarIcon name="team" color={color} />,
           headerRight: () => {
-            if (true) {
+            if (false) {
               return;
             }
             return (
@@ -68,7 +68,7 @@ export default function TabLayout() {
           title: "Memo",
           tabBarIcon: ({ color }) => <TabBarIcon name="notification" color={color} />,
           headerRight: () => {
-            if (true) {
+            if (false) {
               return;
             }
             return (
@@ -86,7 +86,7 @@ export default function TabLayout() {
           title: "Profile",
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
           headerRight: () => {
-            if (true) {
+            if (false) {
               return;
             }
             return (
