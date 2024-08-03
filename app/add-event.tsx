@@ -9,11 +9,18 @@ export default function AddEventScreen() {
       <Text style={styles.title}>Fill out this form to register a new event</Text>
 
       <View style={styles.form}>
-        <TextField placeholder="What is the name of the event?" />
-        <TextField placeholder="What is the title of the event?" />
-        <TextField placeholder="What is the name of the event?" />
-        <TextField placeholder="What is the name of the event?" />
-        <TextField placeholder="What is the name of the event?" />
+        <View style={styles.formGroup}>
+          <Text style={styles.formText}>Event Title</Text>
+          <TextField placeholder="What is the name of the event?" />
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.formText}>Event Title</Text>
+          <TextField placeholder="What is the name of the event?" />
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.formText}>Event Title</Text>
+          <TextField placeholder="What is the name of the event?" />
+        </View>
       </View>
       <View style={styles.button}>
         <Button onPress={() => null} text="Add Event" />
@@ -33,14 +40,20 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
   },
-  form: {
-    marginVertical: 30,
-    gap: 10,
-  },
   button: {
     position: "absolute",
     bottom: 25,
     marginHorizontal: 20,
     width: "100%",
+  },
+  form: {
+    marginVertical: 30,
+    gap: 10,
+  },
+  formGroup: {
+    gap: 8,
+  },
+  formText: {
+    fontSize: 16,
   },
 });

@@ -3,8 +3,10 @@ import { Text, View, Pressable, useThemeColor } from "@/components/Themed";
 import { Agenda, AgendaEntry } from "react-native-calendars";
 import events from "@/assets/data/events.json";
 import { useColorScheme } from "@/components/useColorScheme.web";
+import { RootTabScreenProps } from "@/types";
+import { router } from "expo-router";
 
-export default function TabOneScreen() {
+export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events">) {
   const colorScheme = useColorScheme();
   const backgroundColor = useThemeColor({}, "background");
   const textColor = useThemeColor({}, "text");
@@ -14,7 +16,7 @@ export default function TabOneScreen() {
     // const color = isFirst ? "black" : "#43515c";
 
     return (
-      <Pressable style={[styles.item, { height: reservation.height }]} onPress={() => Alert.alert(reservation.name)}>
+      <Pressable style={[styles.item, { height: reservation.height }]} onPress={() => router.replace("/")}>
         <Text style={{ fontSize }}>{reservation.name}</Text>
       </Pressable>
     );

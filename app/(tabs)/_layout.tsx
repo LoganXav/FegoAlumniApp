@@ -31,11 +31,16 @@ export default function TabLayout() {
           headerTitle: "Upcoming Events",
           title: "Events",
           tabBarIcon: ({ color }) => <TabBarIcon name="calendar" color={color} />,
-          headerRight: () => (
-            <Link href="/add-event" asChild>
-              <Pressable>{({ pressed }) => <AntDesign name="addfolder" size={20} color={Colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
-            </Link>
-          ),
+          headerRight: () => {
+            if (false) {
+              return;
+            }
+            return (
+              <Link href="/add-event" asChild>
+                <Pressable>{({ pressed }) => <AntDesign name="addfolder" size={20} color={Colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
+              </Link>
+            );
+          },
         }}
       />
       <Tabs.Screen
@@ -44,11 +49,16 @@ export default function TabLayout() {
           headerTitle: "Class Directory",
           title: "Directory",
           tabBarIcon: ({ color }) => <TabBarIcon name="team" color={color} />,
-          headerRight: () => (
-            <Link href="/add-member" asChild>
-              <Pressable>{({ pressed }) => <AntDesign name="adduser" size={20} color={Colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
-            </Link>
-          ),
+          headerRight: () => {
+            if (true) {
+              return;
+            }
+            return (
+              <Link href="/add-member" asChild>
+                <Pressable>{({ pressed }) => <AntDesign name="adduser" size={20} color={Colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
+              </Link>
+            );
+          },
         }}
       />
       <Tabs.Screen
@@ -57,11 +67,16 @@ export default function TabLayout() {
           headerTitle: "Announcements",
           title: "Memo",
           tabBarIcon: ({ color }) => <TabBarIcon name="notification" color={color} />,
-          headerRight: () => (
-            <Link href="/add-memo" asChild>
-              <Pressable>{({ pressed }) => <AntDesign name="pluscircleo" size={25} color={Colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
-            </Link>
-          ),
+          headerRight: () => {
+            if (true) {
+              return;
+            }
+            return (
+              <Link href="/add-memo" asChild>
+                <Pressable>{({ pressed }) => <AntDesign name="pluscircleo" size={25} color={Colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
+              </Link>
+            );
+          },
         }}
       />
       <Tabs.Screen
@@ -70,11 +85,16 @@ export default function TabLayout() {
           headerTitle: "My Profile",
           title: "Profile",
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-          headerRight: () => (
-            <Link href="/edit-profile" asChild>
-              <Pressable>{({ pressed }) => <AntDesign name="edit" size={20} color={Colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
-            </Link>
-          ),
+          headerRight: () => {
+            if (true) {
+              return;
+            }
+            return (
+              <Link href="/edit-profile" asChild>
+                <Pressable>{({ pressed }) => <AntDesign name="edit" size={20} color={Colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
+              </Link>
+            );
+          },
         }}
       />
     </Tabs>
