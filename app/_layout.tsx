@@ -56,7 +56,7 @@ function RootLayoutNav() {
         <Stack.Screen name="add-member" options={{ headerBackTitle: "Back", headerTitle: "Add a new member" }} />
         <Stack.Screen name="add-memo" options={{ headerBackTitle: "Back", headerTitle: "Publish an announcement" }} />
         <Stack.Screen name="edit-profile" options={{ headerBackTitle: "Back", headerTitle: "Update your profile" }} />
-        {/* <Stack.Screen name="" options={{ presentation: "modal" }} /> */}
+        <Stack.Screen name="event/[id]" options={{ headerTitle: "Event details", presentation: "modal", animation: "fade" }} />
       </Stack>
     </ThemeProvider>
   );

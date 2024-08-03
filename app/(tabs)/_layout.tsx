@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Tabs } from "expo-router";
 import { Pressable } from "react-native";
-import Colors from "@/constants/Colors";
+import Colors from "@/constants/colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import TabBar from "@/components/layout/TabBar";

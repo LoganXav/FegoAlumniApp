@@ -1,4 +1,4 @@
-import Colors from "@/constants/Colors";
+import Colors from "@/constants/colors";
 import React from "react";
 import { Text, StyleSheet, Pressable, useColorScheme } from "react-native";
 

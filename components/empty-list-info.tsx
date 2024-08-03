@@ -7,7 +7,7 @@ import { Text, View } from "./Themed";
 
 import Colors from "@/constants/colors";
 
-export default function EditScreenInfo({ path }: { path: string }) {
+export default function EmptyListInfo({ path }: { path: string }) {
   return (
     <View>
       <View style={styles.getStartedContainer}>

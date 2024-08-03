@@ -2,7 +2,7 @@ import React from "react";
 import { Text, useThemeColor, View } from "../Themed";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { useColorScheme } from "@/components/useColorScheme";
-import Colors from "@/constants/Colors";
+import Colors from "@/constants/colors";
 
 function TabBar({ state, descriptors, navigation }: any) {
   const textColor = useThemeColor({}, "text");

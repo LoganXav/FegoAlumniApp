@@ -16,7 +16,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events"
     // const color = isFirst ? "black" : "#43515c";
 
     return (
-      <Pressable style={[styles.item, { height: reservation.height }]} onPress={() => router.replace("/")}>
+      <Pressable style={[styles.item, { height: reservation.height }]} onPress={() => router.push("/event/1")}>
         <Text style={{ fontSize }}>{reservation.name}</Text>
       </Pressable>
     );

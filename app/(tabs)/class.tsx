@@ -1,31 +1,60 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, FlatList, StyleSheet } from "react-native";
 
-import EditScreenInfo from "@/components/EditScreenInfo";
-import { Text, View } from "@/components/Themed";
+import { View } from "@/components/Themed";
 
-export default function TabTwoScreen() {
+import * as Animatable from "react-native-animatable";
+import { useEffect, useRef } from "react";
+import { Animations } from "@/constants/animations";
+import EmptyListInfo from "@/components/empty-list-info";
+import { useNavigation } from "expo-router";
+import ListItem from "@/components/class-list-item";
+
+export default function TabTwoScreen({}) {
+  const navigation = useNavigation();
+  const viewRef = useRef(null);
+  const animation = Animations[Math.floor(Math.random() * Animations.length)];
+
+  const renderItem = ({ item, index }: { item: Record<string, any>; index: number }) => <ListItem item={item} index={index} animation={animation} />;
+
+  const ListEmptyComponent = () => {
+    return (
+      <View style={styles.listEmpty}>
+        <EmptyListInfo path="add a member" />
+      </View>
+    );
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (viewRef.current) {
+        viewRef.current.transition({ opacity: 0.5 }, { opacity: 1 }, 500, "ease-in-out-circ");
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation]);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Class Directory</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/class.tsx" />
-    </View>
+    <Animatable.View ref={viewRef} easing={"ease-in-out-circ"} duration={500}>
+      <FlatList data={Array(30).fill({ name: "Micheal Myers", title: "Mr" })} keyExtractor={(_, i) => String(i)} numColumns={2} renderItem={renderItem} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }} ListEmptyComponent={ListEmptyComponent} />
+    </Animatable.View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  listEmpty: {
+    height: Dimensions.get("window").height,
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+  listItem: {
+    height: 200,
+    width: Dimensions.get("window").width / 2 - 16,
+
+    borderBottomWidth: 0.1,
+    margin: 8,
+    borderRadius: 5,
   },
 });
