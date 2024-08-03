@@ -1,18 +1,15 @@
-import React, { useState } from "react";
-import { StyleSheet, TextInput, Button, View } from "react-native";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 import { Text, useThemeColor } from "@/components/Themed";
 
-export default function EventDetailScreen() {
-  const [eventName, setEventName] = useState("");
+export default function MemberDetailsScreen() {
   const backgroundColor = useThemeColor({}, "background");
 
   const handleSave = () => {};
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      <Text style={styles.label}>Event Name</Text>
-      <TextInput style={[styles.input, {}]} placeholder="Enter event name" value={eventName} onChangeText={setEventName} />
-      <Button title="Save" onPress={handleSave} />
+      <Text style={styles.label}>Member Name</Text>
     </View>
   );
 }

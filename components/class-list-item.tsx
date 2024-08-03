@@ -18,7 +18,7 @@ export default function ListItem({ item, index, animation }: { item: Record<stri
   return (
     <Animatable.View animation={animation} duration={300} delay={index * 100}>
       <View style={[styles.listItem, { borderColor: shadowColor }]}>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => router.push("/")}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => router.push("/member/1")}>
           <View style={[styles.image, { backgroundColor: bgColor(index) }]} />
         </TouchableOpacity>
         <View style={styles.detailsContainer}>
