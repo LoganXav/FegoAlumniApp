@@ -7,7 +7,7 @@ import Colors from "@/constants/colors";
 function TabBar({ state, descriptors, navigation }: any) {
   const textColor = useThemeColor({}, "text");
   const colorScheme = useColorScheme();
-  const shadowColor = Colors[colorScheme ?? "light"].text;
+  const shadowColor = Colors[colorScheme ?? "light"].tabIconSelected;
 
   return (
     <View style={[styles.tabBar, { shadowColor }]}>
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 2,
     shadowOpacity: 0.1,
-    elevation: 1,
+    elevation: 3,
   },
   tabBarItem: {
     flex: 1,
