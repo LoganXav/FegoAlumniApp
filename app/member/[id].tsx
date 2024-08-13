@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Text, useThemeColor } from "@/components/Themed";
+import { Text, useThemeColor } from "@/components/ui/themed";
 
 export default function MemberDetailsScreen() {
   const backgroundColor = useThemeColor({}, "background");

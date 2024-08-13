@@ -2,9 +2,9 @@ import React from "react";
 import { Link, Tabs } from "expo-router";
 import { Pressable } from "react-native";
 import Colors from "@/constants/colors";
-import { useColorScheme } from "@/components/useColorScheme";
-import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-import TabBar from "@/components/layout/TabBar";
+import { useColorScheme } from "@/utils/use-color-scheme";
+import { useClientOnlyValue } from "@/utils/use-client-only-value";
+import TabBar from "@/components/layout/tab-bar";
 import { AntDesign } from "@expo/vector-icons";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/

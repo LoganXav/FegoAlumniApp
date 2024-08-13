@@ -1,8 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import { Platform, StyleSheet } from "react-native";
 
-import { Text, TextField, View } from "@/components/Themed";
-import Button from "@/components/ui/Button";
+import { Text, TextField, View } from "@/components/ui/themed";
+import Button from "@/components/ui/button";
 
 export default function AddMemberScreen() {
   return (

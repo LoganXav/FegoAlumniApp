@@ -1,7 +1,7 @@
 import { Dimensions, FlatList, StyleSheet } from "react-native";
 
 import * as Animatable from "react-native-animatable";
-import { View } from "@/components/Themed";
+import { View } from "@/components/ui/themed";
 import { useEffect, useRef } from "react";
 import { useNavigation } from "expo-router";
 import MemoListItem from "@/components/memo-list-item";

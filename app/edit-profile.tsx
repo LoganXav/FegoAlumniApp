@@ -1,9 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { Platform, StyleSheet } from "react-native";
 
-import EditScreenInfo from "@/components/EditScreenInfo";
-import { Text, TextField, View } from "@/components/Themed";
-import Button from "@/components/ui/Button";
+import EditScreenInfo from "@/components/edit-screen-info";
+import { Text, TextField, View } from "@/components/ui/themed";
+import Button from "@/components/ui/button";
 
 export default function EditProfileScreen() {
   return (

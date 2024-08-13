@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, TextInput, Button, View } from "react-native";
-import { Text, useThemeColor } from "@/components/Themed";
+import { Text, useThemeColor } from "@/components/ui/themed";
 
 export default function EventDetailScreen() {
   const [eventName, setEventName] = useState("");

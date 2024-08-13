@@ -1,12 +1,12 @@
 import { Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 
-import { Text, View, useThemeColor } from "@/components/Themed";
+import { Text, View, useThemeColor } from "@/components/ui/themed";
 
 import * as Animatable from "react-native-animatable";
 import Colors from "@/constants/colors";
 import { router } from "expo-router";
-import Icon from "@/components/icons";
-import { useColorScheme } from "@/components/useColorScheme";
+import Icon from "@/utils/icons";
+import { useColorScheme } from "@/utils/use-color-scheme";
 
 const colorAr = ["#637aff", "#60c5a8", "#CCCCCC", "#ff5454", "#039a83", "#dcb834", "#8f06e4", "skyblue", "#ff4c98"];
 const bgColor = (i: number) => colorAr[i % colorAr.length];

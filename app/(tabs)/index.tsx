@@ -1,8 +1,8 @@
 import { Alert, StyleSheet } from "react-native";
-import { Text, View, Pressable, useThemeColor } from "@/components/Themed";
+import { Text, View, Pressable, useThemeColor } from "@/components/ui/themed";
 import { Agenda, AgendaEntry } from "react-native-calendars";
 import events from "@/assets/data/events.json";
-import { useColorScheme } from "@/components/useColorScheme.web";
+import { useColorScheme } from "@/utils/use-color-scheme.web";
 import { RootTabScreenProps } from "@/types";
 import { router } from "expo-router";
 

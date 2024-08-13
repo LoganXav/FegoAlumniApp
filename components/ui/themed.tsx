@@ -4,7 +4,7 @@
  */
 
 import { TextInput as DefaultTextInput, Text as DefaultText, View as DefaultView, Pressable as DefaultPressable, PressableStateCallbackType, StyleSheet } from "react-native";
-import { useColorScheme } from "./useColorScheme";
+import { useColorScheme } from "../../utils/use-color-scheme";
 import React, { useState } from "react";
 import Colors from "@/constants/colors";
 

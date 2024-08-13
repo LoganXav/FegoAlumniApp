@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, useThemeColor, View } from "../Themed";
+import { Text, useThemeColor, View } from "../ui/themed";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { useColorScheme } from "@/components/useColorScheme";
+import { useColorScheme } from "@/utils/use-color-scheme";
 import Colors from "@/constants/colors";
 
 function TabBar({ state, descriptors, navigation }: any) {

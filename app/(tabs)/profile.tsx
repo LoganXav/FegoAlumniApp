@@ -1,8 +1,8 @@
 import { Image, ScrollView, StyleSheet } from "react-native";
 import ProfileImage from "@/assets/images/selfie.png";
-import { useColorScheme } from "@/components/useColorScheme";
-import { Text, View } from "@/components/Themed";
-import Button from "@/components/ui/Button";
+import { useColorScheme } from "@/utils/use-color-scheme";
+import { Text, View } from "@/components/ui/themed";
+import Button from "@/components/ui/button";
 import { router } from "expo-router";
 import Colors from "@/constants/colors";
 import ImageCarousel from "@/components/carousel/image-carousel";
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   button: {
     marginHorizontal: 20,
     width: "100%",
-    paddingBottom: 300,
+    paddingBottom: 100,
     paddingTop: 20,
   },
   infoCard: {
