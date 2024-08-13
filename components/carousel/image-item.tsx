@@ -2,7 +2,7 @@ import { StyleSheet, Image, View } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import Animated, { useAnimatedStyle, interpolate } from "react-native-reanimated";
 
-const CustomImage = ({ item, x, index, size, spacer }) => {
+const CustomImage = ({ item, x, index, size, spacer }: Record<string, any>) => {
   const [aspectRatio, setAspectRatio] = useState(1);
 
   // Get Image Width and Height to Calculate AspectRatio

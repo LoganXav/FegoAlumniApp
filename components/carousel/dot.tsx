@@ -1,10 +1,10 @@
 import { StyleSheet } from "react-native";
 import React from "react";
-import { useColorScheme } from "@/components/useColorScheme";
+import { useColorScheme } from "@/utils/use-color-scheme";
 import Colors from "@/constants/colors";
 import Animated, { useAnimatedStyle, interpolate, Extrapolation } from "react-native-reanimated";
 
-const Dot = ({ x, index, size }) => {
+const Dot = ({ x, index, size }: Record<string, any>) => {
   const colorScheme = useColorScheme();
   const dotBackgroundColor = Colors[colorScheme ?? "light"].tabIconSelected;
 

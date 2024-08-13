@@ -4,7 +4,7 @@ import Animated, { useSharedValue, useAnimatedScrollHandler, useAnimatedRef } fr
 import CustomImage from "./image-item";
 import Pagination from "./pagination";
 
-const ImageCarousel = ({ data, autoPlay, pagination }) => {
+const ImageCarousel = ({ data, autoPlay, pagination }: Record<string, any>) => {
   const scrollViewRef = useAnimatedRef(null);
   const interval = useRef();
   const [isAutoPlay, setIsAutoPlay] = useState(autoPlay);
