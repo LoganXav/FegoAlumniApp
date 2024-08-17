@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from "react";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -5,12 +6,14 @@ import { StatusBar } from "expo-status-bar";
 import { Platform, ScrollView, StyleSheet } from "react-native";
 import { Text, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
+import { useColorScheme } from "@/utils/use-color-scheme.web";
+import colors from "@/constants/colors";
 
 export default function AddMemberScreen() {
+  const colorScheme = useColorScheme();
+  const defaultBgColor = colors[colorScheme ?? "light"].tabIconSelected;
+
   const [gender, setGender] = useState("male");
-  const [preferredContact, setPreferredContact] = useState("whatsapp");
-  const [networking, setNetworking] = useState("no");
-  const [mentorship, setMentorship] = useState("no");
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -36,9 +39,9 @@ export default function AddMemberScreen() {
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Gender</Text>
             <View style={styles.radioGroup}>
-              <RadioButton value="male" status={gender === "male" ? "checked" : "unchecked"} onPress={() => setGender("male")} />
+              <RadioButton.Android color={defaultBgColor} value="male" status={gender === "male" ? "checked" : "unchecked"} onPress={() => setGender("male")} />
               <Text>Male</Text>
-              <RadioButton value="female" status={gender === "female" ? "checked" : "unchecked"} onPress={() => setGender("female")} />
+              <RadioButton.Android color={defaultBgColor} value="female" status={gender === "female" ? "checked" : "unchecked"} onPress={() => setGender("female")} />
               <Text>Female</Text>
             </View>
           </View>

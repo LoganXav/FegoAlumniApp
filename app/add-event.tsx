@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from "react";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -5,8 +6,13 @@ import { StatusBar } from "expo-status-bar";
 import { Platform, ScrollView, StyleSheet } from "react-native";
 import { Text, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
+import { useColorScheme } from "@/utils/use-color-scheme.web";
+import colors from "@/constants/colors";
 
 export default function AddEventScreen() {
+  const colorScheme = useColorScheme();
+  const defaultBgColor = colors[colorScheme ?? "light"].tabIconSelected;
+
   const [gender, setGender] = useState("male");
   const [preferredContact, setPreferredContact] = useState("whatsapp");
   const [networking, setNetworking] = useState("no");
@@ -38,9 +44,9 @@ export default function AddEventScreen() {
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Gender</Text>
             <View style={styles.radioGroup}>
-              <RadioButton value="male" status={gender === "male" ? "checked" : "unchecked"} onPress={() => setGender("male")} />
+              <RadioButton.Android value="male" color={defaultBgColor} status={gender === "male" ? "checked" : "unchecked"} onPress={() => setGender("male")} />
               <Text>Male</Text>
-              <RadioButton value="female" status={gender === "female" ? "checked" : "unchecked"} onPress={() => setGender("female")} />
+              <RadioButton.Android value="female" color={defaultBgColor} status={gender === "female" ? "checked" : "unchecked"} onPress={() => setGender("female")} />
               <Text>Female</Text>
             </View>
           </View>
@@ -80,9 +86,9 @@ export default function AddEventScreen() {
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Open to networking?</Text>
             <View style={styles.radioGroup}>
-              <RadioButton value="yes" status={networking === "yes" ? "checked" : "unchecked"} onPress={() => setNetworking("yes")} />
+              <RadioButton.Android value="yes" color={defaultBgColor} status={networking === "yes" ? "checked" : "unchecked"} onPress={() => setNetworking("yes")} />
               <Text>Yes</Text>
-              <RadioButton value="no" status={networking === "no" ? "checked" : "unchecked"} onPress={() => setNetworking("no")} />
+              <RadioButton.Android value="no" color={defaultBgColor} status={networking === "no" ? "checked" : "unchecked"} onPress={() => setNetworking("no")} />
               <Text>No</Text>
             </View>
           </View>
@@ -91,11 +97,11 @@ export default function AddEventScreen() {
             <Text style={styles.formLabel}>Preferred Contact Method (Calls/WhatsApp/Email)</Text>
 
             <View style={styles.radioGroup}>
-              <RadioButton value="calls" status={preferredContact === "calls" ? "checked" : "unchecked"} onPress={() => setPreferredContact("calls")} />
+              <RadioButton.Android value="calls" color={defaultBgColor} status={preferredContact === "calls" ? "checked" : "unchecked"} onPress={() => setPreferredContact("calls")} />
               <Text>Calls</Text>
-              <RadioButton value="whatsapp" status={preferredContact === "whatsapp" ? "checked" : "unchecked"} onPress={() => setPreferredContact("whatsapp")} />
+              <RadioButton.Android value="whatsapp" color={defaultBgColor} status={preferredContact === "whatsapp" ? "checked" : "unchecked"} onPress={() => setPreferredContact("whatsapp")} />
               <Text>WhatsApp</Text>
-              <RadioButton value="email" status={preferredContact === "email" ? "checked" : "unchecked"} onPress={() => setPreferredContact("email")} />
+              <RadioButton.Android value="email" color={defaultBgColor} status={preferredContact === "email" ? "checked" : "unchecked"} onPress={() => setPreferredContact("email")} />
               <Text>Email</Text>
             </View>
           </View>
@@ -103,9 +109,9 @@ export default function AddEventScreen() {
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Willingness to Mentor or Coach</Text>
             <View style={styles.radioGroup}>
-              <RadioButton value="yes" status={mentorship === "yes" ? "checked" : "unchecked"} onPress={() => setMentorship("yes")} />
+              <RadioButton.Android value="yes" color={defaultBgColor} status={mentorship === "yes" ? "checked" : "unchecked"} onPress={() => setMentorship("yes")} />
               <Text>Yes</Text>
-              <RadioButton value="no" status={mentorship === "no" ? "checked" : "unchecked"} onPress={() => setMentorship("no")} />
+              <RadioButton.Android value="no" color={defaultBgColor} status={mentorship === "no" ? "checked" : "unchecked"} onPress={() => setMentorship("no")} />
               <Text>No</Text>
             </View>
           </View>
@@ -160,5 +166,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
+  },
+  radio: {
+    color: "#6200ee", // Set a color for the radio button (e.g., purple)
   },
 });

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from "react";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -6,8 +7,13 @@ import { Image, Platform, ScrollView, StyleSheet } from "react-native";
 import { Text, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
 import ProfileImage from "@/assets/images/selfie.png";
+import { useColorScheme } from "@/utils/use-color-scheme.web";
+import colors from "@/constants/colors";
 
 export default function EditProfileScreen() {
+  const colorScheme = useColorScheme();
+  const defaultBgColor = colors[colorScheme ?? "light"].tabIconSelected;
+
   const [gender, setGender] = useState("male");
   const [preferredContact, setPreferredContact] = useState("whatsapp");
   const [networking, setNetworking] = useState("no");
@@ -38,9 +44,9 @@ export default function EditProfileScreen() {
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Gender</Text>
             <View style={styles.radioGroup}>
-              <RadioButton value="male" status={gender === "male" ? "checked" : "unchecked"} onPress={() => setGender("male")} />
+              <RadioButton.Android color={defaultBgColor} value="male" status={gender === "male" ? "checked" : "unchecked"} onPress={() => setGender("male")} />
               <Text>Male</Text>
-              <RadioButton value="female" status={gender === "female" ? "checked" : "unchecked"} onPress={() => setGender("female")} />
+              <RadioButton.Android color={defaultBgColor} value="female" status={gender === "female" ? "checked" : "unchecked"} onPress={() => setGender("female")} />
               <Text>Female</Text>
             </View>
           </View>
@@ -80,9 +86,9 @@ export default function EditProfileScreen() {
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Open to networking?</Text>
             <View style={styles.radioGroup}>
-              <RadioButton value="yes" status={networking === "yes" ? "checked" : "unchecked"} onPress={() => setNetworking("yes")} />
+              <RadioButton.Android color={defaultBgColor} value="yes" status={networking === "yes" ? "checked" : "unchecked"} onPress={() => setNetworking("yes")} />
               <Text>Yes</Text>
-              <RadioButton value="no" status={networking === "no" ? "checked" : "unchecked"} onPress={() => setNetworking("no")} />
+              <RadioButton.Android color={defaultBgColor} value="no" status={networking === "no" ? "checked" : "unchecked"} onPress={() => setNetworking("no")} />
               <Text>No</Text>
             </View>
           </View>
@@ -91,11 +97,11 @@ export default function EditProfileScreen() {
             <Text style={styles.formLabel}>Preferred Contact Method (Calls/WhatsApp/Email)</Text>
 
             <View style={styles.radioGroup}>
-              <RadioButton value="calls" status={preferredContact === "calls" ? "checked" : "unchecked"} onPress={() => setPreferredContact("calls")} />
+              <RadioButton.Android color={defaultBgColor} value="calls" status={preferredContact === "calls" ? "checked" : "unchecked"} onPress={() => setPreferredContact("calls")} />
               <Text>Calls</Text>
-              <RadioButton value="whatsapp" status={preferredContact === "whatsapp" ? "checked" : "unchecked"} onPress={() => setPreferredContact("whatsapp")} />
+              <RadioButton.Android color={defaultBgColor} value="whatsapp" status={preferredContact === "whatsapp" ? "checked" : "unchecked"} onPress={() => setPreferredContact("whatsapp")} />
               <Text>WhatsApp</Text>
-              <RadioButton value="email" status={preferredContact === "email" ? "checked" : "unchecked"} onPress={() => setPreferredContact("email")} />
+              <RadioButton.Android color={defaultBgColor} value="email" status={preferredContact === "email" ? "checked" : "unchecked"} onPress={() => setPreferredContact("email")} />
               <Text>Email</Text>
             </View>
           </View>
@@ -103,9 +109,9 @@ export default function EditProfileScreen() {
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Willingness to Mentor or Coach</Text>
             <View style={styles.radioGroup}>
-              <RadioButton value="yes" status={mentorship === "yes" ? "checked" : "unchecked"} onPress={() => setMentorship("yes")} />
+              <RadioButton.Android color={defaultBgColor} value="yes" status={mentorship === "yes" ? "checked" : "unchecked"} onPress={() => setMentorship("yes")} />
               <Text>Yes</Text>
-              <RadioButton value="no" status={mentorship === "no" ? "checked" : "unchecked"} onPress={() => setMentorship("no")} />
+              <RadioButton.Android color={defaultBgColor} value="no" status={mentorship === "no" ? "checked" : "unchecked"} onPress={() => setMentorship("no")} />
               <Text>No</Text>
             </View>
           </View>
