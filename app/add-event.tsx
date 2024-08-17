@@ -3,27 +3,53 @@ import React, { useState } from "react";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { StatusBar } from "expo-status-bar";
-import { Platform, ScrollView, StyleSheet } from "react-native";
+import { Platform, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
 import { useColorScheme } from "@/utils/use-color-scheme.web";
 import colors from "@/constants/colors";
+import { AntDesign } from "@expo/vector-icons"; // Import AntDesign for icons
 
 export default function AddEventScreen() {
   const colorScheme = useColorScheme();
   const defaultBgColor = colors[colorScheme ?? "light"].tabIconSelected;
 
-  const [gender, setGender] = useState("male");
-  const [preferredContact, setPreferredContact] = useState("whatsapp");
-  const [networking, setNetworking] = useState("no");
-  const [mentorship, setMentorship] = useState("no");
-  const [dateOfBirth, setDateOfBirth] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  // New State Variables for Event Form
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [activities, setActivities] = useState([{ title: "", startTime: new Date(), endTime: new Date() }]);
 
   const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || dateOfBirth;
     setShowDatePicker(Platform.OS === "ios");
     setDateOfBirth(currentDate);
+  };
+
+  const onChangeStartDate = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate || startDate;
+    setStartDate(currentDate);
+  };
+
+  const onChangeEndDate = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate || endDate;
+    setEndDate(currentDate);
+  };
+
+  const handleActivityChange = (index: number, key: string, value: any) => {
+    const updatedActivities = [...activities];
+    updatedActivities[index][key] = value;
+    setActivities(updatedActivities);
+  };
+
+  const addActivity = () => {
+    setActivities([...activities, { title: "", startTime: new Date(), endTime: new Date() }]);
+  };
+
+  const deleteActivity = (index: number) => {
+    const updatedActivities = activities.filter((_, i) => i !== index);
+    setActivities(updatedActivities);
   };
 
   return (
@@ -32,93 +58,56 @@ export default function AddEventScreen() {
         <Text style={styles.title}>Fill out this form to register a new event</Text>
 
         <View style={styles.form}>
-          <Text style={styles.sectionHeader}>Personal Information</Text>
+          <Text style={styles.sectionHeader}>Event Details</Text>
           <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>First Name</Text>
-            <TextField placeholder="Type your name" />
+            <Text style={styles.formLabel}>Event Title</Text>
+            <TextField placeholder="Enter the event title" />
           </View>
           <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Last Name</Text>
-            <TextField placeholder="Type your name" />
+            <Text style={styles.formLabel}>Venue</Text>
+            <TextField placeholder="Enter the event venue" />
           </View>
           <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Gender</Text>
-            <View style={styles.radioGroup}>
-              <RadioButton.Android value="male" color={defaultBgColor} status={gender === "male" ? "checked" : "unchecked"} onPress={() => setGender("male")} />
-              <Text>Male</Text>
-              <RadioButton.Android value="female" color={defaultBgColor} status={gender === "female" ? "checked" : "unchecked"} onPress={() => setGender("female")} />
-              <Text>Female</Text>
+            <Text style={styles.formLabel}>Start Date</Text>
+            <TextField placeholder="Select the start date" value={startDate.toDateString()} />
+            {showDatePicker === "start" && <DateTimePicker value={startDate} mode="date" display="default" onChange={onChangeStartDate} />}
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>End Date</Text>
+            <TextField placeholder="Select the end date" value={endDate.toDateString()} />
+            {showDatePicker === "end" && <DateTimePicker value={endDate} mode="date" display="default" onChange={onChangeEndDate} />}
+          </View>
+
+          <Text style={styles.sectionHeader}>Day Activities</Text>
+          {activities.map((activity, index) => (
+            <View key={index} style={styles.activityContainer}>
+              <View style={styles.activityHeader}>
+                <Text style={styles.activityTitle}>Activity {index + 1}</Text>
+                <TouchableOpacity style={styles.deleteButton} onPress={() => deleteActivity(index)}>
+                  <AntDesign name="delete" size={20} color="red" />
+                  <Text style={styles.deleteButtonText}>Remove Activity</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Activity Title</Text>
+                <TextField placeholder="Enter the activity title" value={activity.title} onChangeText={(text) => handleActivityChange(index, "title", text)} />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Start Time</Text>
+                <TextField placeholder="Select the start time" value={activity.startTime.toLocaleTimeString()} />
+                {showDatePicker === `startTime-${index}` && <DateTimePicker value={activity.startTime} mode="time" display="default" onChange={(event, selectedTime) => handleActivityChange(index, "startTime", selectedTime)} />}
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>End Time</Text>
+                <TextField placeholder="Select the end time" value={activity.endTime.toLocaleTimeString()} />
+                {showDatePicker === `endTime-${index}` && <DateTimePicker value={activity.endTime} mode="time" display="default" onChange={(event, selectedTime) => handleActivityChange(index, "endTime", selectedTime)} />}
+              </View>
             </View>
-          </View>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Date of Birth</Text>
-            <TextField placeholder="Select your date of birth" value={dateOfBirth.toDateString()} onPressIn={() => setShowDatePicker(true)} />
-            {showDatePicker && <DateTimePicker value={dateOfBirth} mode="date" display="default" onChange={onChangeDate} />}
-          </View>
-          <Text style={styles.sectionHeader}>Contact Details</Text>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Email Address</Text>
-            <TextField placeholder="Type your email address" />
-          </View>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Phone Number (Optional)</Text>
-            <TextField placeholder="Type your phone number" />
-          </View>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Address (Country, State, City)</Text>
-            <TextField placeholder="Type your address" />
-          </View>
-          <Text style={styles.sectionHeader}>Professional</Text>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Current Employer (Optional)</Text>
-            <TextField placeholder="Type your organization name" />
-          </View>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Job Title</Text>
-            <TextField placeholder="Type your job title" />
-          </View>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Industry</Text>
-            <TextField placeholder="Type your organization's industry" />
-          </View>
-          <Text style={styles.sectionHeader}>Networking Preferences</Text>
-
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Open to networking?</Text>
-            <View style={styles.radioGroup}>
-              <RadioButton.Android value="yes" color={defaultBgColor} status={networking === "yes" ? "checked" : "unchecked"} onPress={() => setNetworking("yes")} />
-              <Text>Yes</Text>
-              <RadioButton.Android value="no" color={defaultBgColor} status={networking === "no" ? "checked" : "unchecked"} onPress={() => setNetworking("no")} />
-              <Text>No</Text>
-            </View>
-          </View>
-
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Preferred Contact Method (Calls/WhatsApp/Email)</Text>
-
-            <View style={styles.radioGroup}>
-              <RadioButton.Android value="calls" color={defaultBgColor} status={preferredContact === "calls" ? "checked" : "unchecked"} onPress={() => setPreferredContact("calls")} />
-              <Text>Calls</Text>
-              <RadioButton.Android value="whatsapp" color={defaultBgColor} status={preferredContact === "whatsapp" ? "checked" : "unchecked"} onPress={() => setPreferredContact("whatsapp")} />
-              <Text>WhatsApp</Text>
-              <RadioButton.Android value="email" color={defaultBgColor} status={preferredContact === "email" ? "checked" : "unchecked"} onPress={() => setPreferredContact("email")} />
-              <Text>Email</Text>
-            </View>
-          </View>
-
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Willingness to Mentor or Coach</Text>
-            <View style={styles.radioGroup}>
-              <RadioButton.Android value="yes" color={defaultBgColor} status={mentorship === "yes" ? "checked" : "unchecked"} onPress={() => setMentorship("yes")} />
-              <Text>Yes</Text>
-              <RadioButton.Android value="no" color={defaultBgColor} status={mentorship === "no" ? "checked" : "unchecked"} onPress={() => setMentorship("no")} />
-              <Text>No</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.button}>
-          <Button onPress={() => null} text="Add Event" />
+          ))}
+          <TouchableOpacity style={styles.addButton} onPress={addActivity}>
+            <AntDesign name="pluscircleo" size={24} color={defaultBgColor} />
+            <Text style={styles.addButtonText}>Add Another Activity</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Use a light status bar on iOS to account for the black space above the modal */}
@@ -146,12 +135,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingTop: 20,
   },
-  button: {
-    position: "absolute",
-    bottom: 25,
-    marginHorizontal: 20,
-    width: "100%",
-  },
   form: {
     marginVertical: 30,
     gap: 10,
@@ -162,12 +145,37 @@ const styles = StyleSheet.create({
   formLabel: {
     fontSize: 14,
   },
-  radioGroup: {
-    flexDirection: "row",
-    alignItems: "center",
+  activityContainer: {
+    paddingTop: 15,
+    // backgroundColor: "#f0f0f0",
+    borderRadius: 8,
+    marginBottom: 10,
     gap: 10,
   },
-  radio: {
-    color: "#6200ee", // Set a color for the radio button (e.g., purple)
+  activityHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  activityTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  addButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  addButtonText: {
+    marginLeft: 10,
+    fontSize: 16,
+  },
+  deleteButtonText: {
+    marginLeft: 10,
+    fontSize: 16,
+  },
+  deleteButton: {
+    flexDirection: "row",
   },
 });
