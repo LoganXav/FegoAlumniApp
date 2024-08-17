@@ -14,6 +14,7 @@ export default function AddMemberScreen() {
   const defaultBgColor = colors[colorScheme ?? "light"].tabIconSelected;
 
   const [gender, setGender] = useState("male");
+  const [hasAdmin, setHasAdmin] = useState("no");
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -76,10 +77,21 @@ export default function AddMemberScreen() {
             <Text style={styles.formLabel}>Industry</Text>
             <TextField placeholder="Type your organization's industry" />
           </View> */}
+
+          <Text style={styles.sectionHeader}>Admin Priviledges</Text>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Should have Admin Priviledges?</Text>
+            <View style={styles.radioGroup}>
+              <RadioButton.Android color={defaultBgColor} value="yes" status={hasAdmin === "yes" ? "checked" : "unchecked"} onPress={() => setHasAdmin("yes")} />
+              <Text>Yes</Text>
+              <RadioButton.Android color={defaultBgColor} value="no" status={hasAdmin === "no" ? "checked" : "unchecked"} onPress={() => setHasAdmin("no")} />
+              <Text>No</Text>
+            </View>
+          </View>
         </View>
 
         <View style={styles.button}>
-          <Button onPress={() => null} text="Add Event" />
+          <Button onPress={() => null} text="Add Member" />
         </View>
 
         {/* Use a light status bar on iOS to account for the black space above the modal */}

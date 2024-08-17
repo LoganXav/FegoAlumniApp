@@ -107,7 +107,7 @@ export default function EditProfileScreen() {
           </View>
 
           <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Willingness to Mentor or Coach</Text>
+            <Text style={styles.formLabel}>Willing to Mentor or Coach?</Text>
             <View style={styles.radioGroup}>
               <RadioButton.Android color={defaultBgColor} value="yes" status={mentorship === "yes" ? "checked" : "unchecked"} onPress={() => setMentorship("yes")} />
               <Text>Yes</Text>
@@ -118,7 +118,7 @@ export default function EditProfileScreen() {
         </View>
 
         <View style={styles.button}>
-          <Button onPress={() => null} text="Add Event" />
+          <Button onPress={() => null} text="Update Profile" />
         </View>
 
         {/* Use a light status bar on iOS to account for the black space above the modal */}
