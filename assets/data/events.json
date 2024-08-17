@@ -4,7 +4,7 @@
     {
       "id": "1",
       "name": "Live: notJust.Hack Kickstart",
-      "height": 50,
+      "height": 100,
       "day": "2024-07-14"
     }
   ],
@@ -12,7 +12,7 @@
     {
       "id": "2",
       "name": "Workshop: Build any mobile application with React Native",
-      "height": 50,
+      "height": 100,
       "day": "2024-07-15"
     },
     {
@@ -38,7 +38,7 @@
     {
       "id": "4",
       "name": "Workshop: Build a Chat application in hours using Stream",
-      "height": 50,
+      "height": 100,
       "day": "2024-07-16"
     },
     {
@@ -52,7 +52,7 @@
     {
       "id": "6",
       "name": "Workshop: Build Full-Stack applications with Nhost",
-      "height": 50,
+      "height": 100,
       "day": "2024-07-17"
     },
     {
@@ -84,7 +84,7 @@
     {
       "id": "8",
       "name": "Demo Day",
-      "height": 50,
+      "height": 100,
       "day": "2024-07-18"
     }
   ]
