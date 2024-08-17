@@ -1,34 +1,87 @@
+import React, { useState } from "react";
+import { RadioButton } from "react-native-paper";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet } from "react-native";
-
+import { Platform, ScrollView, StyleSheet } from "react-native";
 import { Text, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
 
 export default function AddMemberScreen() {
+  const [gender, setGender] = useState("male");
+  const [preferredContact, setPreferredContact] = useState("whatsapp");
+  const [networking, setNetworking] = useState("no");
+  const [mentorship, setMentorship] = useState("no");
+  const [dateOfBirth, setDateOfBirth] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const onChangeDate = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate || dateOfBirth;
+    setShowDatePicker(Platform.OS === "ios");
+    setDateOfBirth(currentDate);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Fill out this form to register a new event</Text>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.form}>
+          <Text style={styles.sectionHeader}>Personal Information</Text>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>First Name</Text>
+            <TextField placeholder="Type your name" />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Last Name</Text>
+            <TextField placeholder="Type your name" />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Gender</Text>
+            <View style={styles.radioGroup}>
+              <RadioButton value="male" status={gender === "male" ? "checked" : "unchecked"} onPress={() => setGender("male")} />
+              <Text>Male</Text>
+              <RadioButton value="female" status={gender === "female" ? "checked" : "unchecked"} onPress={() => setGender("female")} />
+              <Text>Female</Text>
+            </View>
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Date of Birth</Text>
+            <TextField placeholder="Select your date of birth" value={dateOfBirth.toDateString()} onPressIn={() => setShowDatePicker(true)} />
+            {showDatePicker && <DateTimePicker value={dateOfBirth} mode="date" display="default" onChange={onChangeDate} />}
+          </View>
+          <Text style={styles.sectionHeader}>Contact Details</Text>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Email Address</Text>
+            <TextField placeholder="Type your email address" />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Phone Number (Optional)</Text>
+            <TextField placeholder="Type your phone number" />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Address (Country, State, City)</Text>
+            <TextField placeholder="Type your address" />
+          </View>
+          {/* <Text style={styles.sectionHeader}>Professional</Text>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Current Employer (Optional)</Text>
+            <TextField placeholder="Type your organization name" />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Job Title</Text>
+            <TextField placeholder="Type your job title" />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Industry</Text>
+            <TextField placeholder="Type your organization's industry" />
+          </View> */}
+        </View>
 
-      <View style={styles.form}>
-        <View style={styles.formGroup}>
-          <Text style={styles.formText}>Event Title</Text>
-          <TextField placeholder="What is the name of the event?" />
+        <View style={styles.button}>
+          <Button onPress={() => null} text="Add Event" />
         </View>
-        <View style={styles.formGroup}>
-          <Text style={styles.formText}>Event Title</Text>
-          <TextField placeholder="What is the name of the event?" />
-        </View>
-        <View style={styles.formGroup}>
-          <Text style={styles.formText}>Event Title</Text>
-          <TextField placeholder="What is the name of the event?" />
-        </View>
-      </View>
-      <View style={styles.button}>
-        <Button onPress={() => null} text="Add Event" />
-      </View>
 
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+        {/* Use a light status bar on iOS to account for the black space above the modal */}
+        <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+      </ScrollView>
     </View>
   );
 }
@@ -36,10 +89,19 @@ export default function AddMemberScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
     padding: 15,
+    paddingBottom: 100,
   },
   title: {
     fontSize: 18,
+  },
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: "bold",
+    paddingTop: 20,
   },
   button: {
     position: "absolute",
@@ -54,7 +116,12 @@ const styles = StyleSheet.create({
   formGroup: {
     gap: 8,
   },
-  formText: {
-    fontSize: 16,
+  formLabel: {
+    fontSize: 14,
+  },
+  radioGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
 });

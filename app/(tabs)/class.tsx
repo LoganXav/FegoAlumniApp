@@ -10,7 +10,7 @@ import ClassListItem from "@/components/class-list-item";
 
 export default function TabTwoScreen({}) {
   const navigation = useNavigation();
-  const viewRef = useRef(null);
+  const viewRef = useRef(null) as any;
   const animation = Animations[Math.floor(Math.random() * Animations.length)];
 
   const renderItem = ({ item, index }: { item: Record<string, any>; index: number }) => <ClassListItem item={item} index={index} animation={animation} />;

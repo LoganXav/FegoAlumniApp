@@ -5,7 +5,7 @@ import CustomImage from "./image-item";
 import Pagination from "./pagination";
 
 const ImageCarousel = ({ data, autoPlay, pagination }: Record<string, any>) => {
-  const scrollViewRef = useAnimatedRef(null) as any;
+  const scrollViewRef = useAnimatedRef() as any;
   const interval = useRef() as any;
   const [isAutoPlay, setIsAutoPlay] = useState(autoPlay);
   const [newData, setNewData] = useState([{ key: "spacer-left" }, ...data, { key: "spacer-right" }]);

@@ -9,7 +9,7 @@ import { Animations } from "@/constants/animations";
 import EmptyListInfo from "@/components/empty-list-info";
 
 export default function TabThreeScreen() {
-  const viewRef = useRef(null);
+  const viewRef = useRef(null) as any;
   const navigation = useNavigation();
   const animation = Animations[Math.floor(Math.random() * Animations.length)];
 
