@@ -2,14 +2,16 @@ import { Alert, StyleSheet } from "react-native";
 import { Text, View, Pressable, useThemeColor } from "@/components/ui/themed";
 import { Agenda, AgendaEntry } from "react-native-calendars";
 import events from "@/assets/data/events.json";
-import { useColorScheme } from "@/utils/use-color-scheme.web";
+import { useColorScheme } from "@/utils/use-color-scheme";
 import { RootTabScreenProps } from "@/types";
 import { router } from "expo-router";
+import colors from "@/constants/colors";
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events">) {
   const colorScheme = useColorScheme();
-  const backgroundColor = useThemeColor({}, "background");
-  const textColor = useThemeColor({}, "text");
+  const backgroundColor = colors[colorScheme ?? "light"].background;
+  const selectedBackgroundColor = colors[colorScheme ?? "light"].tabIconSelected;
+  const textColor = colors[colorScheme ?? "light"].text;
 
   const renderItem = (event: AgendaEntry, isFirst: boolean) => {
     const fontSize = isFirst ? 18 : 15;
@@ -50,11 +52,11 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events"
           calendarBackground: backgroundColor,
           textSectionTitleColor: textColor,
           dayTextColor: textColor,
-          todayTextColor: "#00adf5",
-          selectedDayBackgroundColor: "#00adf5",
+          todayTextColor: "#333",
+          selectedDayBackgroundColor: selectedBackgroundColor,
           selectedDayTextColor: "#ffffff",
           monthTextColor: textColor,
-          indicatorColor: textColor,
+          indicatorColor: selectedBackgroundColor,
         }}
       />
     </View>
