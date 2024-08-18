@@ -25,7 +25,12 @@ export default function ClassListItem({ item, index, animation }: { item: Record
           <Text style={styles.name}>
             {item.title} {item.name}
           </Text>
-          {item.title === "Mr" && <Icon name="frowno" size={16} color={textColor} />}
+          {item.lifeStatus === "deceased" && (
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 5, backgroundColor: "#5365", borderRadius: 5, paddingHorizontal: 10, paddingVertical: 1 }}>
+              <Text style={{ fontSize: 12 }}>Deceased</Text>
+              <Icon name="star" size={10} color={"gold"} />
+            </View>
+          )}
         </View>
       </View>
     </Animatable.View>
@@ -53,8 +58,9 @@ const styles = StyleSheet.create({
   detailsContainer: {
     paddingHorizontal: 16,
     paddingVertical: 5,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: "column",
+    gap: 5,
+    // justifyContent: "space-between",
+    alignItems: "flex-start",
   },
 });

@@ -15,6 +15,7 @@ export default function AddMemberScreen() {
 
   const [gender, setGender] = useState("male");
   const [hasAdmin, setHasAdmin] = useState("no");
+  const [isDeceased, setIsDeceased] = useState("yes");
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -85,6 +86,17 @@ export default function AddMemberScreen() {
               <RadioButton.Android color={defaultBgColor} value="yes" status={hasAdmin === "yes" ? "checked" : "unchecked"} onPress={() => setHasAdmin("yes")} />
               <Text>Yes</Text>
               <RadioButton.Android color={defaultBgColor} value="no" status={hasAdmin === "no" ? "checked" : "unchecked"} onPress={() => setHasAdmin("no")} />
+              <Text>No</Text>
+            </View>
+          </View>
+
+          <Text style={styles.sectionHeader}>Life Status</Text>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Is this member still with us?</Text>
+            <View style={styles.radioGroup}>
+              <RadioButton.Android color={defaultBgColor} value="yes" status={isDeceased === "yes" ? "checked" : "unchecked"} onPress={() => setIsDeceased("yes")} />
+              <Text>Yes</Text>
+              <RadioButton.Android color={defaultBgColor} value="no" status={isDeceased === "no" ? "checked" : "unchecked"} onPress={() => setIsDeceased("no")} />
               <Text>No</Text>
             </View>
           </View>

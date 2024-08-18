@@ -1,15 +1,14 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { StatusBar } from "expo-status-bar";
-import { Image, Platform, ScrollView, StyleSheet } from "react-native";
+import { FlatList, Image, Platform, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
-import ProfileImage from "@/assets/images/selfie.png";
-import { useColorScheme } from "@/utils/use-color-scheme.web";
+import { useColorScheme } from "@/utils/use-color-scheme";
 import colors from "@/constants/colors";
 import ImageUpload from "@/components/image-upload";
+import MultiImageUpload from "@/components/image-upload/multi-image-upload";
 
 export default function EditProfileScreen() {
   const colorScheme = useColorScheme();
@@ -31,17 +30,17 @@ export default function EditProfileScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <ImageUpload imagePreviewStyle={styles.imagePreview} imageStyle={styles.imagePreview} />
+        <ImageUpload imagePreviewStyle={styles.imagePreview} imageStyle={styles.imagePreview} onImageSelect={() => null} />
 
         <View style={styles.form}>
           <Text style={styles.sectionHeader}>Personal Information</Text>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>First Name</Text>
-            <TextField placeholder="Type your name" />
+            <TextField placeholder="Type your first name" />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Last Name</Text>
-            <TextField placeholder="Type your name" />
+            <TextField placeholder="Type your last name" />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Gender</Text>
@@ -56,6 +55,10 @@ export default function EditProfileScreen() {
             <Text style={styles.formLabel}>Date of Birth</Text>
             <TextField placeholder="Select your date of birth" value={dateOfBirth.toDateString()} onPressIn={() => setShowDatePicker(true)} />
             {showDatePicker && <DateTimePicker value={dateOfBirth} mode="date" display="default" onChange={onChangeDate} />}
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Bio</Text>
+            <TextField placeholder="Type something fun about yourself" />
           </View>
           <Text style={styles.sectionHeader}>Contact Details</Text>
           <View style={styles.formGroup}>
@@ -117,6 +120,9 @@ export default function EditProfileScreen() {
               <Text>No</Text>
             </View>
           </View>
+
+          <Text style={styles.sectionHeader}>Gallery</Text>
+          <MultiImageUpload imageLimit={3} />
         </View>
 
         <View style={styles.button}>

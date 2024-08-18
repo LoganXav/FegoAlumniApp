@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, Alert, Platform, TouchableOpacity, StyleProp, ViewStyle } from "react-native";
+import { Image, StyleSheet, Alert, Platform, TouchableOpacity, StyleProp, ViewStyle, useColorScheme } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Text, View } from "@/components/ui/themed";
 import { AntDesign } from "@expo/vector-icons";
+import colors from "@/constants/colors";
 
 type ImageUploadProps = {
   onImageSelect: (uri: string) => void;
@@ -12,6 +13,8 @@ type ImageUploadProps = {
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect, imagePreviewStyle, imageStyle }) => {
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const colorScheme = useColorScheme();
+  const iconColor = colors[colorScheme ?? "light"].grey;
 
   const handleImageSelection = async () => {
     try {
@@ -62,14 +65,14 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect, imagePreviewSt
 
   return (
     <View style={styles.container}>
-      <View style={[styles.imagePreview, imagePreviewStyle]}>{imageUri ? <Image source={{ uri: imageUri }} style={[styles.image, imageStyle]} /> : <Text style={styles.placeholderText}>No image selected</Text>}</View>
+      <View style={[styles.imagePreview, imagePreviewStyle, { borderColor: iconColor }]}>{imageUri ? <Image source={{ uri: imageUri }} style={[styles.image, imageStyle]} /> : <Text style={styles.placeholderText}>No image selected</Text>}</View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handleImageSelection} style={styles.iconButton}>
-          <AntDesign name="picture" size={20} color="black" />
+          <AntDesign name="picture" size={20} color={iconColor} />
           <Text style={styles.iconText}>Select Image</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleCapturePhoto} style={styles.iconButton}>
-          <AntDesign name="camera" size={20} color="black" />
+          <AntDesign name="camera" size={20} color={iconColor} />
           <Text style={styles.iconText}>Use Camera</Text>
         </TouchableOpacity>
       </View>
@@ -89,8 +92,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#ccc",
-    backgroundColor: "#f0f0f0",
   },
   image: {
     width: "100%",

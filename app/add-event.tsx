@@ -85,7 +85,7 @@ export default function AddEventScreen() {
               <View style={styles.activityHeader}>
                 <Text style={styles.activityTitle}>Activity {index + 1}</Text>
                 <TouchableOpacity style={styles.deleteButton} onPress={() => deleteActivity(index)}>
-                  <AntDesign name="delete" size={20} color="red" />
+                  <AntDesign name="closecircleo" size={20} color="red" />
                   <Text style={styles.deleteButtonText}>Remove Activity</Text>
                 </TouchableOpacity>
               </View>
@@ -180,6 +180,7 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     flexDirection: "row",
+    alignItems: "center",
   },
   registerButton: {
     position: "absolute",

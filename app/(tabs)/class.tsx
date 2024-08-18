@@ -37,7 +37,7 @@ export default function TabTwoScreen({}) {
 
   return (
     <Animatable.View ref={viewRef} easing={"ease-in-out-circ"} duration={500}>
-      <FlatList data={Array(30).fill({ name: "Micheal Myers", title: "Mr" })} keyExtractor={(_, i) => String(i)} numColumns={2} renderItem={renderItem} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }} ListEmptyComponent={ListEmptyComponent} />
+      <FlatList data={Array(30).fill({ name: "Micheal Myers", lifeStatus: "deceased" })} keyExtractor={(_, i) => String(i)} numColumns={2} renderItem={renderItem} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }} ListEmptyComponent={ListEmptyComponent} />
     </Animatable.View>
   );
 }
