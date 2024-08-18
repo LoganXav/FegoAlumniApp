@@ -13,9 +13,13 @@ type ThemeProps = {
   darkColor?: string;
 };
 
+type ErrorProp = {
+  error?: any;
+};
+
 export type TextProps = ThemeProps & DefaultText["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
-export type TextInputProps = ThemeProps & DefaultTextInput["props"];
+export type TextInputProps = ThemeProps & DefaultTextInput["props"] & ErrorProp;
 export type PressableProps = ThemeProps & React.ComponentProps<typeof DefaultPressable>;
 
 export function useThemeColor(props: { light?: string; dark?: string }, colorName: keyof typeof Colors.light & keyof typeof Colors.dark) {
@@ -53,7 +57,7 @@ export function Pressable(props: PressableProps) {
 }
 
 export function TextField(props: TextInputProps) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
+  const { style, error, lightColor, darkColor, ...otherProps } = props;
   const [isFocused, setIsFocused] = useState(false);
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
   const colorScheme = useColorScheme();
@@ -67,20 +71,23 @@ export function TextField(props: TextInputProps) {
   };
 
   return (
-    <DefaultView
-      style={[
-        styles.container,
-        {
-          borderColor: isFocused ? Colors[colorScheme ?? "light"].tint : Colors[colorScheme ?? "light"].grey,
-        },
-      ]}
-    >
-      <DefaultTextInput style={[styles.textInput, { color }, style]} onFocus={handleFocus} onBlur={handleBlur} {...otherProps} />
-    </DefaultView>
+    <>
+      <DefaultView
+        style={[
+          styles.container,
+          {
+            borderColor: isFocused ? Colors[colorScheme ?? "light"].tint : Colors[colorScheme ?? "light"].grey,
+          },
+        ]}
+      >
+        <DefaultTextInput style={[styles.textInput, { color }, style]} onFocus={handleFocus} onBlur={handleBlur} {...otherProps} />
+      </DefaultView>
+      {error && <Text style={{ fontSize: 14, color: "red" }}>{error}</Text>}
+    </>
   );
 }
 
-export function TextArea({ maxLength, style, lightColor, darkColor, ...otherProps }: TextInputProps & { maxLength?: number }) {
+export function TextArea({ maxLength, style, lightColor, darkColor, error, ...otherProps }: TextInputProps & { maxLength?: number }) {
   const [text, setText] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
@@ -101,21 +108,24 @@ export function TextArea({ maxLength, style, lightColor, darkColor, ...otherProp
   };
 
   return (
-    <DefaultView
-      style={[
-        styles.textAreaContainer,
-        {
-          borderColor: isFocused ? Colors[colorScheme ?? "light"].tint : Colors[colorScheme ?? "light"].grey,
-        },
-      ]}
-    >
-      <DefaultTextInput style={[styles.textArea, { color }, style]} onFocus={handleFocus} onBlur={handleBlur} multiline={true} value={text} onChangeText={handleChangeText} {...otherProps} />
-      {maxLength && (
-        <DefaultText style={[styles.charCount, { color: Colors[colorScheme ?? "light"].grey }]}>
-          {text.length}/{maxLength}
-        </DefaultText>
-      )}
-    </DefaultView>
+    <>
+      <DefaultView
+        style={[
+          styles.textAreaContainer,
+          {
+            borderColor: isFocused ? Colors[colorScheme ?? "light"].tint : Colors[colorScheme ?? "light"].grey,
+          },
+        ]}
+      >
+        <DefaultTextInput style={[styles.textArea, { color }, style]} onFocus={handleFocus} onBlur={handleBlur} multiline={true} value={text} onChangeText={handleChangeText} {...otherProps} />
+        {maxLength && (
+          <DefaultText style={[styles.charCount, { color: Colors[colorScheme ?? "light"].grey }]}>
+            {text.length}/{maxLength}
+          </DefaultText>
+        )}
+      </DefaultView>
+      {error && <Text style={{ fontSize: 14, color: "red" }}>{error}</Text>}
+    </>
   );
 }
 

@@ -1,128 +1,198 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { StatusBar } from "expo-status-bar";
 import { Platform, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, TextArea, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
-import { useColorScheme } from "@/utils/use-color-scheme.web";
+import { useColorScheme } from "@/utils/use-color-scheme";
 import colors from "@/constants/colors";
 import { AntDesign } from "@expo/vector-icons"; // Import AntDesign for icons
+import * as yup from "yup";
+import { Formik } from "formik";
 
 export default function AddEventScreen() {
   const colorScheme = useColorScheme();
   const defaultBgColor = colors[colorScheme ?? "light"].tabIconSelected;
 
-  const [showDatePicker, setShowDatePicker] = useState(null);
+  const [showDatePicker, setShowDatePicker] = useState<React.SetStateAction<any>>();
 
-  // New State Variables for Event Form
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [activities, setActivities] = useState([{ title: "", startTime: new Date(), endTime: new Date() }]);
-
-  const onChangeDate = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate || dateOfBirth;
-    setShowDatePicker(Platform.OS === "ios");
-    setDateOfBirth(currentDate);
-  };
-
-  const onChangeStartDate = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate || startDate;
-    setStartDate(currentDate);
-  };
-
-  const onChangeEndDate = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate || endDate;
-    setEndDate(currentDate);
-  };
-
-  const handleActivityChange = (index: number, key: string, value: any) => {
-    const updatedActivities = [...activities];
-    updatedActivities[index][key] = value;
-    setActivities(updatedActivities);
-  };
-
-  const addActivity = () => {
-    setActivities([...activities, { title: "", startTime: new Date(), endTime: new Date() }]);
-  };
-
-  const deleteActivity = (index: number) => {
-    const updatedActivities = activities.filter((_, i) => i !== index);
-    setActivities(updatedActivities);
-  };
+  const validationSchema = yup.object().shape({
+    title: yup.string().required("Title is required"),
+    venue: yup.string().required("Venue is required"),
+    tagline: yup.string().required("Tagline is required"),
+    description: yup.string().required("Description is required"),
+    startDate: yup.date().required("Start date is required"),
+    endDate: yup.date().required("End date is required").min(yup.ref("startDate"), "End date must be after start date"), // Custom condition for date
+    activities: yup.array().of(
+      yup.object().shape({
+        title: yup.string().required("Activity title is required"),
+        startTime: yup.date().required("Start time is required"),
+        endTime: yup
+          .date()
+          .required("End time is required")
+          .test("is-after-start", "End time must be after start time", function (value) {
+            return value > this.parent.startTime; // Custom condition for time
+          }),
+      })
+    ),
+  });
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.form}>
-          <Text style={styles.sectionHeader}>Event Details</Text>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Event Title</Text>
-            <TextField placeholder="Enter the event title" />
-          </View>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Venue</Text>
-            <TextField placeholder="Enter the event venue" />
-          </View>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Event Tagline</Text>
-            <TextField placeholder="Provide the event tagline here." />
-          </View>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Event Description</Text>
-            <TextArea maxLength={500} placeholder="Provide the event description here..." />
-          </View>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Start Date</Text>
-            <TextField placeholder="Select the start date" value={startDate.toDateString()} />
-            {showDatePicker === "start" && <DateTimePicker value={startDate} mode="date" display="default" onChange={onChangeStartDate} />}
-          </View>
-          <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>End Date</Text>
-            <TextField placeholder="Select the end date" value={endDate.toDateString()} />
-            {showDatePicker === "end" && <DateTimePicker value={endDate} mode="date" display="default" onChange={onChangeEndDate} />}
-          </View>
+    <Formik
+      initialValues={{
+        title: "",
+        venue: "",
+        tagline: "",
+        description: "",
+        startDate: new Date(),
+        endDate: new Date(),
+        activities: [{ title: "", startTime: new Date(), endTime: new Date() }],
+      }}
+      validationSchema={validationSchema}
+      onSubmit={(values) => console.log(values)}
+    >
+      {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
+        <View style={styles.container}>
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <View style={styles.form}>
+              <Text style={styles.sectionHeader}>Event Details</Text>
 
-          <Text style={styles.sectionHeader}>Day Activities</Text>
-          {activities.map((activity, index) => (
-            <View key={index} style={styles.activityContainer}>
-              <View style={styles.activityHeader}>
-                <Text style={styles.activityTitle}>Activity {index + 1}</Text>
-                <TouchableOpacity style={styles.deleteButton} onPress={() => deleteActivity(index)}>
-                  <AntDesign name="closecircleo" size={20} color="red" />
-                  <Text style={styles.deleteButtonText}>Remove Activity</Text>
-                </TouchableOpacity>
-              </View>
               <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Activity Title</Text>
-                <TextField placeholder="Enter the activity title" value={activity.title} onChangeText={(text) => handleActivityChange(index, "title", text)} />
+                <Text style={styles.formLabel}>Event Title</Text>
+                <TextField onChangeText={handleChange("title")} onBlur={handleBlur("title")} value={values.title} placeholder="Enter the event title" />
+                {touched.title && errors.title && <Text style={{ fontSize: 14, color: "red" }}>{errors.title}</Text>}
               </View>
+
               <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>Start Time</Text>
-                <TextField placeholder="Select the start time" value={activity.startTime.toLocaleTimeString()} />
-                {showDatePicker === `startTime-${index}` && <DateTimePicker value={activity.startTime} mode="time" display="default" onChange={(event, selectedTime) => handleActivityChange(index, "startTime", selectedTime)} />}
+                <Text style={styles.formLabel}>Venue</Text>
+                <TextField onChangeText={handleChange("venue")} onBlur={handleBlur("venue")} value={values.venue} placeholder="Enter the event venue" />
+                {touched.venue && errors.venue && <Text style={{ fontSize: 14, color: "red" }}>{errors.venue}</Text>}
               </View>
+
               <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>End Time</Text>
-                <TextField placeholder="Select the end time" value={activity.endTime.toLocaleTimeString()} />
-                {showDatePicker === `endTime-${index}` && <DateTimePicker value={activity.endTime} mode="time" display="default" onChange={(event, selectedTime) => handleActivityChange(index, "endTime", selectedTime)} />}
+                <Text style={styles.formLabel}>Event Tagline</Text>
+                <TextField onChangeText={handleChange("tagline")} onBlur={handleBlur("tagline")} value={values.tagline} placeholder="Provide the event tagline here." />
+                {touched.tagline && errors.tagline && <Text style={{ fontSize: 14, color: "red" }}>{errors.tagline}</Text>}
               </View>
+
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Event Description</Text>
+                <TextArea maxLength={500} onChangeText={handleChange("description")} onBlur={handleBlur("description")} value={values.description} placeholder="Provide the event description here..." />
+                {touched.description && errors.description && <Text style={{ fontSize: 14, color: "red" }}>{errors.description}</Text>}
+              </View>
+
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Start Date</Text>
+                <TextField placeholder="Select the start date" value={values.startDate.toDateString()} onFocus={() => setShowDatePicker("start")} />
+                {touched.startDate && typeof errors.startDate === "string" && <Text style={{ fontSize: 14, color: "red" }}>{errors.startDate}</Text>}
+                {showDatePicker === "start" && (
+                  <DateTimePicker
+                    value={values.startDate}
+                    mode="date"
+                    display="default"
+                    onChange={(event, selectedDate) => {
+                      setFieldValue("startDate", selectedDate || values.startDate);
+                      setShowDatePicker(null);
+                    }}
+                  />
+                )}
+              </View>
+
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>End Date</Text>
+                <TextField placeholder="Select the end date" value={values.endDate.toDateString()} onFocus={() => setShowDatePicker("end")} />
+                {touched.endDate && typeof errors.endDate === "string" && <Text style={{ fontSize: 14, color: "red" }}>{errors.endDate}</Text>}
+                {showDatePicker === "end" && (
+                  <DateTimePicker
+                    value={values.endDate}
+                    mode="date"
+                    display="default"
+                    onChange={(event, selectedDate) => {
+                      setFieldValue("endDate", selectedDate || values.endDate);
+                      setShowDatePicker(null);
+                    }}
+                  />
+                )}
+              </View>
+
+              <Text style={styles.sectionHeader}>Day Activities</Text>
+              {values.activities.map((activity, index) => (
+                <View key={index} style={styles.activityContainer}>
+                  <View style={styles.activityHeader}>
+                    <Text style={styles.activityTitle}>Activity {index + 1}</Text>
+                    <TouchableOpacity
+                      style={styles.deleteButton}
+                      onPress={() => {
+                        const updatedActivities = values.activities.filter((_, i) => i !== index);
+                        setFieldValue("activities", updatedActivities);
+                      }}
+                    >
+                      <AntDesign name="closecircleo" size={20} color="red" />
+                      <Text style={styles.deleteButtonText}>Remove Activity</Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={styles.formGroup}>
+                    <Text style={styles.formLabel}>Activity Title</Text>
+                    <TextField onChangeText={handleChange(`activities[${index}].title`)} onBlur={handleBlur(`activities[${index}].title`)} value={activity.title} placeholder="Enter the activity title" />
+                    {touched.activities?.[index]?.title && typeof errors.activities?.[index] === "object" && errors.activities?.[index]?.title && <Text style={{ fontSize: 14, color: "red" }}>{errors.activities[index].title}</Text>}
+                  </View>
+
+                  <View style={styles.formGroup}>
+                    <Text style={styles.formLabel}>Start Time</Text>
+                    <TextField placeholder="Select the start time" value={activity.startTime.toLocaleTimeString()} onFocus={() => setShowDatePicker(`startTime-${index}`)} />
+                    {touched.activities?.[index]?.startTime && typeof errors.activities?.[index] === "object" && typeof errors.activities?.[index].startTime === "string" && <Text style={{ fontSize: 14, color: "red" }}>{errors.activities[index].startTime}</Text>}
+                    {showDatePicker === `startTime-${index}` && (
+                      <DateTimePicker
+                        value={activity.startTime}
+                        mode="time"
+                        display="default"
+                        onChange={(event, selectedTime) => {
+                          const updatedActivities = [...values.activities];
+                          updatedActivities[index].startTime = selectedTime || activity.startTime;
+                          setFieldValue("activities", updatedActivities);
+                          setShowDatePicker(null);
+                        }}
+                      />
+                    )}
+                  </View>
+
+                  <View style={styles.formGroup}>
+                    <Text style={styles.formLabel}>End Time</Text>
+                    <TextField placeholder="Select the end time" value={activity.endTime.toLocaleTimeString()} onFocus={() => setShowDatePicker(`endTime-${index}`)} />
+                    {touched.activities?.[index]?.endTime && typeof errors.activities?.[index] === "object" && typeof errors.activities?.[index].endTime === "string" && <Text style={{ fontSize: 14, color: "red" }}>{errors.activities[index].endTime}</Text>}
+                    {showDatePicker === `endTime-${index}` && (
+                      <DateTimePicker
+                        value={activity.endTime}
+                        mode="time"
+                        display="default"
+                        onChange={(event, selectedTime) => {
+                          const updatedActivities = [...values.activities];
+                          updatedActivities[index].endTime = selectedTime || activity.endTime;
+                          setFieldValue("activities", updatedActivities);
+                          setShowDatePicker(null);
+                        }}
+                      />
+                    )}
+                  </View>
+                </View>
+              ))}
+
+              <TouchableOpacity style={styles.addButton} onPress={() => setFieldValue("activities", [...values.activities, { title: "", startTime: new Date(), endTime: new Date() }])}>
+                <AntDesign name="pluscircleo" size={24} color={defaultBgColor} />
+                <Text style={styles.addButtonText}>Add Another Activity</Text>
+              </TouchableOpacity>
             </View>
-          ))}
-          <TouchableOpacity style={styles.addButton} onPress={addActivity}>
-            <AntDesign name="pluscircleo" size={24} color={defaultBgColor} />
-            <Text style={styles.addButtonText}>Add Another Activity</Text>
-          </TouchableOpacity>
-        </View>
 
-        <View style={styles.registerButton}>
-          <Button onPress={() => null} text="Register Event" />
-        </View>
+            <View style={styles.registerButton}>
+              <Button onPress={handleSubmit} text="Register Event" />
+            </View>
 
-        {/* Use a light status bar on iOS to account for the black space above the modal */}
-        <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
-      </ScrollView>
-    </View>
+            <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+          </ScrollView>
+        </View>
+      )}
+    </Formik>
   );
 }
 
