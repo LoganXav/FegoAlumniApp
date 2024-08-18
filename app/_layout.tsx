@@ -58,6 +58,7 @@ function RootLayoutNav() {
         <Stack.Screen name="edit-profile" options={{ headerBackTitle: "Back", headerTitle: "Update your profile" }} />
         <Stack.Screen name="event/[id]" options={{ headerTitle: "Event details", presentation: "modal", animation: "fade" }} />
         <Stack.Screen name="member/[id]" options={{ headerTitle: "Profile", presentation: "modal", animation: "fade" }} />
+        <Stack.Screen name="memo/[id]" options={{ headerTitle: "Announcement details", presentation: "modal", animation: "fade" }} />
       </Stack>
     </ThemeProvider>
   );

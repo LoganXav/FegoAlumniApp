@@ -65,6 +65,10 @@ export default function AddEventScreen() {
             <TextField placeholder="Enter the event venue" />
           </View>
           <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Event Tagline</Text>
+            <TextField placeholder="Provide the event tagline here." />
+          </View>
+          <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Event Description</Text>
             <TextArea maxLength={500} placeholder="Provide the event description here..." />
           </View>

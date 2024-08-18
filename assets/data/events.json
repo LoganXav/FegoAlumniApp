@@ -3,7 +3,10 @@
   "2024-07-14": [
     {
       "id": "1",
-      "name": "Live: notJust.Hack Kickstart",
+      "title": "Live: notJust.Hack Kickstart",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 100,
       "day": "2024-07-14"
     }
@@ -11,25 +14,37 @@
   "2024-07-15": [
     {
       "id": "2",
-      "name": "Workshop: Build any mobile application with React Native",
+      "title": "Workshop: Build any mobile application with React Native",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 100,
       "day": "2024-07-15"
     },
     {
       "id": "3",
-      "name": "Q&A session",
+      "title": "Q&A session",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 50,
       "day": "2024-07-15"
     },
     {
       "id": "3",
-      "name": "Q&A session",
+      "title": "Q&A session",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 50,
       "day": "2024-07-15"
     },
     {
       "id": "3",
-      "name": "Q&A session",
+      "title": "Q&A session",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 50,
       "day": "2024-07-15"
     }
@@ -37,13 +52,19 @@
   "2024-07-16": [
     {
       "id": "4",
-      "name": "Workshop: Build a Chat application in hours using Stream",
+      "title": "Workshop: Build a Chat application in hours using Stream",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 100,
       "day": "2024-07-16"
     },
     {
       "id": "5",
-      "name": "Q&A session",
+      "title": "Q&A session",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 50,
       "day": "2024-07-16"
     }
@@ -51,31 +72,46 @@
   "2024-07-17": [
     {
       "id": "6",
-      "name": "Workshop: Build Full-Stack applications with Nhost",
+      "title": "Workshop: Build Full-Stack applications with Nhost",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 100,
       "day": "2024-07-17"
     },
     {
       "id": "7",
-      "name": "Q&A session",
+      "title": "Q&A session",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 50,
       "day": "2024-07-17"
     },
     {
       "id": "3",
-      "name": "Q&A session",
+      "title": "Q&A session",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 50,
       "day": "2024-07-15"
     },
     {
       "id": "3",
-      "name": "Q&A session",
+      "title": "Q&A session",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 50,
       "day": "2024-07-15"
     },
     {
       "id": "3",
-      "name": "Q&A session",
+      "title": "Q&A session",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 50,
       "day": "2024-07-15"
     }
@@ -83,7 +119,10 @@
   "2024-07-18": [
     {
       "id": "8",
-      "name": "Demo Day",
+      "title": "Demo Day",
+      "venue": "Google Meet",
+      "desc": "A presentation of awards ceremony",
+      "tag": "The future is ours to live",
       "height": 100,
       "day": "2024-07-18"
     }

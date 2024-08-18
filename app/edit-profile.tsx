@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { StatusBar } from "expo-status-bar";
-import { FlatList, Image, Platform, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { Platform, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
 import { useColorScheme } from "@/utils/use-color-scheme";
@@ -122,7 +122,7 @@ export default function EditProfileScreen() {
           </View>
 
           <Text style={styles.sectionHeader}>Gallery</Text>
-          <MultiImageUpload imageLimit={3} />
+          <MultiImageUpload imageLimit={5} />
         </View>
 
         <View style={styles.button}>
@@ -181,6 +181,6 @@ const styles = StyleSheet.create({
   radioGroup: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: 5,
   },
 });

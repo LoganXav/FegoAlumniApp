@@ -11,13 +11,18 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events"
   const backgroundColor = useThemeColor({}, "background");
   const textColor = useThemeColor({}, "text");
 
-  const renderItem = (reservation: AgendaEntry, isFirst: boolean) => {
-    const fontSize = isFirst ? 16 : 14;
-    // const color = isFirst ? "black" : "#43515c";
+  const renderItem = (event: AgendaEntry, isFirst: boolean) => {
+    const fontSize = isFirst ? 18 : 15;
 
     return (
-      <Pressable style={[styles.item, { height: reservation.height }]} onPress={() => router.push("/event/1")}>
-        <Text style={{ fontSize }}>{reservation.name}</Text>
+      <Pressable style={[styles.item, { height: event.height }]} onPress={() => router.push("/event/1")}>
+        <Text style={{ fontSize, fontWeight: "500" }}>{event.title}</Text>
+        {isFirst && (
+          <>
+            <Text style={{ fontSize: 15 }}>Venue: {event.venue}</Text>
+            <Text style={{ fontSize: 15 }}>Tag: {event.tag}</Text>
+          </>
+        )}
       </Pressable>
     );
   };
@@ -63,6 +68,7 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     borderRadius: 5,
+    justifyContent: "center",
     padding: 10,
     marginRight: 10,
     marginTop: 17,

@@ -1,38 +1,23 @@
 import React from "react";
-import { StyleSheet, ScrollView, Platform, Image } from "react-native";
+import { StyleSheet, ScrollView, Platform, Image, Linking, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Text, View, useThemeColor } from "@/components/ui/themed";
 import { AntDesign } from "@expo/vector-icons";
 import EventCoverImage from "@/assets/images/cover.jpg";
 
-export default function EventDetailScreen() {
+export default function MemoDetailScreen() {
   const backgroundColor = useThemeColor({}, "background");
 
-  const event = {
-    title: "FEGO ANNUAL REUNION EVENT",
-    tagline: "The future is our to live",
-    activities: [
-      {
-        title: "Q & A Session",
-        startTime: "Now",
-        endTime: "Then",
-      },
-      {
-        title: "Q & A Session",
-        startTime: "Now",
-        endTime: "Then",
-      },
-      {
-        title: "Q & A Session",
-        startTime: "Now",
-        endTime: "Then",
-      },
-    ],
-    startDate: "Today",
-    endDate: "Tommorrow",
-    venue: "Google Meet",
-    description:
+  const announcement = {
+    title: "SAMPLE ANNOUNCEMENT",
+    desc: "This announcement is concerning xyz",
+    link: "https://meet.google.com/txv-mwgz-fsv",
+    details:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa facilis rem laudantium deleniti accusamus sed explicabo at repellat, fugiat ea, tempora suscipit. Perferendis tempore modi voluptatibus quibusdam aliquam ea illum natus autem repellat soluta, culparepellendus aspernatur inventore deleniti sapiente saepe alias, totam nesciunt ducimus asperiores voluptatem. Voluptatum impedit at quasi, perferendis consequatur minima expedita? Est, magnam quibusdam cum, iusto aspernatur libero laboriosam incidunt optio molestias sapiente similiquequo, quis impedit repellendus dicta expedita. Nesciunt alias provident praesentium unde vero dolor accusantium, assumenda labore autem quo. Voluptates exercitationem assumenda non. Perferendis repellat at officiis cum placeat possimus ea commodi. Porro? repellendus aspernatur inventoredeleniti sapiente saepe alias, totam nesciunt ducimus asperiores voluptatem. Voluptatum impedit at quasi, perferendis consequatur minima expedita? Est, magnam quibusdam cum, iusto aspernatur libero laboriosam incidunt optio molestias sapiente similique quo, quis impedit repellendus dicta",
+  };
+
+  const handleLinkPress = (url: string) => {
+    Linking.openURL(url).catch((err) => console.error("Failed to open URL:", err));
   };
 
   return (
@@ -42,40 +27,25 @@ export default function EventDetailScreen() {
         <View style={styles.overlay} />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>{event.title}</Text>
-        <Text style={styles.tagline}>{event.tagline}</Text>
-        <View style={styles.detailGroup}>
-          <AntDesign name="find" size={15} color="grey" />
-          <Text>{event.venue}</Text>
-        </View>
-        <View style={styles.detailGroup}>
-          <AntDesign name="calendar" size={15} color="grey" />
-          <Text>
-            {event.startDate} - {event.endDate}
-          </Text>
-        </View>
+        <Text style={styles.title}>{announcement.title}</Text>
+        <Text style={styles.desc}>{announcement.desc}</Text>
+
         <View>
-          <Text style={styles.label}>About this Programme</Text>
-          <Text style={{ fontSize: 18 }}>{event.description}</Text>
+          <Text style={styles.label}>Announcement</Text>
+          <Text style={{ fontSize: 18 }}>{announcement.details}</Text>
         </View>
-        <Text style={styles.sectionHeader}>Day Activities</Text>
-        {event.activities.map((activity, index) => (
-          <View key={index} style={styles.activityContainer}>
-            <Text style={styles.activityTitle}>
-              {(index + 1).toString()}. {activity.title}
-            </Text>
-            <View style={styles.timeContainer}>
-              <AntDesign name="clockcircleo" size={15} color="grey" />
-              <Text style={styles.timeValue}>
-                {activity.startTime} - {activity.endTime}
-              </Text>
-            </View>
+        {announcement.link && (
+          <View style={styles.detailGroup}>
+            <Text style={styles.label}>Related Link: </Text>
+            <TouchableOpacity onPress={() => handleLinkPress(announcement.link)}>
+              <Text style={styles.link}>{announcement.link}</Text>
+            </TouchableOpacity>
           </View>
-        ))}
+        )}
       </ScrollView>
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+      {/* <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} /> */}
     </View>
   );
 }
@@ -109,13 +79,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
-  tagline: {
+  desc: {
     fontSize: 16,
-    fontStyle: "italic",
     marginBottom: 20,
   },
   detailGroup: {
-    marginBottom: 15,
+    marginVertical: 15,
     flexDirection: "row",
     gap: 5,
     alignItems: "center",
@@ -123,33 +92,10 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     fontWeight: "500",
-    marginBottom: 5,
   },
-  sectionHeader: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginVertical: 20,
-  },
-  activityContainer: {
-    padding: 10,
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexDirection: "row",
-  },
-  activityTitle: {
+  link: {
     fontSize: 18,
-    fontWeight: "600",
-  },
-  timeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-  },
-  timeLabel: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  timeValue: {
-    fontSize: 16,
+    color: "#1e90ff", // Styling the link color to be blue
+    textDecorationLine: "underline", // Underline the link to make it more identifiable
   },
 });

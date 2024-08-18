@@ -149,6 +149,6 @@ const styles = StyleSheet.create({
   radioGroup: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: 5,
   },
 });
