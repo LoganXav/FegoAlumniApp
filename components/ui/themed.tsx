@@ -80,6 +80,45 @@ export function TextField(props: TextInputProps) {
   );
 }
 
+export function TextArea({ maxLength, style, lightColor, darkColor, ...otherProps }: TextInputProps & { maxLength?: number }) {
+  const [text, setText] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+  const colorScheme = useColorScheme();
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
+  const handleChangeText = (inputText: string) => {
+    if (!maxLength || inputText.length <= maxLength) {
+      setText(inputText);
+    }
+  };
+
+  return (
+    <DefaultView
+      style={[
+        styles.textAreaContainer,
+        {
+          borderColor: isFocused ? Colors[colorScheme ?? "light"].tint : Colors[colorScheme ?? "light"].grey,
+        },
+      ]}
+    >
+      <DefaultTextInput style={[styles.textArea, { color }, style]} onFocus={handleFocus} onBlur={handleBlur} multiline={true} value={text} onChangeText={handleChangeText} {...otherProps} />
+      {maxLength && (
+        <DefaultText style={[styles.charCount, { color: Colors[colorScheme ?? "light"].grey }]}>
+          {text.length}/{maxLength}
+        </DefaultText>
+      )}
+    </DefaultView>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     width: "100%",
@@ -93,5 +132,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     width: "100%",
     height: "100%",
+  },
+  textAreaContainer: {
+    width: "100%",
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: 16,
+    justifyContent: "flex-start",
+  },
+  textArea: {
+    fontSize: 16,
+    width: "100%",
+    height: 100, // or adjust the height as needed
+    textAlignVertical: "top", // to ensure text starts at the top
+  },
+  charCount: {
+    fontSize: 12,
+    alignSelf: "flex-end",
+    marginTop: 8,
   },
 });

@@ -1,34 +1,42 @@
 import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet } from "react-native";
+import { Platform, ScrollView, StyleSheet } from "react-native";
 
-import { Text, TextField, View } from "@/components/ui/themed";
+import { Text, TextArea, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
+import ImageUpload from "@/components/image-upload";
 
 export default function AddMemoScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Fill out this form to register a new event</Text>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.form}>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Announcement Title</Text>
+            <TextField placeholder="What is the title of the announcement?" />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Announcement Description</Text>
+            <TextField placeholder="Type a short description of the announcement" />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Link (Optional)</Text>
+            <TextField placeholder="Enter a link related to the announcement" />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Announcement Details</Text>
+            <TextArea maxLength={500} placeholder="Provide the announcement details here..." />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Picture (Optional)</Text>
+            <ImageUpload onImageSelect={() => null} />
+          </View>
+        </View>
+        <View style={styles.button}>
+          <Button onPress={() => null} text="Publish Announcement" />
+        </View>
 
-      <View style={styles.form}>
-        <View style={styles.formGroup}>
-          <Text style={styles.formText}>Event Title</Text>
-          <TextField placeholder="What is the name of the event?" />
-        </View>
-        <View style={styles.formGroup}>
-          <Text style={styles.formText}>Event Title</Text>
-          <TextField placeholder="What is the name of the event?" />
-        </View>
-        <View style={styles.formGroup}>
-          <Text style={styles.formText}>Event Title</Text>
-          <TextField placeholder="What is the name of the event?" />
-        </View>
-      </View>
-      <View style={styles.button}>
-        <Button onPress={() => null} text="Add Event" />
-      </View>
-
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+        <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+      </ScrollView>
     </View>
   );
 }
@@ -36,7 +44,11 @@ export default function AddMemoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
     padding: 15,
+    paddingBottom: 100,
   },
   title: {
     fontSize: 18,
@@ -48,13 +60,13 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   form: {
-    marginVertical: 30,
+    marginBottom: 30,
     gap: 10,
   },
   formGroup: {
     gap: 8,
   },
-  formText: {
-    fontSize: 16,
+  formLabel: {
+    fontSize: 14,
   },
 });

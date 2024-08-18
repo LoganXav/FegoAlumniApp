@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     padding: 15,
-    paddingTop: 30,
     paddingBottom: 100,
   },
   title: {
@@ -161,7 +160,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   form: {
-    marginVertical: 30,
+    marginBottom: 30,
     gap: 10,
   },
   formGroup: {

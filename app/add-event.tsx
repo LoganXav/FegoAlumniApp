@@ -55,8 +55,6 @@ export default function AddEventScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>Fill out this form to register a new event</Text>
-
         <View style={styles.form}>
           <Text style={styles.sectionHeader}>Event Details</Text>
           <View style={styles.formGroup}>
@@ -110,6 +108,10 @@ export default function AddEventScreen() {
           </TouchableOpacity>
         </View>
 
+        <View style={styles.registerButton}>
+          <Button onPress={() => null} text="Register Event" />
+        </View>
+
         {/* Use a light status bar on iOS to account for the black space above the modal */}
         <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
       </ScrollView>
@@ -124,7 +126,6 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     padding: 15,
-    paddingTop: 30,
     paddingBottom: 100,
   },
   title: {
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   form: {
-    marginVertical: 30,
+    marginBottom: 30,
     gap: 10,
   },
   formGroup: {
@@ -147,7 +148,6 @@ const styles = StyleSheet.create({
   },
   activityContainer: {
     paddingTop: 15,
-    // backgroundColor: "#f0f0f0",
     borderRadius: 8,
     marginBottom: 10,
     gap: 10,
@@ -177,5 +177,11 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     flexDirection: "row",
+  },
+  registerButton: {
+    position: "absolute",
+    bottom: 25,
+    marginHorizontal: 20,
+    width: "100%",
   },
 });
