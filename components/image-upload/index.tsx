@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, Alert, Platform } from "react-native";
+import { Image, StyleSheet, Alert, Platform, TouchableOpacity, StyleProp, ViewStyle } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { Text, View } from "@/components/ui/themed"; // Assuming you're using the Text component from your UI library
-import Button from "../ui/button";
+import { Text, View } from "@/components/ui/themed";
+import { AntDesign } from "@expo/vector-icons";
 
 type ImageUploadProps = {
   onImageSelect: (uri: string) => void;
+  imagePreviewStyle?: StyleProp<ViewStyle>;
+  imageStyle?: any;
 };
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect, imagePreviewStyle, imageStyle }) => {
   const [imageUri, setImageUri] = useState<string | null>(null);
 
   const handleImageSelection = async () => {
@@ -60,10 +62,16 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.imagePreview}>{imageUri ? <Image source={{ uri: imageUri }} style={styles.image} /> : <Text style={styles.placeholderText}>No image selected</Text>}</View>
+      <View style={[styles.imagePreview, imagePreviewStyle]}>{imageUri ? <Image source={{ uri: imageUri }} style={[styles.image, imageStyle]} /> : <Text style={styles.placeholderText}>No image selected</Text>}</View>
       <View style={styles.buttonContainer}>
-        <Button text="Select Image" onPress={handleImageSelection} />
-        <Button text="Use Camera" onPress={handleCapturePhoto} />
+        <TouchableOpacity onPress={handleImageSelection} style={styles.iconButton}>
+          <AntDesign name="picture" size={20} color="black" />
+          <Text style={styles.iconText}>Select Image</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleCapturePhoto} style={styles.iconButton}>
+          <AntDesign name="camera" size={20} color="black" />
+          <Text style={styles.iconText}>Use Camera</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -71,7 +79,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    // alignItems: "center",
   },
   imagePreview: {
     width: "100%",
@@ -93,10 +101,18 @@ const styles = StyleSheet.create({
     color: "#888",
   },
   buttonContainer: {
-    flexDirection: "column",
-    justifyContent: "space-between",
-    width: "100%",
-    marginTop: 10,
+    // flexDirection: "column",
+    // alignItems: "flex-start",
+    // gap: 10,
+  },
+  iconButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 5,
+  },
+  iconText: {
+    marginLeft: 8,
+    fontSize: 14,
   },
 });
 

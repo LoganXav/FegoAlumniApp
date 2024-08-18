@@ -9,6 +9,7 @@ import Button from "@/components/ui/button";
 import ProfileImage from "@/assets/images/selfie.png";
 import { useColorScheme } from "@/utils/use-color-scheme.web";
 import colors from "@/constants/colors";
+import ImageUpload from "@/components/image-upload";
 
 export default function EditProfileScreen() {
   const colorScheme = useColorScheme();
@@ -30,7 +31,8 @@ export default function EditProfileScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Image source={ProfileImage} style={styles.avatar} />
+        <ImageUpload imagePreviewStyle={styles.imagePreview} imageStyle={styles.imagePreview} />
+
         <View style={styles.form}>
           <Text style={styles.sectionHeader}>Personal Information</Text>
           <View style={styles.formGroup}>
@@ -129,11 +131,12 @@ export default function EditProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  avatar: {
+  imagePreview: {
     justifyContent: "center",
     alignItems: "center",
+    alignSelf: "center",
     width: "100%",
-    height: 100,
+    height: 160,
     aspectRatio: 1,
     borderRadius: 100,
   },

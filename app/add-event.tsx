@@ -1,10 +1,9 @@
 // @ts-nocheck
 import React, { useState } from "react";
-import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { StatusBar } from "expo-status-bar";
 import { Platform, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { Text, TextField, View } from "@/components/ui/themed";
+import { Text, TextArea, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
 import { useColorScheme } from "@/utils/use-color-scheme.web";
 import colors from "@/constants/colors";
@@ -14,7 +13,7 @@ export default function AddEventScreen() {
   const colorScheme = useColorScheme();
   const defaultBgColor = colors[colorScheme ?? "light"].tabIconSelected;
 
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(null);
 
   // New State Variables for Event Form
   const [startDate, setStartDate] = useState(new Date());
@@ -64,6 +63,10 @@ export default function AddEventScreen() {
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Venue</Text>
             <TextField placeholder="Enter the event venue" />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Event Description</Text>
+            <TextArea maxLength={500} placeholder="Provide the event description here..." />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Start Date</Text>
