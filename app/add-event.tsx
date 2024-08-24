@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { StatusBar } from "expo-status-bar";
-import { Platform, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { Text, TextArea, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
 import { useColorScheme } from "@/utils/use-color-scheme";
@@ -14,7 +19,8 @@ export default function AddEventScreen() {
   const colorScheme = useColorScheme();
   const defaultBgColor = colors[colorScheme ?? "light"].tabIconSelected;
 
-  const [showDatePicker, setShowDatePicker] = useState<React.SetStateAction<any>>();
+  const [showDatePicker, setShowDatePicker] =
+    useState<React.SetStateAction<any>>();
 
   const validationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
@@ -22,7 +28,10 @@ export default function AddEventScreen() {
     tagline: yup.string().required("Tagline is required"),
     description: yup.string().required("Description is required"),
     startDate: yup.date().required("Start date is required"),
-    endDate: yup.date().required("End date is required").min(yup.ref("startDate"), "End date must be after start date"), // Custom condition for date
+    endDate: yup
+      .date()
+      .required("End date is required")
+      .min(yup.ref("startDate"), "End date must be after start date"), // Custom condition for date
     activities: yup.array().of(
       yup.object().shape({
         title: yup.string().required("Activity title is required"),
@@ -30,12 +39,20 @@ export default function AddEventScreen() {
         endTime: yup
           .date()
           .required("End time is required")
-          .test("is-after-start", "End time must be after start time", function (value) {
-            return value > this.parent.startTime; // Custom condition for time
-          }),
-      })
+          .test(
+            "is-after-start",
+            "End time must be after start time",
+            function (value) {
+              return value > this.parent.startTime; // Custom condition for time
+            },
+          ),
+      }),
     ),
   });
+
+  const handleAddEvent = (values) => {
+    console.log(values, "====");
+  };
 
   return (
     <Formik
@@ -49,9 +66,17 @@ export default function AddEventScreen() {
         activities: [{ title: "", startTime: new Date(), endTime: new Date() }],
       }}
       validationSchema={validationSchema}
-      onSubmit={(values) => console.log(values)}
+      onSubmit={(values) => handleAddEvent(values)}
     >
-      {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        touched,
+        setFieldValue,
+      }) => (
         <View style={styles.container}>
           <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.form}>
@@ -59,39 +84,87 @@ export default function AddEventScreen() {
 
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Event Title</Text>
-                <TextField onChangeText={handleChange("title")} onBlur={handleBlur("title")} value={values.title} placeholder="Enter the event title" />
-                {touched.title && errors.title && <Text style={{ fontSize: 14, color: "red" }}>{errors.title}</Text>}
+                <TextField
+                  onChangeText={handleChange("title")}
+                  onBlur={handleBlur("title")}
+                  value={values.title}
+                  placeholder="Enter the event title"
+                />
+                {touched.title && errors.title && (
+                  <Text style={{ fontSize: 14, color: "red" }}>
+                    {errors.title}
+                  </Text>
+                )}
               </View>
 
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Venue</Text>
-                <TextField onChangeText={handleChange("venue")} onBlur={handleBlur("venue")} value={values.venue} placeholder="Enter the event venue" />
-                {touched.venue && errors.venue && <Text style={{ fontSize: 14, color: "red" }}>{errors.venue}</Text>}
+                <TextField
+                  onChangeText={handleChange("venue")}
+                  onBlur={handleBlur("venue")}
+                  value={values.venue}
+                  placeholder="Enter the event venue"
+                />
+                {touched.venue && errors.venue && (
+                  <Text style={{ fontSize: 14, color: "red" }}>
+                    {errors.venue}
+                  </Text>
+                )}
               </View>
 
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Event Tagline</Text>
-                <TextField onChangeText={handleChange("tagline")} onBlur={handleBlur("tagline")} value={values.tagline} placeholder="Provide the event tagline here." />
-                {touched.tagline && errors.tagline && <Text style={{ fontSize: 14, color: "red" }}>{errors.tagline}</Text>}
+                <TextField
+                  onChangeText={handleChange("tagline")}
+                  onBlur={handleBlur("tagline")}
+                  value={values.tagline}
+                  placeholder="Provide the event tagline here."
+                />
+                {touched.tagline && errors.tagline && (
+                  <Text style={{ fontSize: 14, color: "red" }}>
+                    {errors.tagline}
+                  </Text>
+                )}
               </View>
 
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Event Description</Text>
-                <TextArea maxLength={500} onChangeText={handleChange("description")} onBlur={handleBlur("description")} value={values.description} placeholder="Provide the event description here..." />
-                {touched.description && errors.description && <Text style={{ fontSize: 14, color: "red" }}>{errors.description}</Text>}
+                <TextArea
+                  maxLength={500}
+                  onChangeText={handleChange("description")}
+                  onBlur={handleBlur("description")}
+                  value={values.description}
+                  placeholder="Provide the event description here..."
+                />
+                {touched.description && errors.description && (
+                  <Text style={{ fontSize: 14, color: "red" }}>
+                    {errors.description}
+                  </Text>
+                )}
               </View>
 
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Start Date</Text>
-                <TextField placeholder="Select the start date" value={values.startDate.toDateString()} onFocus={() => setShowDatePicker("start")} />
-                {touched.startDate && typeof errors.startDate === "string" && <Text style={{ fontSize: 14, color: "red" }}>{errors.startDate}</Text>}
+                <TextField
+                  placeholder="Select the start date"
+                  value={values.startDate.toDateString()}
+                  onFocus={() => setShowDatePicker("start")}
+                />
+                {touched.startDate && typeof errors.startDate === "string" && (
+                  <Text style={{ fontSize: 14, color: "red" }}>
+                    {errors.startDate}
+                  </Text>
+                )}
                 {showDatePicker === "start" && (
                   <DateTimePicker
                     value={values.startDate}
                     mode="date"
                     display="default"
                     onChange={(event, selectedDate) => {
-                      setFieldValue("startDate", selectedDate || values.startDate);
+                      setFieldValue(
+                        "startDate",
+                        selectedDate || values.startDate,
+                      );
                       setShowDatePicker(null);
                     }}
                   />
@@ -100,8 +173,16 @@ export default function AddEventScreen() {
 
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>End Date</Text>
-                <TextField placeholder="Select the end date" value={values.endDate.toDateString()} onFocus={() => setShowDatePicker("end")} />
-                {touched.endDate && typeof errors.endDate === "string" && <Text style={{ fontSize: 14, color: "red" }}>{errors.endDate}</Text>}
+                <TextField
+                  placeholder="Select the end date"
+                  value={values.endDate.toDateString()}
+                  onFocus={() => setShowDatePicker("end")}
+                />
+                {touched.endDate && typeof errors.endDate === "string" && (
+                  <Text style={{ fontSize: 14, color: "red" }}>
+                    {errors.endDate}
+                  </Text>
+                )}
                 {showDatePicker === "end" && (
                   <DateTimePicker
                     value={values.endDate}
@@ -119,29 +200,57 @@ export default function AddEventScreen() {
               {values.activities.map((activity, index) => (
                 <View key={index} style={styles.activityContainer}>
                   <View style={styles.activityHeader}>
-                    <Text style={styles.activityTitle}>Activity {index + 1}</Text>
+                    <Text style={styles.activityTitle}>
+                      Activity {index + 1}
+                    </Text>
                     <TouchableOpacity
                       style={styles.deleteButton}
                       onPress={() => {
-                        const updatedActivities = values.activities.filter((_, i) => i !== index);
+                        const updatedActivities = values.activities.filter(
+                          (_, i) => i !== index,
+                        );
                         setFieldValue("activities", updatedActivities);
                       }}
                     >
                       <AntDesign name="closecircleo" size={20} color="red" />
-                      <Text style={styles.deleteButtonText}>Remove Activity</Text>
+                      <Text style={styles.deleteButtonText}>
+                        Remove Activity
+                      </Text>
                     </TouchableOpacity>
                   </View>
 
                   <View style={styles.formGroup}>
                     <Text style={styles.formLabel}>Activity Title</Text>
-                    <TextField onChangeText={handleChange(`activities[${index}].title`)} onBlur={handleBlur(`activities[${index}].title`)} value={activity.title} placeholder="Enter the activity title" />
-                    {touched.activities?.[index]?.title && typeof errors.activities?.[index] === "object" && errors.activities?.[index]?.title && <Text style={{ fontSize: 14, color: "red" }}>{errors.activities[index].title}</Text>}
+                    <TextField
+                      onChangeText={handleChange(`activities[${index}].title`)}
+                      onBlur={handleBlur(`activities[${index}].title`)}
+                      value={activity.title}
+                      placeholder="Enter the activity title"
+                    />
+                    {touched.activities?.[index]?.title &&
+                      typeof errors.activities?.[index] === "object" &&
+                      errors.activities?.[index]?.title && (
+                        <Text style={{ fontSize: 14, color: "red" }}>
+                          {errors.activities[index].title}
+                        </Text>
+                      )}
                   </View>
 
                   <View style={styles.formGroup}>
                     <Text style={styles.formLabel}>Start Time</Text>
-                    <TextField placeholder="Select the start time" value={activity.startTime.toLocaleTimeString()} onFocus={() => setShowDatePicker(`startTime-${index}`)} />
-                    {touched.activities?.[index]?.startTime && typeof errors.activities?.[index] === "object" && typeof errors.activities?.[index].startTime === "string" && <Text style={{ fontSize: 14, color: "red" }}>{errors.activities[index].startTime}</Text>}
+                    <TextField
+                      placeholder="Select the start time"
+                      value={activity.startTime.toLocaleTimeString()}
+                      onFocus={() => setShowDatePicker(`startTime-${index}`)}
+                    />
+                    {touched.activities?.[index]?.startTime &&
+                      typeof errors.activities?.[index] === "object" &&
+                      typeof errors.activities?.[index].startTime ===
+                        "string" && (
+                        <Text style={{ fontSize: 14, color: "red" }}>
+                          {errors.activities[index].startTime}
+                        </Text>
+                      )}
                     {showDatePicker === `startTime-${index}` && (
                       <DateTimePicker
                         value={activity.startTime}
@@ -149,7 +258,8 @@ export default function AddEventScreen() {
                         display="default"
                         onChange={(event, selectedTime) => {
                           const updatedActivities = [...values.activities];
-                          updatedActivities[index].startTime = selectedTime || activity.startTime;
+                          updatedActivities[index].startTime =
+                            selectedTime || activity.startTime;
                           setFieldValue("activities", updatedActivities);
                           setShowDatePicker(null);
                         }}
@@ -159,8 +269,19 @@ export default function AddEventScreen() {
 
                   <View style={styles.formGroup}>
                     <Text style={styles.formLabel}>End Time</Text>
-                    <TextField placeholder="Select the end time" value={activity.endTime.toLocaleTimeString()} onFocus={() => setShowDatePicker(`endTime-${index}`)} />
-                    {touched.activities?.[index]?.endTime && typeof errors.activities?.[index] === "object" && typeof errors.activities?.[index].endTime === "string" && <Text style={{ fontSize: 14, color: "red" }}>{errors.activities[index].endTime}</Text>}
+                    <TextField
+                      placeholder="Select the end time"
+                      value={activity.endTime.toLocaleTimeString()}
+                      onFocus={() => setShowDatePicker(`endTime-${index}`)}
+                    />
+                    {touched.activities?.[index]?.endTime &&
+                      typeof errors.activities?.[index] === "object" &&
+                      typeof errors.activities?.[index].endTime ===
+                        "string" && (
+                        <Text style={{ fontSize: 14, color: "red" }}>
+                          {errors.activities[index].endTime}
+                        </Text>
+                      )}
                     {showDatePicker === `endTime-${index}` && (
                       <DateTimePicker
                         value={activity.endTime}
@@ -168,7 +289,8 @@ export default function AddEventScreen() {
                         display="default"
                         onChange={(event, selectedTime) => {
                           const updatedActivities = [...values.activities];
-                          updatedActivities[index].endTime = selectedTime || activity.endTime;
+                          updatedActivities[index].endTime =
+                            selectedTime || activity.endTime;
                           setFieldValue("activities", updatedActivities);
                           setShowDatePicker(null);
                         }}
@@ -178,14 +300,26 @@ export default function AddEventScreen() {
                 </View>
               ))}
 
-              <TouchableOpacity style={styles.addButton} onPress={() => setFieldValue("activities", [...values.activities, { title: "", startTime: new Date(), endTime: new Date() }])}>
-                <AntDesign name="pluscircleo" size={24} color={defaultBgColor} />
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() =>
+                  setFieldValue("activities", [
+                    ...values.activities,
+                    { title: "", startTime: new Date(), endTime: new Date() },
+                  ])
+                }
+              >
+                <AntDesign
+                  name="pluscircleo"
+                  size={24}
+                  color={defaultBgColor}
+                />
                 <Text style={styles.addButtonText}>Add Another Activity</Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.registerButton}>
-              <Button onPress={handleSubmit} text="Register Event" />
+              <Button onPress={handleSubmit} text="Register event" />
             </View>
 
             <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />

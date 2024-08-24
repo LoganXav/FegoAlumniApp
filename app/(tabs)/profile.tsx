@@ -8,7 +8,11 @@ import Colors from "@/constants/colors";
 import ImageCarousel from "@/components/carousel/image-carousel";
 
 export default function TabFourScreen() {
-  const user = { displayName: "Jason Mamoa", desc: "A 23 year old man from Victoria Island", extra: "fun fact about the person" };
+  const user = {
+    displayName: "Jason Mamoa",
+    desc: "A 23 year old man from Victoria Island",
+    extra: "fun fact about the person",
+  };
 
   const colorScheme = useColorScheme();
   const cardBackgroundColor = Colors[colorScheme ?? "light"].grey;
@@ -45,21 +49,32 @@ export default function TabFourScreen() {
         <Text style={styles.name}>{user?.displayName}</Text>
         <Text style={{ fontSize: 16 }}>{user?.desc}</Text>
         <Text style={{ fontSize: 16 }}>{user?.extra}</Text>
-        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>Personal Information</Text>
+        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>
+          Personal Information
+        </Text>
         {Array(4)
           .fill(0)
           .map((detail, idx) => (
-            <View key={idx} style={[styles.infoCard, { borderColor: shadowColor }]}>
-              <Text style={{ fontSize: 16, fontWeight: "bold" }}>Personal </Text>
-              <Text style={{ fontSize: 16, fontWeight: "bold" }}>Information</Text>
+            <View
+              key={idx}
+              style={[styles.infoCard, { borderColor: shadowColor }]}
+            >
+              <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                Personal{" "}
+              </Text>
+              <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                Information
+              </Text>
             </View>
           ))}
-        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>Gallery</Text>
+        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>
+          Gallery
+        </Text>
         <View style={{ height: 240 }}>
           <ImageCarousel data={data} autoPlay={false} pagination={true} />
         </View>
         <View style={styles.button}>
-          <Button onPress={() => router.push("/")} text="Sign out" />
+          <Button onPress={() => router.push("/auth")} text="Sign out" />
         </View>
       </ScrollView>
     </View>

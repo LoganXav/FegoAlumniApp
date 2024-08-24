@@ -1,5 +1,9 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -51,14 +55,54 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
+        <Stack.Screen name="auth" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="add-event" options={{ headerBackTitle: "Back", headerTitle: "Add an event" }} />
-        <Stack.Screen name="add-member" options={{ headerBackTitle: "Back", headerTitle: "Add a new member" }} />
-        <Stack.Screen name="add-memo" options={{ headerBackTitle: "Back", headerTitle: "Publish an announcement" }} />
-        <Stack.Screen name="edit-profile" options={{ headerBackTitle: "Back", headerTitle: "Update your profile" }} />
-        <Stack.Screen name="event/[id]" options={{ headerTitle: "Event details", presentation: "modal", animation: "fade" }} />
-        <Stack.Screen name="member/[id]" options={{ headerTitle: "Profile", presentation: "modal", animation: "fade" }} />
-        <Stack.Screen name="memo/[id]" options={{ headerTitle: "Announcement details", presentation: "modal", animation: "fade" }} />
+        <Stack.Screen
+          name="add-event"
+          options={{ headerBackTitle: "Back", headerTitle: "Add an event" }}
+        />
+        <Stack.Screen
+          name="add-member"
+          options={{ headerBackTitle: "Back", headerTitle: "Add a new member" }}
+        />
+        <Stack.Screen
+          name="add-memo"
+          options={{
+            headerBackTitle: "Back",
+            headerTitle: "Publish an announcement",
+          }}
+        />
+        <Stack.Screen
+          name="edit-profile"
+          options={{
+            headerBackTitle: "Back",
+            headerTitle: "Update your profile",
+          }}
+        />
+        <Stack.Screen
+          name="event/[id]"
+          options={{
+            headerTitle: "Event details",
+            presentation: "modal",
+            animation: "fade",
+          }}
+        />
+        <Stack.Screen
+          name="member/[id]"
+          options={{
+            headerTitle: "Profile",
+            presentation: "modal",
+            animation: "fade",
+          }}
+        />
+        <Stack.Screen
+          name="memo/[id]"
+          options={{
+            headerTitle: "Announcement details",
+            presentation: "modal",
+            animation: "fade",
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );

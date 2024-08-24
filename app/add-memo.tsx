@@ -32,19 +32,44 @@ export default function AddMemoScreen() {
         <View style={styles.form}>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Announcement Title</Text>
-            <TextField value={formik.values.title} onChangeText={formik.handleChange("title")} onBlur={formik.handleBlur("title")} error={formik.touched.title && formik.errors.title} placeholder="What is the title of the announcement?" />
+            <TextField
+              value={formik.values.title}
+              onChangeText={formik.handleChange("title")}
+              onBlur={formik.handleBlur("title")}
+              error={formik.touched.title && formik.errors.title}
+              placeholder="What is the title of the announcement?"
+            />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Announcement Description</Text>
-            <TextField value={formik.values.desc} onChangeText={formik.handleChange("desc")} onBlur={formik.handleBlur("desc")} error={formik.touched.desc && formik.errors.desc} placeholder="Type a short description of the announcement" />
+            <TextField
+              value={formik.values.desc}
+              onChangeText={formik.handleChange("desc")}
+              onBlur={formik.handleBlur("desc")}
+              error={formik.touched.desc && formik.errors.desc}
+              placeholder="Type a short description of the announcement"
+            />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Link (Optional)</Text>
-            <TextField value={formik.values.link} onChangeText={formik.handleChange("link")} onBlur={formik.handleBlur("link")} error={formik.touched.link && formik.errors.link} placeholder="Enter a link related to the announcement" />
+            <TextField
+              value={formik.values.link}
+              onChangeText={formik.handleChange("link")}
+              onBlur={formik.handleBlur("link")}
+              error={formik.touched.link && formik.errors.link}
+              placeholder="Enter a link related to the announcement"
+            />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Announcement Details</Text>
-            <TextArea maxLength={500} value={formik.values.details} onChangeText={formik.handleChange("details")} onBlur={formik.handleBlur("details")} error={formik.touched.details && formik.errors.details} placeholder="Provide the announcement details here..." />
+            <TextArea
+              maxLength={500}
+              value={formik.values.details}
+              onChangeText={formik.handleChange("details")}
+              onBlur={formik.handleBlur("details")}
+              error={formik.touched.details && formik.errors.details}
+              placeholder="Provide the announcement details here..."
+            />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Picture (Optional)</Text>
@@ -52,7 +77,7 @@ export default function AddMemoScreen() {
           </View>
         </View>
         <View style={styles.button}>
-          <Button onPress={formik.handleSubmit} text="Publish Announcement" />
+          <Button onPress={formik.handleSubmit} text="Publish announcement" />
         </View>
 
         <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
