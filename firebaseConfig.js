@@ -6,12 +6,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAHPxZ6m3iIAj3JU5BODeWXBtEQvhMsr6Q",
-  authDomain: "fego-alumni-app.firebaseapp.com",
-  projectId: "fego-alumni-app",
-  storageBucket: "fego-alumni-app.appspot.com",
-  messagingSenderId: "377056159337",
-  appId: "1:377056159337:web:d39b4f99df9c899b3ca4f8",
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTH_DOMAIN,
+  projectId: FIREBASE_PROJECT_ID,
+  storageBucket: FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
