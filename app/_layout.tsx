@@ -1,16 +1,13 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/utils/use-color-scheme";
+import { useAuthUser } from "@/hooks/useAuthUser";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -54,16 +51,16 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
+      <Stack initialRouteName="(tabs)">
         <Stack.Screen name="auth" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="add-event"
-          options={{ headerBackTitle: "Back", headerTitle: "Add an event" }}
-        />
+        <Stack.Screen name="add-event" options={{ headerBackTitle: "Back", headerTitle: "Add an event" }} />
         <Stack.Screen
           name="add-member"
-          options={{ headerBackTitle: "Back", headerTitle: "Add a new member" }}
+          options={{
+            headerBackTitle: "Back",
+            headerTitle: "Add a new member",
+          }}
         />
         <Stack.Screen
           name="add-memo"
