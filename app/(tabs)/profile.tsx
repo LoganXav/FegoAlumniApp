@@ -8,16 +8,25 @@ import Colors from "@/constants/colors";
 import ImageCarousel from "@/components/carousel/image-carousel";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
+import { AuthenticatedUserContext } from "@/contexts/auth-user-context";
+import { useContext } from "react";
 
 export default function TabFourScreen() {
-  const user = {
+  const { user, setUser } = useContext(AuthenticatedUserContext);
+
+  const testUser = {
     displayName: "Jason Mamoa",
     desc: "A 23 year old man from Victoria Island",
     extra: "fun fact about the person",
   };
 
   async function handleSignOut() {
-    const res = await signOut(auth);
+    try {
+      await signOut(auth);
+      setUser(null);
+    } catch (error) {
+      console.error("<-- Error signing out -->", error);
+    }
   }
 
   const colorScheme = useColorScheme();
@@ -52,9 +61,9 @@ export default function TabFourScreen() {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Image source={ProfileImage} style={styles.avatar} />
-        <Text style={styles.name}>{user?.displayName}</Text>
-        <Text style={{ fontSize: 16 }}>{user?.desc}</Text>
-        <Text style={{ fontSize: 16 }}>{user?.extra}</Text>
+        <Text style={styles.name}>{testUser?.displayName}</Text>
+        <Text style={{ fontSize: 16 }}>{testUser?.desc}</Text>
+        <Text style={{ fontSize: 16 }}>{testUser?.extra}</Text>
         <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>Personal Information</Text>
         {Array(4)
           .fill(0)

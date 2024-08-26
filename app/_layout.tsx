@@ -1,25 +1,23 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack, router } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/utils/use-color-scheme";
-import { useAuthUser } from "@/hooks/useAuthUser";
+import { AuthenticatedUserContext, AuthenticatedUserProvider } from "@/contexts/auth-user-context";
+import { ActivityIndicator, SafeAreaView } from "react-native";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/firebaseConfig";
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from "expo-router";
+export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(tabs)",
+  initialRouteName: "auth",
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -28,7 +26,17 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+  // const { user, setUser } = useContext(AuthenticatedUserContext);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // useEffect(() => {
+  //   const unsubscribeAuth = onAuthStateChanged(auth, async (authenticatedUser) => {
+  //     authenticatedUser ? setUser(authenticatedUser) : setUser(null);
+  //     setIsLoading(false);
+  //   });
+  //   return unsubscribeAuth; // Unsubscribe auth listener on unmount
+  // }, [user]);
+
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -36,14 +44,23 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
+      setIsLoading(false);
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
+  if (isLoading) {
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+      </SafeAreaView>
+    );
   }
 
-  return <RootLayoutNav />;
+  return (
+    <AuthenticatedUserProvider>
+      <RootLayoutNav />
+    </AuthenticatedUserProvider>
+  );
 }
 
 function RootLayoutNav() {

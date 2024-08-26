@@ -1,11 +1,12 @@
-import React from "react";
-import { Link, Tabs } from "expo-router";
+import React, { useContext, useEffect } from "react";
+import { Link, router, Tabs } from "expo-router";
 import { Pressable } from "react-native";
 import Colors from "@/constants/colors";
 import { useColorScheme } from "@/utils/use-color-scheme";
 import { useClientOnlyValue } from "@/utils/use-client-only-value";
 import TabBar from "@/components/layout/tab-bar";
 import { AntDesign } from "@expo/vector-icons";
+import { AuthenticatedUserContext } from "@/contexts/auth-user-context";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: { name: React.ComponentProps<typeof AntDesign>["name"]; color: string }) {
@@ -14,6 +15,19 @@ function TabBarIcon(props: { name: React.ComponentProps<typeof AntDesign>["name"
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  const { user } = useContext(AuthenticatedUserContext);
+
+  console.log("Signed in user", user);
+
+  useEffect(() => {
+    if (user === null) {
+      const timer = setTimeout(() => {
+        router.replace("/auth");
+      }, 100); // Short delay to ensure navigation context is ready
+      return () => clearTimeout(timer);
+    }
+  }, [user]);
 
   return (
     <Tabs

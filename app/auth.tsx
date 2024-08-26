@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Pressable, Text, TextField, View, useThemeColor } from "@/components/ui/themed";
 import { router } from "expo-router";
 import { Image, StyleSheet } from "react-native";
@@ -9,14 +9,19 @@ import { Dimensions } from "react-native";
 import EventCoverImage from "@/assets/images/cover.jpg";
 import { useColorScheme } from "@/utils/use-color-scheme";
 import colors from "@/constants/colors";
-import { auth } from "@/firebaseConfig";
+import { auth, db } from "@/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { FirebaseError } from "firebase/app";
+import { AuthenticatedUserContext } from "@/contexts/auth-user-context";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function LoginScreen() {
   const colorScheme = useColorScheme();
+  const { user, setUser } = useContext(AuthenticatedUserContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const borderColor = colors[colorScheme ?? "light"].grey;
 
@@ -25,12 +30,25 @@ export default function LoginScreen() {
     password: yup.string().required("Password is required"),
   });
 
-  const handleSignIn = async (values: any) => {
+  const handleSignIn = async (values: { email: string; password: string }) => {
     try {
-      const res = await signInWithEmailAndPassword(auth, values.email, values.password);
-      console.log(res, "======res");
+      setIsLoading(true);
+
+      const userCredential = await signInWithEmailAndPassword(auth, values.email.trim(), values.password);
+
+      const authUser = userCredential.user;
+
+      setUser(authUser);
+
+      setIsLoading(false);
+
+      router.push("/");
     } catch (error: any) {
-      console.log(error, "Error=======");
+      setIsLoading(false);
+      if (error instanceof FirebaseError) {
+        alert("Invalid email or password");
+      }
+      console.error("<-- Error signing in -->", error);
     }
   };
 
@@ -72,13 +90,13 @@ export default function LoginScreen() {
                 {touched.password && errors.password && <Text style={{ fontSize: 14, color: "red" }}>{errors.password}</Text>}
               </View>
               <Pressable style={styles.button}>
-                <Button onPress={() => handleSubmit()} text="Sign in" />
+                <Button onPress={() => handleSubmit()} text={isLoading ? "Loading..." : "Sign in"} />
               </Pressable>
 
-              <Pressable style={styles.socialButton} onPress={handleSignIn}>
+              <Pressable style={styles.socialButton} onPress={() => null}>
                 <Button onPress={() => console.log("Sign in with google")} text="Sign in with Google" />
               </Pressable>
-              <Pressable style={styles.socialButton} onPress={handleSignIn}>
+              <Pressable style={styles.socialButton} onPress={() => null}>
                 <Button onPress={() => console.log("sign in with facebook")} text="Sign in with Facebook" />
               </Pressable>
             </View>
