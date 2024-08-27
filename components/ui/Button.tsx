@@ -6,15 +6,17 @@ type ButtonProps = {
   onPress: () => void;
   text: string;
   type?: "PRIMARY" | "SECONDARY" | "TERTIARY";
+  disabled?: boolean;
   bgColor?: string;
   fgColor?: string;
 };
 
-const Button = ({ onPress, text, type = "PRIMARY", bgColor, fgColor }: ButtonProps) => {
+const Button = ({ onPress, disabled, text, type = "PRIMARY", bgColor, fgColor }: ButtonProps) => {
   const colorScheme = useColorScheme();
   const defaultBgColor = Colors[colorScheme ?? "light"].tabIconSelected;
+
   return (
-    <Pressable onPress={onPress} style={[styles.container, styles[`container_${type}`], bgColor ? { backgroundColor: bgColor } : { backgroundColor: defaultBgColor }]}>
+    <Pressable disabled={disabled} onPress={onPress} style={[styles.container, styles[`container_${type}`], bgColor ? { backgroundColor: bgColor } : { backgroundColor: defaultBgColor }]}>
       <Text style={[styles.text, styles[`text_${type}`], fgColor ? { color: fgColor } : {}]}>{text}</Text>
     </Pressable>
   );
