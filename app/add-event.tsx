@@ -14,6 +14,8 @@ import colors from "@/constants/colors";
 import { AntDesign } from "@expo/vector-icons"; // Import AntDesign for icons
 import * as yup from "yup";
 import { Formik } from "formik";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/firebaseConfig";
 
 export default function AddEventScreen() {
   const colorScheme = useColorScheme();
@@ -50,8 +52,21 @@ export default function AddEventScreen() {
     ),
   });
 
-  const handleAddEvent = (values) => {
-    console.log(values, "====");
+  const handleAddEvent = async (values: any) => {
+    try {
+      await setDoc(doc(db, "events", values.title), {
+        title: values.title,
+        venue: values.venue,
+        tagline: values.tagline,
+        description: values.description,
+        startDate: values.startDate,
+        endDate: values.endDate,
+        activities: values.activities,
+      });
+      console.log(values, "Registration successful");
+    } catch (error) {
+      console.error(error, "Error happened");
+    }
   };
 
   return (

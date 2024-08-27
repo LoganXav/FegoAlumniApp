@@ -37,6 +37,8 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events"
     );
   };
 
+  
+
   return (
     <View style={styles.container}>
       <Agenda
