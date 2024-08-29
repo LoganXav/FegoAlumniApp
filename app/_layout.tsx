@@ -114,7 +114,7 @@ function RootLayoutNav() {
           }}
         />
         <Stack.Screen
-          name="member/[id]"
+          name="member/[email]"
           options={{
             headerTitle: "Profile",
             presentation: "modal",

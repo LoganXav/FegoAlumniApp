@@ -9,12 +9,61 @@ import { useColorScheme } from "@/utils/use-color-scheme";
 import colors from "@/constants/colors";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { db } from "@/firebaseConfig";
+import {
+  and,
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
+import { router } from "expo-router";
 
 export default function AddMemberScreen() {
   const colorScheme = useColorScheme();
   const defaultBgColor = colors[colorScheme ?? "light"].tabIconSelected;
 
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAddUser = async (values: any) => {
+    try {
+      setIsLoading(true);
+      const formattedDate = new Date(values.dateOfBirth)
+        .toISOString()
+        .split("T")[0];
+
+      const eventsRef = collection(db, "members");
+      const q = query(eventsRef, where("email", "==", values.email));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        alert(`An member with this email already exists.`);
+        setIsLoading(false);
+        return;
+      }
+
+      await setDoc(doc(db, "members", values.email), {
+        firatName: values.firstName,
+        lastName: values.lastName,
+        gender: values.gender,
+        dateOfBirth: formattedDate,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        address: values.address,
+        hasAdmin: values.hasAdmin,
+        isDeceased: values.isDeceased,
+      });
+      setIsLoading(false);
+
+      router.push("/class");
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error while adding member", error);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -40,7 +89,7 @@ export default function AddMemberScreen() {
       isDeceased: yup.string().required("Life status selection is required"),
     }),
     onSubmit: (values) => {
-      console.log("Form values:", values);
+      handleAddUser(values);
     },
   });
 
@@ -200,7 +249,11 @@ export default function AddMemberScreen() {
         </View>
 
         <View style={styles.button}>
-          <Button onPress={formik.handleSubmit} text="Add member" />
+          <Button
+            disabled={isLoading}
+            onPress={formik.handleSubmit}
+            text={isLoading ? "Loading..." : "Add member"}
+          />
         </View>
 
         <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />

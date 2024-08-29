@@ -1,16 +1,43 @@
 // @ts-nocheck
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { Text, useThemeColor } from "@/components/ui/themed";
 import ImageCarousel from "@/components/carousel/image-carousel";
 import Button from "@/components/ui/button";
 import { useColorScheme } from "@/utils/use-color-scheme.web";
-import ProfileImage from "@/assets/images/selfie.png";
-import { router } from "expo-router";
+import ProfileImage from "@/assets/images/member.png";
+import { router, useLocalSearchParams } from "expo-router";
 import Colors from "@/constants/colors";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebaseConfig";
+import { formatDate } from "@/utils";
 
 export default function MemberDetailsScreen() {
-  const user = { displayName: "Jason Mamoa", desc: "A 23 year old man from Victoria Island", extra: "fun fact about the person" };
+  const { email } = useLocalSearchParams();
+
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    async function fetchEvent() {
+      try {
+        const docRef = doc(db, "members", email);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+
+          console.log(data, "==");
+
+          setUser(data);
+        } else {
+          console.log("No such member!");
+        }
+      } catch (error) {
+        console.error("Error while fetching member <---->", error);
+      }
+    }
+    fetchEvent();
+  }, [email]);
 
   const colorScheme = useColorScheme();
 
@@ -43,20 +70,36 @@ export default function MemberDetailsScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Image source={ProfileImage} style={styles.avatar} />
-        <Text style={styles.name}>{user?.displayName}</Text>
+        <Image
+          source={user?.profilePic || ProfileImage}
+          style={styles.avatar}
+        />
+        <Text style={styles.name}>
+          {user?.firstName} {user?.lastName}
+        </Text>
         <Text style={{ fontSize: 16 }}>{user?.desc}</Text>
         <Text style={{ fontSize: 16 }}>{user?.extra}</Text>
-        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>Personal Information</Text>
+        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>
+          Personal Information
+        </Text>
         {Array(4)
           .fill(0)
           .map((detail, idx) => (
-            <View key={idx} style={[styles.infoCard, { borderColor: shadowColor }]}>
-              <Text style={{ fontSize: 16, fontWeight: "bold" }}>Personal </Text>
-              <Text style={{ fontSize: 16, fontWeight: "bold" }}>Information</Text>
+            <View
+              key={idx}
+              style={[styles.infoCard, { borderColor: shadowColor }]}
+            >
+              <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                Personal{" "}
+              </Text>
+              <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                Information
+              </Text>
             </View>
           ))}
-        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>Gallery</Text>
+        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>
+          Gallery
+        </Text>
         <View style={{ height: 240 }}>
           <ImageCarousel data={data} autoPlay={false} pagination={true} />
         </View>

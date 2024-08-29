@@ -14,8 +14,6 @@ export default function EventDetailScreen() {
   const { title } = useLocalSearchParams();
   const [event, setEvent] = useState<any>(null);
 
-  console.log(event, "==++");
-
   useEffect(() => {
     async function fetchEvent() {
       try {
@@ -35,7 +33,6 @@ export default function EventDetailScreen() {
 
           setEvent(data);
         } else {
-          // docSnap.data() will be undefined in this case
           console.log("No such document!");
         }
       } catch (error) {
