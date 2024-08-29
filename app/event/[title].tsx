@@ -1,39 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView, Platform, Image } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Text, View, useThemeColor } from "@/components/ui/themed";
 import { AntDesign } from "@expo/vector-icons";
 import EventCoverImage from "@/assets/images/cover.jpg";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebaseConfig";
+import { useLocalSearchParams } from "expo-router";
+import { formatDate, formatTime } from "@/utils";
 
 export default function EventDetailScreen() {
   const backgroundColor = useThemeColor({}, "background");
+  const { title } = useLocalSearchParams();
+  const [event, setEvent] = useState<any>(null);
 
-  const event = {
-    title: "FEGO ANNUAL REUNION EVENT",
-    tagline: "The future is our to live",
-    activities: [
-      {
-        title: "Q & A Session",
-        startTime: "Now",
-        endTime: "Then",
-      },
-      {
-        title: "Q & A Session",
-        startTime: "Now",
-        endTime: "Then",
-      },
-      {
-        title: "Q & A Session",
-        startTime: "Now",
-        endTime: "Then",
-      },
-    ],
-    startDate: "Today",
-    endDate: "Tommorrow",
-    venue: "Google Meet",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa facilis rem laudantium deleniti accusamus sed explicabo at repellat, fugiat ea, tempora suscipit. Perferendis tempore modi voluptatibus quibusdam aliquam ea illum natus autem repellat soluta, culparepellendus aspernatur inventore deleniti sapiente saepe alias, totam nesciunt ducimus asperiores voluptatem. Voluptatum impedit at quasi, perferendis consequatur minima expedita? Est, magnam quibusdam cum, iusto aspernatur libero laboriosam incidunt optio molestias sapiente similiquequo, quis impedit repellendus dicta expedita. Nesciunt alias provident praesentium unde vero dolor accusantium, assumenda labore autem quo. Voluptates exercitationem assumenda non. Perferendis repellat at officiis cum placeat possimus ea commodi. Porro? repellendus aspernatur inventoredeleniti sapiente saepe alias, totam nesciunt ducimus asperiores voluptatem. Voluptatum impedit at quasi, perferendis consequatur minima expedita? Est, magnam quibusdam cum, iusto aspernatur libero laboriosam incidunt optio molestias sapiente similique quo, quis impedit repellendus dicta",
-  };
+  console.log(event, "==++");
+
+  useEffect(() => {
+    async function fetchEvent() {
+      try {
+        const docRef = doc(db, "events", title);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+
+          data.startDate = formatDate(data.startDate.toDate());
+          data.endDate = formatDate(data.endDate.toDate());
+
+          data.activities.forEach((activity: any) => {
+            activity.startTime = formatTime(activity.startTime);
+            activity.endTime = formatTime(activity.endTime);
+          });
+
+          setEvent(data);
+        } else {
+          // docSnap.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error while fetching event <---->", error);
+      }
+    }
+    fetchEvent();
+  }, [title]);
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
@@ -42,32 +52,32 @@ export default function EventDetailScreen() {
         <View style={styles.overlay} />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>{event.title}</Text>
-        <Text style={styles.tagline}>{event.tagline}</Text>
+        <Text style={styles.title}>{event?.title}</Text>
+        <Text style={styles.tagline}>{event?.tagline}</Text>
         <View style={styles.detailGroup}>
           <AntDesign name="find" size={15} color="grey" />
-          <Text>{event.venue}</Text>
+          <Text>{event?.venue}</Text>
         </View>
         <View style={styles.detailGroup}>
           <AntDesign name="calendar" size={15} color="grey" />
           <Text>
-            {event.startDate} - {event.endDate}
+            {event?.startDate} - {event?.endDate}
           </Text>
         </View>
         <View>
           <Text style={styles.label}>About this Programme</Text>
-          <Text style={{ fontSize: 18 }}>{event.description}</Text>
+          <Text style={{ fontSize: 18 }}>{event?.description}</Text>
         </View>
         <Text style={styles.sectionHeader}>Day Activities</Text>
-        {event.activities.map((activity, index) => (
+        {event?.activities.map((activity, index) => (
           <View key={index} style={styles.activityContainer}>
             <Text style={styles.activityTitle}>
-              {(index + 1).toString()}. {activity.title}
+              {(index + 1).toString()}. {activity?.title}
             </Text>
             <View style={styles.timeContainer}>
               <AntDesign name="clockcircleo" size={15} color="grey" />
               <Text style={styles.timeValue}>
-                {activity.startTime} - {activity.endTime}
+                {activity?.startTime} - {activity?.endTime}
               </Text>
             </View>
           </View>
@@ -88,8 +98,8 @@ const styles = StyleSheet.create({
   coverImage: {
     width: "100%",
     height: 200,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    // borderBottomLeftRadius: 20,
+    // borderBottomRightRadius: 20,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject, // positions the overlay to cover the entire image

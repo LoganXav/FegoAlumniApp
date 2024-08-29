@@ -38,21 +38,24 @@ interface CalendarEntry {
   endTime?: string;
 }
 
+// Helper function to format date to YYYY-MM-DD
+export const formatDate = (dateString: Date): string => {
+  const date = new Date(dateString);
+  return date.toISOString().split("T")[0];
+};
+
+// Helper function to format time to HH:MM am/pm
+export const formatTime = (timestamp: Timestamp): string => {
+  const date = new Date(
+    timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000,
+  );
+  return format(date, "hh:mm a"); // 'hh:mm a' for 12-hour format with am/pm
+};
+
 export function processEventForCalendar(event: Event): CalendarData {
   const calendarData: CalendarData = {};
-  const { title, venue, description, tagline, startDate, endDate, activities } = event;
-
-  // Helper function to format date to YYYY-MM-DD
-  const formatDate = (dateString: Date): string => {
-    const date = new Date(dateString);
-    return date.toISOString().split("T")[0];
-  };
-
-  // Helper function to format time to HH:MM am/pm
-  const formatTime = (timestamp: Timestamp): string => {
-    const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-    return format(date, "hh:mm a"); // 'hh:mm a' for 12-hour format with am/pm
-  };
+  const { title, venue, description, tagline, startDate, endDate, activities } =
+    event;
 
   // General event info
   const generalInfo: CalendarEntry = {

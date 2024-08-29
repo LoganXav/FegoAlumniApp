@@ -11,21 +11,27 @@ import { db } from "@/firebaseConfig";
 import { useEffect, useState } from "react";
 import { Event, processEventForCalendar } from "@/utils";
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events">) {
+export default function TabOneScreen({
+  navigation,
+}: RootTabScreenProps<"Events">) {
   const colorScheme = useColorScheme();
   const [events, setEvents] = useState<CalendarData>({});
 
   const backgroundColor = colors[colorScheme ?? "light"].background;
-  const selectedBackgroundColor = colors[colorScheme ?? "light"].tabIconSelected;
+  const selectedBackgroundColor =
+    colors[colorScheme ?? "light"].tabIconSelected;
   const textColor = colors[colorScheme ?? "light"].text;
 
   const renderItem = (event: AgendaEntry, isFirst: boolean) => {
-    const fontSize = isFirst ? 20 : 18;
+    const fontSize = isFirst ? 23 : 18;
 
     return (
-      <Pressable style={[styles.item, { height: event.height }]} onPress={() => router.push("/event/1")}>
+      <Pressable
+        style={[styles.item, { height: event.height }]}
+        onPress={() => router.push(`/event/${event.title}`)}
+      >
         <Text style={{ fontSize, fontWeight: "500" }}>{event.title}</Text>
-        {!isFirst && <Text style={{ fontSize: 14, fontWeight: "500" }}>{event.desc}</Text>}
+        {!isFirst && <Text style={{ fontSize: 15 }}>{event.desc}</Text>}
         {isFirst && (
           <>
             <Text style={{ fontSize: 15 }}>Venue: {event.venue}</Text>
@@ -52,8 +58,14 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events"
 
         querySnapshot.forEach((doc) => {
           const docData = doc.data();
-          const startDate = docData.startDate instanceof Timestamp ? docData.startDate.toDate() : new Date(docData.startDate);
-          const endDate = docData.endDate instanceof Timestamp ? docData.endDate.toDate() : new Date(docData.endDate);
+          const startDate =
+            docData.startDate instanceof Timestamp
+              ? docData.startDate.toDate()
+              : new Date(docData.startDate);
+          const endDate =
+            docData.endDate instanceof Timestamp
+              ? docData.endDate.toDate()
+              : new Date(docData.endDate);
 
           const event = {
             ...docData,

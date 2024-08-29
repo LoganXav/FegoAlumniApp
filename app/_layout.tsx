@@ -1,5 +1,9 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -7,7 +11,10 @@ import { useContext, useEffect, useState } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/utils/use-color-scheme";
-import { AuthenticatedUserContext, AuthenticatedUserProvider } from "@/contexts/auth-user-context";
+import {
+  AuthenticatedUserContext,
+  AuthenticatedUserProvider,
+} from "@/contexts/auth-user-context";
 import { ActivityIndicator, SafeAreaView } from "react-native";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
@@ -50,7 +57,9 @@ export default function RootLayout() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <SafeAreaView
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      >
         <ActivityIndicator size="large" />
       </SafeAreaView>
     );
@@ -71,7 +80,10 @@ function RootLayoutNav() {
       <Stack initialRouteName="(tabs)">
         <Stack.Screen name="auth" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="add-event" options={{ headerBackTitle: "Back", headerTitle: "Add an event" }} />
+        <Stack.Screen
+          name="add-event"
+          options={{ headerBackTitle: "Back", headerTitle: "Add an event" }}
+        />
         <Stack.Screen
           name="add-member"
           options={{
@@ -94,7 +106,7 @@ function RootLayoutNav() {
           }}
         />
         <Stack.Screen
-          name="event/[id]"
+          name="event/[title]"
           options={{
             headerTitle: "Event details",
             presentation: "modal",
@@ -110,7 +122,7 @@ function RootLayoutNav() {
           }}
         />
         <Stack.Screen
-          name="memo/[id]"
+          name="memo/[title]"
           options={{
             headerTitle: "Announcement details",
             presentation: "modal",
