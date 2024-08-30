@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Pressable, Text, TextField, View, useThemeColor } from "@/components/ui/themed";
 import { router } from "expo-router";
-import { Image, StyleSheet } from "react-native";
+import { Alert, Image, StyleSheet } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
 import Button from "@/components/ui/button";
@@ -46,7 +46,7 @@ export default function LoginScreen() {
     } catch (error: any) {
       setIsLoading(false);
       if (error instanceof FirebaseError) {
-        alert("Invalid email or password");
+        Alert.alert("Invalid email or password");
       }
       console.error("<-- Error signing in -->", error);
     }

@@ -5,28 +5,13 @@ import { Text, View } from "@/components/ui/themed";
 import * as Animatable from "react-native-animatable";
 import { router } from "expo-router";
 import Icon from "@/utils/icons";
-import ProfileImage from "@/assets/images/member.png";
 
-export default function ClassListItem({
-  item,
-  index,
-  animation,
-}: {
-  item: Record<string, any>;
-  index: number;
-  animation: string;
-}) {
+export default function ClassListItem({ item, index, animation }: { item: Record<string, any>; index: number; animation: string }) {
   return (
     <Animatable.View animation={animation} duration={300} delay={index * 100}>
       <View style={[styles.listItem, {}]}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => router.push(`/member/${item.email}`)}
-        >
-          <Image
-            source={item?.profilePic || ProfileImage}
-            style={styles.image}
-          />
+        <TouchableOpacity activeOpacity={0.7} onPress={() => router.push(`/member/${item.email}`)}>
+          <Image source={item?.profilePic} style={styles.image} />
         </TouchableOpacity>
         <View style={styles.detailsContainer}>
           <Text style={styles.name}>
@@ -71,6 +56,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
+    backgroundColor: "grey",
   },
   detailsContainer: {
     paddingHorizontal: 16,

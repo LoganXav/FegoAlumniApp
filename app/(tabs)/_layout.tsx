@@ -9,10 +9,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { AuthenticatedUserContext } from "@/contexts/auth-user-context";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof AntDesign>["name"];
-  color: string;
-}) {
+function TabBarIcon(props: { name: React.ComponentProps<typeof AntDesign>["name"]; color: string }) {
   return <AntDesign size={18} style={{ marginBottom: 3 }} {...props} />;
 }
 
@@ -45,25 +42,14 @@ export default function TabLayout() {
         options={{
           headerTitle: "Upcoming Events",
           title: "Events",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="calendar" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="calendar" color={color} />,
           headerRight: () => {
             if (user?.email === "test@email.com") {
               return;
             }
             return (
               <Link href="/add-event" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <AntDesign
-                      name="addfolder"
-                      size={20}
-                      color={Colors[colorScheme ?? "light"].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
+                <Pressable>{({ pressed }) => <AntDesign name="addfolder" size={20} color={Colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
               </Link>
             );
           },
@@ -81,16 +67,7 @@ export default function TabLayout() {
             }
             return (
               <Link href="/add-member" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <AntDesign
-                      name="adduser"
-                      size={20}
-                      color={Colors[colorScheme ?? "light"].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
+                <Pressable>{({ pressed }) => <AntDesign name="adduser" size={20} color={Colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
               </Link>
             );
           },
@@ -101,25 +78,14 @@ export default function TabLayout() {
         options={{
           headerTitle: "Announcements",
           title: "Memo",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="notification" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="notification" color={color} />,
           headerRight: () => {
             if (false) {
               return;
             }
             return (
               <Link href="/add-memo" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <AntDesign
-                      name="pluscircleo"
-                      size={25}
-                      color={Colors[colorScheme ?? "light"].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
+                <Pressable>{({ pressed }) => <AntDesign name="pluscircleo" size={25} color={Colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
               </Link>
             );
           },
@@ -138,16 +104,7 @@ export default function TabLayout() {
             }
             return (
               <Link href="/edit-profile" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <AntDesign
-                      name="edit"
-                      size={20}
-                      color={Colors[colorScheme ?? "light"].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
+                <Pressable>{({ pressed }) => <AntDesign name="edit" size={20} color={Colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
               </Link>
             );
           },

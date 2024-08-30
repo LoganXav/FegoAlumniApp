@@ -11,14 +11,16 @@ import Colors from "@/constants/colors";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { formatDate } from "@/utils";
+import { useUserStore } from "@/store";
 
 export default function MemberDetailsScreen() {
   const { email } = useLocalSearchParams();
+  const { setEmail } = useUserStore();
 
   const [user, setUser] = useState();
 
   useEffect(() => {
-    async function fetchEvent() {
+    async function fetchMember() {
       try {
         const docRef = doc(db, "members", email);
         const docSnap = await getDoc(docRef);
@@ -26,9 +28,8 @@ export default function MemberDetailsScreen() {
         if (docSnap.exists()) {
           const data = docSnap.data();
 
-          console.log(data, "==");
-
           setUser(data);
+          setEmail(email);
         } else {
           console.log("No such member!");
         }
@@ -36,7 +37,7 @@ export default function MemberDetailsScreen() {
         console.error("Error while fetching member <---->", error);
       }
     }
-    fetchEvent();
+    fetchMember();
   }, [email]);
 
   const colorScheme = useColorScheme();
@@ -70,36 +71,22 @@ export default function MemberDetailsScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Image
-          source={user?.profilePic || ProfileImage}
-          style={styles.avatar}
-        />
+        <Image source={user?.profilePic || ProfileImage} style={styles.avatar} />
         <Text style={styles.name}>
           {user?.firstName} {user?.lastName}
         </Text>
         <Text style={{ fontSize: 16 }}>{user?.desc}</Text>
         <Text style={{ fontSize: 16 }}>{user?.extra}</Text>
-        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>
-          Personal Information
-        </Text>
+        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>Personal Information</Text>
         {Array(4)
           .fill(0)
           .map((detail, idx) => (
-            <View
-              key={idx}
-              style={[styles.infoCard, { borderColor: shadowColor }]}
-            >
-              <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                Personal{" "}
-              </Text>
-              <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                Information
-              </Text>
+            <View key={idx} style={[styles.infoCard, { borderColor: shadowColor }]}>
+              <Text style={{ fontSize: 16, fontWeight: "bold" }}>Personal </Text>
+              <Text style={{ fontSize: 16, fontWeight: "bold" }}>Information</Text>
             </View>
           ))}
-        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>
-          Gallery
-        </Text>
+        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>Gallery</Text>
         <View style={{ height: 240 }}>
           <ImageCarousel data={data} autoPlay={false} pagination={true} />
         </View>
