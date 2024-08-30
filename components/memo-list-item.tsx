@@ -15,21 +15,22 @@ export default function MemoListItem({ item, index, animation }: { item: Record<
   const colorScheme = useColorScheme();
   const textColor = useThemeColor({}, "text");
   const shadowColor = Colors[colorScheme ?? "light"].text;
+
   return (
     <Animatable.View animation={animation} duration={300} delay={index * 100}>
       <View style={[styles.listItem, { borderColor: shadowColor }]}>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => router.push("/memo/1")}>
-          <Image source={EventCoverImage} style={styles.image} />
+        <TouchableOpacity activeOpacity={0.7} onPress={() => router.push(`/memo/${item?.title}`)}>
+          <Image source={item.imageUrl ? { uri: item.imageUrl } : EventCoverImage} style={styles.image} />
         </TouchableOpacity>
         <View style={styles.detailsContainer}>
           <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.name, { color: textColor, fontWeight: "bold" }]}>
-            Announcement Title
+            {item?.title}
           </Text>
           <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.name, { color: textColor }]}>
-            Announcement Description
+            {item?.desc}
           </Text>
           <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.name, { color: textColor, fontSize: 14 }]}>
-            08/24 11:00pm
+            {item?.time}
           </Text>
         </View>
       </View>

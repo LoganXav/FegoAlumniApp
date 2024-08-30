@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAHPxZ6m3iIAj3JU5BODeWXBtEQvhMsr6Q",
@@ -18,5 +19,6 @@ const auth = initializeAuth(app, {
 });
 
 const db = getFirestore(app);
+const storage = getStorage(app, "gs://fego-alumni-app.appspot.com");
 
-export { auth, db };
+export { auth, db, storage };

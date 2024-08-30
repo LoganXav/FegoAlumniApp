@@ -1,12 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView, Platform, Image, Linking, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Text, View, useThemeColor } from "@/components/ui/themed";
 import { AntDesign } from "@expo/vector-icons";
 import EventCoverImage from "@/assets/images/cover.jpg";
+import { useLocalSearchParams } from "expo-router";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebaseConfig";
+import { formatDateTime } from "@/utils";
 
 export default function MemoDetailScreen() {
+  const { title } = useLocalSearchParams();
   const backgroundColor = useThemeColor({}, "background");
+
+  const [memo, setMemo] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchMemo() {
+      try {
+        const docRef = doc(db, "memo", title);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+
+          if (data.time && data.time.seconds) {
+            const date = new Date(data.time.seconds * 1000 + data.time.nanoseconds / 1000000);
+            data.time = formatDateTime(date);
+          }
+
+          setMemo(data);
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error while fetching memo <---->", error);
+      }
+    }
+    fetchMemo();
+  }, [title]);
 
   const announcement = {
     title: "SAMPLE ANNOUNCEMENT",
@@ -23,22 +55,27 @@ export default function MemoDetailScreen() {
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <View style={styles.coverImageContainer}>
-        <Image source={EventCoverImage} style={styles.coverImage} />
+        <Image source={memo?.imageUrl ? { uri: memo?.imageUrl } : EventCoverImage} style={styles.coverImage} />
         <View style={styles.overlay} />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>{announcement.title}</Text>
-        <Text style={styles.desc}>{announcement.desc}</Text>
+        <Text style={styles.title}>{memo?.title}</Text>
+        <Text style={styles.desc}>{memo?.desc}</Text>
+
+        <View style={styles.detailGroup}>
+          <AntDesign name="calendar" size={15} color="grey" />
+          <Text>{memo?.time}</Text>
+        </View>
 
         <View>
           <Text style={styles.label}>Announcement</Text>
-          <Text style={{ fontSize: 18 }}>{announcement.details}</Text>
+          <Text style={{ fontSize: 18 }}>{memo?.details}</Text>
         </View>
-        {announcement.link && (
+        {memo?.link && (
           <View style={styles.detailGroup}>
             <Text style={styles.label}>Related Link: </Text>
-            <TouchableOpacity onPress={() => handleLinkPress(announcement.link)}>
-              <Text style={styles.link}>{announcement.link}</Text>
+            <TouchableOpacity onPress={() => handleLinkPress(memo?.link)}>
+              <Text style={styles.link}>{memo?.link}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -58,8 +95,8 @@ const styles = StyleSheet.create({
   coverImage: {
     width: "100%",
     height: 200,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    // borderBottomLeftRadius: 20,
+    // borderBottomRightRadius: 20,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject, // positions the overlay to cover the entire image

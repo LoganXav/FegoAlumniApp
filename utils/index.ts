@@ -46,16 +46,17 @@ export const formatDate = (dateString: Date): string => {
 
 // Helper function to format time to HH:MM am/pm
 export const formatTime = (timestamp: Timestamp): string => {
-  const date = new Date(
-    timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000,
-  );
+  const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
   return format(date, "hh:mm a"); // 'hh:mm a' for 12-hour format with am/pm
+};
+
+export const formatDateTime = (date: Date): string => {
+  return format(date, "MM/dd hh:mm a");
 };
 
 export function processEventForCalendar(event: Event): CalendarData {
   const calendarData: CalendarData = {};
-  const { title, venue, description, tagline, startDate, endDate, activities } =
-    event;
+  const { title, venue, description, tagline, startDate, endDate, activities } = event;
 
   // General event info
   const generalInfo: CalendarEntry = {
@@ -100,3 +101,8 @@ export function processEventForCalendar(event: Event): CalendarData {
 
   return calendarData;
 }
+
+export const fetchImageAsBlob = async (uri: string) => {
+  const response = await fetch(uri);
+  return await response.blob();
+};

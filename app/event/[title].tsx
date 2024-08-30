@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { Text, View, useThemeColor } from "@/components/ui/themed";
 import { AntDesign } from "@expo/vector-icons";
 import EventCoverImage from "@/assets/images/cover.jpg";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { useLocalSearchParams } from "expo-router";
 import { formatDate, formatTime } from "@/utils";
@@ -23,8 +23,11 @@ export default function EventDetailScreen() {
         if (docSnap.exists()) {
           const data = docSnap.data();
 
-          data.startDate = formatDate(data.startDate.toDate());
-          data.endDate = formatDate(data.endDate.toDate());
+          console.log(data, "=======");
+
+          data.startDate instanceof Timestamp ? formatDate(data.startDate.toDate()) : new Date(data.startDate);
+
+          data.endDate instanceof Timestamp ? formatDate(data.endDate.toDate()) : new Date(data.endDate);
 
           data.activities.forEach((activity: any) => {
             activity.startTime = formatTime(activity.startTime);
@@ -66,7 +69,7 @@ export default function EventDetailScreen() {
           <Text style={{ fontSize: 18 }}>{event?.description}</Text>
         </View>
         <Text style={styles.sectionHeader}>Day Activities</Text>
-        {event?.activities.map((activity, index) => (
+        {event?.activities.map((activity: any, index: any) => (
           <View key={index} style={styles.activityContainer}>
             <Text style={styles.activityTitle}>
               {(index + 1).toString()}. {activity?.title}

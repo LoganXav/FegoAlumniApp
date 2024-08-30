@@ -37,15 +37,7 @@ export default function TabTwoScreen({}) {
     fetchMembers();
   }, []);
 
-  console.log(members, "0997y");
-
-  const renderItem = ({
-    item,
-    index,
-  }: {
-    item: Record<string, any>;
-    index: number;
-  }) => <ClassListItem item={item} index={index} animation={animation} />;
+  const renderItem = ({ item, index }: { item: Record<string, any>; index: number }) => <ClassListItem item={item} index={index} animation={animation} />;
 
   const ListEmptyComponent = () => {
     return (
@@ -58,12 +50,7 @@ export default function TabTwoScreen({}) {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       if (viewRef.current) {
-        viewRef.current.transition(
-          { opacity: 0.5 },
-          { opacity: 1 },
-          500,
-          "ease-in-out-circ",
-        );
+        viewRef.current.transition({ opacity: 0.5 }, { opacity: 1 }, 500, "ease-in-out-circ");
       }
     });
 
@@ -74,15 +61,7 @@ export default function TabTwoScreen({}) {
 
   return (
     <Animatable.View ref={viewRef} easing={"ease-in-out-circ"} duration={500}>
-      <FlatList
-        data={members}
-        keyExtractor={(_, i) => String(i)}
-        numColumns={2}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        ListEmptyComponent={ListEmptyComponent}
-      />
+      <FlatList data={members} keyExtractor={(_, i) => String(i)} numColumns={2} renderItem={renderItem} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }} ListEmptyComponent={ListEmptyComponent} />
     </Animatable.View>
   );
 }
