@@ -1,2 +1,5 @@
-Give admin ability to edit member's profile - (life status, admin rights, delete other people's accounts)
-consider building a colourful landing page before the auth screen
+Intergrate the profile screen
+Map the member profiles screens to match
+Consider building a colourful splash page before the auth screen
+Revamp the auth screen ui
+Plan how the auth flow will work.

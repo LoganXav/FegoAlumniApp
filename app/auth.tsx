@@ -36,7 +36,7 @@ export default function LoginScreen() {
 
       const userCredential = await signInWithEmailAndPassword(auth, values.email.trim(), values.password);
 
-      const authUser = userCredential.user;
+      const authUser = userCredential?.user;
 
       setUser(authUser);
 

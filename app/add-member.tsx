@@ -9,9 +9,11 @@ import { useColorScheme } from "@/utils/use-color-scheme";
 import colors from "@/constants/colors";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { db } from "@/firebaseConfig";
+import { auth, db } from "@/firebaseConfig";
 import { and, collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { router } from "expo-router";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { PASSWORD } from "@/constants/auth";
 
 export default function AddMemberScreen() {
   const colorScheme = useColorScheme();
@@ -36,6 +38,7 @@ export default function AddMemberScreen() {
       }
 
       await setDoc(doc(db, "members", values.email), {
+        title: values.title,
         firstName: values.firstName,
         lastName: values.lastName,
         gender: values.gender,
@@ -46,6 +49,9 @@ export default function AddMemberScreen() {
         hasAdmin: values.hasAdmin,
         isDeceased: values.isDeceased,
       });
+
+      createUserWithEmailAndPassword(auth, values?.email, PASSWORD);
+
       setIsLoading(false);
 
       router.push("/class");
@@ -57,6 +63,7 @@ export default function AddMemberScreen() {
 
   const formik = useFormik({
     initialValues: {
+      title: "",
       firstName: "",
       lastName: "",
       gender: "male",
@@ -70,11 +77,11 @@ export default function AddMemberScreen() {
     validationSchema: yup.object().shape({
       firstName: yup.string().required("First name is required"),
       lastName: yup.string().required("Last name is required"),
-      gender: yup.string().required("Gender is required"),
-      dateOfBirth: yup.date().required("Date of birth is required"),
+      // gender: yup.string().required("Gender is required"),
+      // dateOfBirth: yup.date().required("Date of birth is required"),
       email: yup.string().email("Invalid email").required("Email is required"),
-      phoneNumber: yup.string(),
-      address: yup.string().required("Address is required"),
+      // phoneNumber: yup.string(),
+      // address: yup.string().required("Address is required"),
       hasAdmin: yup.string().required("Admin privileges selection is required"),
       isDeceased: yup.string().required("Life status selection is required"),
     }),
@@ -94,6 +101,10 @@ export default function AddMemberScreen() {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.form}>
           <Text style={styles.sectionHeader}>Personal Information</Text>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>Title</Text>
+            <TextField placeholder="Type your title (e.g Mr, Mrs, Engr, Chief)" value={formik.values.title} onChangeText={formik.handleChange("firstName")} onBlur={formik.handleBlur("title")} error={formik.touched.title && formik.errors.title} />
+          </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>First Name</Text>
             <TextField placeholder="Type your name" value={formik.values.firstName} onChangeText={formik.handleChange("firstName")} onBlur={formik.handleBlur("firstName")} error={formik.touched.firstName && formik.errors.firstName} />
@@ -127,7 +138,7 @@ export default function AddMemberScreen() {
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Address (Country, State, City)</Text>
-            <TextField placeholder="Type your address" value={formik.values.address} onChangeText={formik.handleChange("address")} onBlur={formik.handleBlur("address")} error={formik.touched.address && formik.errors.address} />
+            <TextField placeholder="Type your address (e.g. Lagos, Nigeria)" value={formik.values.address} onChangeText={formik.handleChange("address")} onBlur={formik.handleBlur("address")} error={formik.touched.address && formik.errors.address} />
           </View>
 
           <Text style={styles.sectionHeader}>Admin Privileges</Text>

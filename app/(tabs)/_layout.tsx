@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, router, Tabs } from "expo-router";
 import { Pressable } from "react-native";
 import Colors from "@/constants/colors";
@@ -7,6 +7,8 @@ import { useClientOnlyValue } from "@/utils/use-client-only-value";
 import TabBar from "@/components/layout/tab-bar";
 import { AntDesign } from "@expo/vector-icons";
 import { AuthenticatedUserContext } from "@/contexts/auth-user-context";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebaseConfig";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: { name: React.ComponentProps<typeof AntDesign>["name"]; color: string }) {
@@ -16,7 +18,10 @@ function TabBarIcon(props: { name: React.ComponentProps<typeof AntDesign>["name"
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
+  const [authUser, setAuthUser] = useState<Record<string, any>>({});
   const { user } = useContext(AuthenticatedUserContext);
+
+  console.log(user, "===");
 
   useEffect(() => {
     if (user === null) {
@@ -24,8 +29,28 @@ export default function TabLayout() {
         router.replace("/auth");
       }, 100); // Short delay to ensure navigation context is ready
       return () => clearTimeout(timer);
+    } else {
+      async function fetchMember() {
+        try {
+          const docRef = doc(db, "members", user?.email);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+
+            setAuthUser(data);
+          } else {
+            console.log("No such member!");
+          }
+        } catch (error) {
+          console.error("Error while fetching member <---->", error);
+        }
+      }
+      fetchMember();
     }
   }, [user]);
+
+  console.log(authUser?.hasAdmin);
 
   return (
     <Tabs
@@ -44,7 +69,7 @@ export default function TabLayout() {
           title: "Events",
           tabBarIcon: ({ color }) => <TabBarIcon name="calendar" color={color} />,
           headerRight: () => {
-            if (user?.email === "test@email.com") {
+            if (authUser?.hasAdmin !== "yes") {
               return;
             }
             return (
@@ -62,7 +87,7 @@ export default function TabLayout() {
           title: "Directory",
           tabBarIcon: ({ color }) => <TabBarIcon name="team" color={color} />,
           headerRight: () => {
-            if (false) {
+            if (authUser?.hasAdmin !== "yes") {
               return;
             }
             return (
@@ -80,7 +105,7 @@ export default function TabLayout() {
           title: "Memo",
           tabBarIcon: ({ color }) => <TabBarIcon name="notification" color={color} />,
           headerRight: () => {
-            if (false) {
+            if (authUser?.hasAdmin !== "yes") {
               return;
             }
             return (
@@ -99,7 +124,7 @@ export default function TabLayout() {
           title: "Profile",
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
           headerRight: () => {
-            if (false) {
+            if (authUser?.hasAdmin !== "yes") {
               return;
             }
             return (

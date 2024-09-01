@@ -10,25 +10,19 @@ import { db } from "@/firebaseConfig";
 import { useEffect, useState } from "react";
 import { Event, processEventForCalendar } from "@/utils";
 
-export default function TabOneScreen({
-  navigation,
-}: RootTabScreenProps<"Events">) {
+export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events">) {
   const colorScheme = useColorScheme();
   const [events, setEvents] = useState<CalendarData>({});
 
   const backgroundColor = colors[colorScheme ?? "light"].background;
-  const selectedBackgroundColor =
-    colors[colorScheme ?? "light"].tabIconSelected;
+  const selectedBackgroundColor = colors[colorScheme ?? "light"].tabIconSelected;
   const textColor = colors[colorScheme ?? "light"].text;
 
   const renderItem = (event: AgendaEntry, isFirst: boolean) => {
     const fontSize = isFirst ? 23 : 18;
 
     return (
-      <Pressable
-        style={[styles.item, { height: event.height }]}
-        onPress={() => router.push(`/event/${event.title}`)}
-      >
+      <Pressable style={[styles.item, { height: event.height }]} onPress={() => router.push(`/event/${event.title}`)}>
         <Text style={{ fontSize, fontWeight: "500" }}>{event.title}</Text>
         {!isFirst && <Text style={{ fontSize: 15 }}>{event.desc}</Text>}
         {isFirst && (
@@ -43,8 +37,8 @@ export default function TabOneScreen({
 
   const renderEmptyDate = () => {
     return (
-      <View style={styles.emptyDate}>
-        <Text>This is empty date!</Text>
+      <View style={[styles.emptyDate, { backgroundColor: "lightgrey" }]}>
+        <Text style={[{ color: "white" }]}>No event</Text>
       </View>
     );
   };
@@ -57,14 +51,8 @@ export default function TabOneScreen({
 
         querySnapshot.forEach((doc) => {
           const docData = doc.data();
-          const startDate =
-            docData.startDate instanceof Timestamp
-              ? docData.startDate.toDate()
-              : new Date(docData.startDate);
-          const endDate =
-            docData.endDate instanceof Timestamp
-              ? docData.endDate.toDate()
-              : new Date(docData.endDate);
+          const startDate = docData.startDate instanceof Timestamp ? docData.startDate.toDate() : new Date(docData.startDate);
+          const endDate = docData.endDate instanceof Timestamp ? docData.endDate.toDate() : new Date(docData.endDate);
 
           const event = {
             ...docData,
@@ -102,7 +90,7 @@ export default function TabOneScreen({
         futureScrollRange={3}
         // selected="2024-07-15"
         renderItem={renderItem}
-        renderEmptyDate={renderEmptyDate}
+        renderEmptyData={renderEmptyDate}
         theme={{
           calendarBackground: backgroundColor,
           textSectionTitleColor: textColor,
@@ -131,7 +119,7 @@ const styles = StyleSheet.create({
     marginTop: 17,
   },
   emptyDate: {
-    height: 15,
+    height: 50,
     flex: 1,
     paddingTop: 30,
   },
