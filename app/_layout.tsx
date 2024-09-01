@@ -11,7 +11,7 @@ import { AuthenticatedUserContext, AuthenticatedUserProvider } from "@/contexts/
 import { ActivityIndicator, SafeAreaView } from "react-native";
 import { Pressable } from "@/components/ui/themed";
 import { AntDesign } from "@expo/vector-icons";
-import colors from "@/constants/colors";
+import Colors from "@/constants/colors";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -114,7 +114,7 @@ function RootLayoutNav() {
               }
               return (
                 <Link href="/edit-member" asChild>
-                  <Pressable>{({ pressed }) => <AntDesign name="edit" size={20} color={colors[colorScheme ?? "light"].text} style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }} />}</Pressable>
+                  <Pressable>{({ pressed }) => <AntDesign name="edit" size={20} color={Colors[colorScheme ?? "light"].text} style={{ opacity: pressed ? 0.5 : 1, backgroundColor: "transparent" }} />}</Pressable>
                 </Link>
               );
             },

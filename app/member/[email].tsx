@@ -43,6 +43,7 @@ export default function MemberDetailsScreen() {
   const colorScheme = useColorScheme();
 
   const shadowColor = Colors[colorScheme ?? "light"].text;
+  const borderColor = Colors[colorScheme ?? "light"].grey;
 
   const data = [
     {
@@ -71,24 +72,66 @@ export default function MemberDetailsScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Image source={user?.profilePic || ProfileImage} style={styles.avatar} />
+        <Image source={user?.profileImageUrl && { uri: user?.profileImageUrl }} style={styles.avatar} />
         <Text style={styles.name}>
           {user?.firstName} {user?.lastName}
         </Text>
         <Text style={{ fontSize: 16 }}>{user?.desc}</Text>
         <Text style={{ fontSize: 16 }}>{user?.extra}</Text>
-        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>Personal Information</Text>
-        {Array(4)
-          .fill(0)
-          .map((detail, idx) => (
-            <View key={idx} style={[styles.infoCard, { borderColor: shadowColor }]}>
-              <Text style={{ fontSize: 16, fontWeight: "bold" }}>Personal </Text>
-              <Text style={{ fontSize: 16, fontWeight: "bold" }}>Information</Text>
-            </View>
-          ))}
-        <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 30 }}>Gallery</Text>
-        <View style={{ height: 240 }}>
-          <ImageCarousel data={data} autoPlay={false} pagination={true} />
+
+        <View style={styles.info}>
+          <Text style={styles.sectionHeader}>Personal Information</Text>
+
+          <View style={[styles.infoCard, { borderColor }]}>
+            <Text style={{ fontSize: 16 }}>Date of Birth</Text>
+            <Text style={{ fontSize: 16 }}>{user?.dateOfBirth || "-"}</Text>
+          </View>
+          <View style={[styles.infoCard, { borderColor }]}>
+            <Text style={{ fontSize: 16 }}>Email</Text>
+            <Text style={{ fontSize: 16 }}>{user?.email}</Text>
+          </View>
+          <View style={[styles.infoCard, { borderColor }]}>
+            <Text style={{ fontSize: 16 }}>Phone number</Text>
+            <Text style={{ fontSize: 16 }}>{user?.phoneNumber || "-"}</Text>
+          </View>
+
+          <View style={[styles.infoCard, { borderColor }]}>
+            <Text style={{ fontSize: 16 }}>Location</Text>
+            <Text style={{ fontSize: 16 }}>{user?.address || "-"}</Text>
+          </View>
+          <Text style={styles.sectionHeader}>Professional</Text>
+
+          <View style={[styles.infoCard, { borderColor }]}>
+            <Text style={{ fontSize: 16 }}>Organization name</Text>
+            <Text style={{ fontSize: 16 }}>{user?.currentEmployer || "-"}</Text>
+          </View>
+          <View style={[styles.infoCard, { borderColor }]}>
+            <Text style={{ fontSize: 16 }}>Job title</Text>
+            <Text style={{ fontSize: 16 }}>{user?.jobTitle || "-"}</Text>
+          </View>
+          <View style={[styles.infoCard, { borderColor }]}>
+            <Text style={{ fontSize: 16 }}>Industry</Text>
+            <Text style={{ fontSize: 16 }}>{user?.industry || "-"}</Text>
+          </View>
+
+          <Text style={styles.sectionHeader}>Networking</Text>
+
+          <View style={[styles.infoCard, { borderColor }]}>
+            <Text style={{ fontSize: 16 }}>Open to networking</Text>
+            <Text style={{ fontSize: 16 }}>{user?.networking === "yes" ? "Yes" : "No"}</Text>
+          </View>
+          <View style={[styles.infoCard, { borderColor }]}>
+            <Text style={{ fontSize: 16 }}>Preferred contact method</Text>
+            <Text style={{ fontSize: 16 }}>{user?.preferredContact}</Text>
+          </View>
+          <View style={[styles.infoCard, { borderColor }]}>
+            <Text style={{ fontSize: 16 }}>Industry</Text>
+            <Text style={{ fontSize: 16 }}>{user?.mentorship === "yes" ? "Yes" : "No"}</Text>
+          </View>
+          <Text style={styles.sectionHeader}>Gallery</Text>
+          <View style={{ height: 240, marginTop: 20 }}>
+            <ImageCarousel data={data} autoPlay={false} pagination={true} />
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -98,6 +141,17 @@ export default function MemberDetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+
+  info: {
+    marginBottom: 30,
+    gap: 10,
+  },
+
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: "bold",
+    paddingTop: 20,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -132,7 +186,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     paddingVertical: 20,
     paddingHorizontal: 10,
-    borderWidth: 0.1,
-    borderRadius: 3,
+    borderWidth: 0.1669,
+    borderRadius: 8,
   },
 });

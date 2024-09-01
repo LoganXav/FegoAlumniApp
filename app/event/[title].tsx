@@ -23,8 +23,6 @@ export default function EventDetailScreen() {
         if (docSnap.exists()) {
           const data = docSnap.data();
 
-          console.log(data, "=======");
-
           data.startDate instanceof Timestamp ? formatDate(data.startDate.toDate()) : new Date(data.startDate);
 
           data.endDate instanceof Timestamp ? formatDate(data.endDate.toDate()) : new Date(data.endDate);
@@ -61,7 +59,7 @@ export default function EventDetailScreen() {
         <View style={styles.detailGroup}>
           <AntDesign name="calendar" size={15} color="grey" />
           <Text>
-            {event?.startDate} - {event?.endDate}
+            From: {event?.startDate} To: {event?.endDate}
           </Text>
         </View>
         <View>

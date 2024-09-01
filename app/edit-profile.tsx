@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { StatusBar } from "expo-status-bar";
-import { Platform, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { Alert, Platform, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
 import { useColorScheme } from "@/utils/use-color-scheme";
@@ -11,12 +11,70 @@ import ImageUpload from "@/components/image-upload";
 import MultiImageUpload from "@/components/image-upload/multi-image-upload";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { db, storage } from "@/firebaseConfig";
+import { doc, updateDoc } from "firebase/firestore";
+import { router } from "expo-router";
+import { AuthenticatedUserContext } from "@/contexts/auth-user-context";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { fetchImageAsBlob } from "@/utils";
 
 export default function EditProfileScreen() {
   const colorScheme = useColorScheme();
   const defaultBgColor = colors[colorScheme ?? "light"].tabIconSelected;
 
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const { user, setUser } = useContext(AuthenticatedUserContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [profileImageUri, setProfileImageUri] = useState<string | null>(null);
+
+  const handleEditProfile = async (values: any) => {
+    try {
+      setIsLoading(true);
+
+      const formattedDate = new Date(values.dateOfBirth).toISOString().split("T")[0];
+
+      let profileImageUrl = null;
+
+      if (profileImageUri) {
+        const storageRef = ref(storage, `profile/${values.email}-${Date.now()}`);
+        const uploadResult = await uploadBytes(storageRef, await fetchImageAsBlob(profileImageUri));
+        profileImageUrl = await getDownloadURL(uploadResult.ref);
+      }
+
+      const userRef = doc(db, "members", user?.email);
+
+      const updatedFields: any = {
+        profileImageUrl,
+        title: values.title.trim(),
+        firstName: values.firstName.trim(),
+        lastName: values.lastName.trim(),
+        gender: values.gender.trim(),
+        dateOfBirth: formattedDate,
+        bio: values.bio.trim(),
+        phoneNumber: values.phoneNumber.trim(),
+        address: values.address.trim(),
+        currentEmployer: values.currentEmployer.trim(),
+        jobTitle: values.jobTitle.trim(),
+        industry: values.industry.trim(),
+        networking: values.networking.trim(),
+        preferredContact: values.preferredContact.trim(),
+        mentorship: values.mentorship.trim(),
+      };
+
+      // Remove undefined fields
+      Object.keys(updatedFields).forEach((key) => (updatedFields[key] === undefined || updatedFields[key] === "") && delete updatedFields[key]);
+
+      await updateDoc(userRef, updatedFields);
+
+      setIsLoading(false);
+
+      router.push("/profile");
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error while updating member", error);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -37,8 +95,8 @@ export default function EditProfileScreen() {
       mentorship: "no",
     },
     validationSchema: yup.object().shape({
-      firstName: yup.string().required("First name is required"),
-      lastName: yup.string().required("Last name is required"),
+      // firstName: yup.string().required("First name is required"),
+      // lastName: yup.string().required("Last name is required"),
       // gender: yup.string().required("Gender is required"),
       // dateOfBirth: yup.date().required("Date of birth is required"),
       // bio: yup.string(),
@@ -50,8 +108,7 @@ export default function EditProfileScreen() {
       // mentorship: yup.string().required("Mentorship preference is required"),
     }),
     onSubmit: (values) => {
-      console.log(values);
-      // Handle form submission here
+      handleEditProfile(values);
     },
   });
 
@@ -64,13 +121,12 @@ export default function EditProfileScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <ImageUpload imagePreviewStyle={styles.imagePreview} imageStyle={styles.imagePreview} onImageSelect={() => null} />
-
+        <ImageUpload imagePreviewStyle={styles.imagePreview} imageStyle={styles.imagePreview} onImageSelect={setProfileImageUri} />
         <View style={styles.form}>
           <Text style={styles.sectionHeader}>Personal Information</Text>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Title</Text>
-            <TextField placeholder="Type your title (e.g Mr, Mrs, Engr, Chief)" value={formik.values.title} onChangeText={formik.handleChange("firstName")} onBlur={formik.handleBlur("title")} error={formik.touched.title && formik.errors.title} />
+            <TextField placeholder="Type your title (e.g Mr, Mrs, Engr, Chief)" value={formik.values.title} onChangeText={formik.handleChange("title")} onBlur={formik.handleBlur("title")} error={formik.touched.title && formik.errors.title} />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>First Name</Text>
@@ -99,10 +155,10 @@ export default function EditProfileScreen() {
             <TextField placeholder="Type something fun about yourself" value={formik.values.bio} onChangeText={formik.handleChange("bio")} onBlur={formik.handleBlur("bio")} error={formik.touched.bio && formik.errors.bio} />
           </View>
           <Text style={styles.sectionHeader}>Contact Details</Text>
-          <View style={styles.formGroup}>
+          {/* <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Email Address</Text>
             <TextField placeholder="Type your email address" value={formik.values.email} onChangeText={formik.handleChange("email")} onBlur={formik.handleBlur("email")} error={formik.touched.email && formik.errors.email} />
-          </View>
+          </View> */}
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Phone Number (Optional)</Text>
             <TextField placeholder="Type your phone number" value={formik.values.phoneNumber} onChangeText={formik.handleChange("phoneNumber")} onBlur={formik.handleBlur("phoneNumber")} error={formik.touched.phoneNumber && formik.errors.phoneNumber} />
@@ -159,7 +215,7 @@ export default function EditProfileScreen() {
         </View>
 
         <View style={styles.button}>
-          <Button onPress={formik.handleSubmit} text="Update profile" />
+          <Button disabled={isLoading} onPress={formik.handleSubmit} text={isLoading ? "Loading..." : "Update profile"} />
         </View>
 
         {/* Use a light status bar on iOS to account for the black space above the modal */}

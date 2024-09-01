@@ -21,8 +21,6 @@ export default function TabLayout() {
   const [authUser, setAuthUser] = useState<Record<string, any>>({});
   const { user } = useContext(AuthenticatedUserContext);
 
-  console.log(user, "===");
-
   useEffect(() => {
     if (user === null) {
       const timer = setTimeout(() => {
@@ -49,8 +47,6 @@ export default function TabLayout() {
       fetchMember();
     }
   }, [user]);
-
-  console.log(authUser?.hasAdmin);
 
   return (
     <Tabs

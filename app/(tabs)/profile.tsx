@@ -72,12 +72,11 @@ export default function TabFourScreen() {
     },
   ];
 
-  console.log(authUser);
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Image source={ProfileImage} style={styles.avatar} />
+        <Image source={authUser?.profileImageUrl && { uri: authUser?.profileImageUrl }} style={styles.avatar} />
+
         <Text style={styles.name}>
           {authUser?.title} {authUser?.firstName} {authUser?.lastName}
         </Text>
@@ -173,6 +172,7 @@ const styles = StyleSheet.create({
     height: 100,
     aspectRatio: 1,
     borderRadius: 100,
+    backgroundColor: "lightgray",
   },
   name: {
     fontWeight: "bold",
