@@ -3,21 +3,18 @@ import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { Text, useThemeColor } from "@/components/ui/themed";
 import ImageCarousel from "@/components/carousel/image-carousel";
-import Button from "@/components/ui/button";
 import { useColorScheme } from "@/utils/use-color-scheme.web";
-import ProfileImage from "@/assets/images/member.png";
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import Colors from "@/constants/colors";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
-import { formatDate } from "@/utils";
 import { useUserStore } from "@/store";
 
 export default function MemberDetailsScreen() {
   const { email } = useLocalSearchParams();
   const { setEmail } = useUserStore();
 
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<Record<string, any>>({});
 
   useEffect(() => {
     async function fetchMember() {
@@ -42,32 +39,7 @@ export default function MemberDetailsScreen() {
 
   const colorScheme = useColorScheme();
 
-  const shadowColor = Colors[colorScheme ?? "light"].text;
   const borderColor = Colors[colorScheme ?? "light"].grey;
-
-  const data = [
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-  ];
 
   return (
     <View style={styles.container}>
@@ -130,7 +102,7 @@ export default function MemberDetailsScreen() {
           </View>
           <Text style={styles.sectionHeader}>Gallery</Text>
           <View style={{ height: 240, marginTop: 20 }}>
-            <ImageCarousel data={data} autoPlay={false} pagination={true} />
+            <ImageCarousel data={user?.galleryImageUrls} autoPlay={false} pagination={true} />
           </View>
         </View>
       </ScrollView>
@@ -166,6 +138,7 @@ const styles = StyleSheet.create({
     height: 100,
     aspectRatio: 1,
     borderRadius: 100,
+    backgroundColor: "lightgray",
   },
   name: {
     fontWeight: "bold",

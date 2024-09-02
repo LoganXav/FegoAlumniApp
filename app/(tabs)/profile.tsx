@@ -47,30 +47,6 @@ export default function TabFourScreen() {
   const colorScheme = useColorScheme();
   const borderColor = Colors[colorScheme ?? "light"].grey;
 
-  const data = [
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-    {
-      image: require("../../assets/images/selfie.png"),
-    },
-  ];
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -130,14 +106,10 @@ export default function TabFourScreen() {
             <Text style={{ fontSize: 16 }}>Industry</Text>
             <Text style={{ fontSize: 16 }}>{authUser?.mentorship === "yes" ? "Yes" : "No"}</Text>
           </View>
-          {authUser?.galleryImageUrls && (
-            <>
-              <Text style={styles.sectionHeader}>Gallery</Text>
-              <View style={{ height: 240, marginTop: 20 }}>
-                <ImageCarousel data={authUser?.galleryImageUrls} autoPlay={false} pagination={true} />
-              </View>
-            </>
-          )}
+          <Text style={styles.sectionHeader}>Gallery</Text>
+          <View style={{ height: 240, marginTop: 20 }}>
+            <ImageCarousel data={authUser?.galleryImageUrls} autoPlay={false} pagination={true} />
+          </View>
         </View>
         <View style={styles.button}>
           <Button onPress={handleSignOut} text="Sign out" />

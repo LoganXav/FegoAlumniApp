@@ -19,13 +19,6 @@ const CustomImage = ({ item, x, index, size, spacer }: Record<string, any>) => {
     }
   }, [item?.image]);
 
-  // useLayoutEffect(() => {
-  //   if (item?.image) {
-  //     const { width, height } = Image.resolveAssetSource(item?.image);
-  //     setAspectRatio(width / height);
-  //   }
-  // }, [item?.image]);
-
   // const style = useAnimatedStyle(() => {
   //   const scale = interpolate(x.value, [(index - 2) * size, (index - 1) * size, index * size], [0.8, 1, 0.8]);
   //   return {
@@ -41,7 +34,7 @@ const CustomImage = ({ item, x, index, size, spacer }: Record<string, any>) => {
   return (
     <View style={{ width: size }} key={index}>
       <Animated.View style={[styles.imageContainer, style]}>
-        <Image source={item?.image && { uri: item?.image }} style={[styles.image, { aspectRatio: aspectRatio }]} />
+        <Image source={item?.image && { uri: item?.image }} style={[styles.image, { aspectRatio }]} />
       </Animated.View>
     </View>
   );
@@ -58,5 +51,6 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: undefined,
+    backgroundColor: "lightgray",
   },
 });

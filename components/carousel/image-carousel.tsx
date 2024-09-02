@@ -1,23 +1,23 @@
 import { View, useWindowDimensions } from "react-native";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Animated, { useSharedValue, useAnimatedScrollHandler, useAnimatedRef } from "react-native-reanimated";
 import CustomImage from "./image-item";
 import Pagination from "./pagination";
 
-const ImageCarousel = ({ data, autoPlay, pagination }: Record<string, any>) => {
+const ImageCarousel = ({ data = [], autoPlay, pagination }: Record<string, any>) => {
   const scrollViewRef = useAnimatedRef() as any;
   const interval = useRef() as any;
   const [isAutoPlay, setIsAutoPlay] = useState(autoPlay);
-  const [newData, setNewData] = useState([...data, { key: "spacer-right" }]);
+  // const [newData, setNewData] = useState([...data, { key: "spacer-right" }]);
   const { width } = useWindowDimensions();
   const SIZE = width * 0.45;
   const SPACER = (width - SIZE) / 2;
   const x = useSharedValue(0);
   const offSet = useSharedValue(0);
 
-  // Update newData if data change
-  useEffect(() => {
-    setNewData([...data, { key: "spacer-right" }]);
+  // Update newData if data changes
+  const newData = useMemo(() => {
+    return [...data, { key: "spacer-right" }];
   }, [data]);
 
   const onScroll = useAnimatedScrollHandler({

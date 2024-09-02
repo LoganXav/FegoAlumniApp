@@ -97,7 +97,7 @@ export default function EditProfileScreen() {
       };
 
       // // Remove undefined fields
-      Object.keys(updatedFields).forEach((key) => (updatedFields[key] === undefined || updatedFields[key] === "") && delete updatedFields[key]);
+      Object.keys(updatedFields).forEach((key) => (updatedFields[key] === undefined || updatedFields[key] === "" || updatedFields[key] === null) && delete updatedFields[key]);
 
       await updateDoc(userRef, updatedFields);
 
