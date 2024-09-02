@@ -13,10 +13,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { db, storage } from "@/firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
-import { router } from "expo-router";
 import { AuthenticatedUserContext } from "@/contexts/auth-user-context";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { fetchImageAsBlob } from "@/utils";
+import ImageResizer from "react-native-image-resizer";
+import { router } from "expo-router";
 
 export default function EditProfileScreen() {
   const colorScheme = useColorScheme();
@@ -27,6 +28,7 @@ export default function EditProfileScreen() {
   const { user, setUser } = useContext(AuthenticatedUserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [profileImageUri, setProfileImageUri] = useState<string | null>(null);
+  const [galleryImages, setGalleryImages] = useState<string[] | null>(null);
 
   const handleEditProfile = async (values: any) => {
     try {
@@ -35,6 +37,7 @@ export default function EditProfileScreen() {
       const formattedDate = new Date(values.dateOfBirth).toISOString().split("T")[0];
 
       let profileImageUrl = null;
+      let galleryImageUrls;
 
       if (profileImageUri) {
         const storageRef = ref(storage, `profile/${values.email}-${Date.now()}`);
@@ -42,10 +45,41 @@ export default function EditProfileScreen() {
         profileImageUrl = await getDownloadURL(uploadResult.ref);
       }
 
+      if (galleryImages && galleryImages.length > 0) {
+        const uploadPromises = galleryImages.map(async (imageUri) => {
+          const storageRef = ref(storage, `gallery/${values.email}-${Date.now()}`);
+          const imageBlob = await fetchImageAsBlob(imageUri);
+
+          return new Promise((resolve, reject) => {
+            const uploadTask = uploadBytesResumable(storageRef, imageBlob);
+
+            uploadTask.on(
+              "state_changed",
+              (snapshot) => {
+                // You can add progress monitoring here if needed
+              },
+              (error) => {
+                Alert.alert("Couldn't update gallery");
+                console.error("Upload failed", error);
+                reject(error);
+              },
+              async () => {
+                const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                resolve(downloadUrl);
+              }
+            );
+          });
+        });
+        const uploadedUrls = await Promise.all(uploadPromises);
+
+        galleryImageUrls = uploadedUrls.map((url) => ({ image: url }));
+      }
+
       const userRef = doc(db, "members", user?.email);
 
       const updatedFields: any = {
         profileImageUrl,
+        galleryImageUrls,
         title: values.title.trim(),
         firstName: values.firstName.trim(),
         lastName: values.lastName.trim(),
@@ -62,7 +96,7 @@ export default function EditProfileScreen() {
         mentorship: values.mentorship.trim(),
       };
 
-      // Remove undefined fields
+      // // Remove undefined fields
       Object.keys(updatedFields).forEach((key) => (updatedFields[key] === undefined || updatedFields[key] === "") && delete updatedFields[key]);
 
       await updateDoc(userRef, updatedFields);
@@ -211,7 +245,7 @@ export default function EditProfileScreen() {
             </View>
           </View>
           <Text style={styles.sectionHeader}>Gallery</Text>
-          <MultiImageUpload imageLimit={5} />
+          <MultiImageUpload onImageSelect={setGalleryImages} imageLimit={5} />
         </View>
 
         <View style={styles.button}>

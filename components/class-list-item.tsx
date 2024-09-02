@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    backgroundColor: "grey",
+    backgroundColor: "lightgray",
   },
   detailsContainer: {
     paddingHorizontal: 16,

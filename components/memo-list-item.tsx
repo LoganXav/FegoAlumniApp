@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     width: 100,
     margin: 5,
     borderRadius: 5,
+    backgroundColor: "lightgray",
   },
   detailsContainer: {
     flex: 1,

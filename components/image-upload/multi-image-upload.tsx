@@ -6,7 +6,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useColorScheme } from "@/utils/use-color-scheme";
 import colors from "@/constants/colors";
 
-export default function MultiImageUpload({ imageLimit }: { imageLimit: number }) {
+export default function MultiImageUpload({ onImageSelect, imageLimit }: { onImageSelect: (uri: string[]) => void; imageLimit: number }) {
   const [galleryPhotos, setGalleryPhotos] = useState<string[]>([]);
   const colorScheme = useColorScheme();
   const defaultBgColor = colors[colorScheme ?? "light"].tabIconSelected;
@@ -14,21 +14,22 @@ export default function MultiImageUpload({ imageLimit }: { imageLimit: number })
   const pickGalleryImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: false,
+      allowsMultipleSelection: true,
       quality: 1,
     });
 
     if (!result.canceled && result.assets.length > 0) {
-      if (galleryPhotos.length < imageLimit) {
-        setGalleryPhotos([...galleryPhotos, result.assets[0].uri]);
-      } else {
-        alert(`You can only upload up to ${imageLimit} photos.`);
-      }
+      const selectedUris = result.assets.map((asset) => asset.uri);
+      const newPhotos = [...galleryPhotos, ...selectedUris].slice(0, imageLimit);
+      setGalleryPhotos(newPhotos);
+      onImageSelect(newPhotos);
     }
   };
 
   const removeGalleryImage = (uri: string) => {
-    setGalleryPhotos(galleryPhotos.filter((photo) => photo !== uri));
+    const updatedPhotos = galleryPhotos.filter((photo) => photo !== uri);
+    setGalleryPhotos(updatedPhotos);
+    onImageSelect(updatedPhotos);
   };
 
   return (

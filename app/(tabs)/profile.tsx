@@ -1,5 +1,4 @@
 import { Image, ScrollView, StyleSheet } from "react-native";
-import ProfileImage from "@/assets/images/selfie.png";
 import { useColorScheme } from "@/utils/use-color-scheme";
 import { Text, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
@@ -80,7 +79,7 @@ export default function TabFourScreen() {
         <Text style={styles.name}>
           {authUser?.title} {authUser?.firstName} {authUser?.lastName}
         </Text>
-        <Text style={{ fontSize: 16 }}>{authUser?.desc || "-"}</Text>
+        <Text style={{ fontSize: 16 }}>{authUser?.bio || "-"}</Text>
 
         <View style={styles.info}>
           <Text style={styles.sectionHeader}>Personal Information</Text>
@@ -91,7 +90,7 @@ export default function TabFourScreen() {
           </View>
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Email</Text>
-            <Text style={{ fontSize: 16 }}>{authUser?.email}</Text>
+            <Text style={{ fontSize: 16 }}>{authUser?.email || "-"}</Text>
           </View>
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Phone number</Text>
@@ -131,10 +130,14 @@ export default function TabFourScreen() {
             <Text style={{ fontSize: 16 }}>Industry</Text>
             <Text style={{ fontSize: 16 }}>{authUser?.mentorship === "yes" ? "Yes" : "No"}</Text>
           </View>
-          <Text style={styles.sectionHeader}>Gallery</Text>
-          <View style={{ height: 240, marginTop: 20 }}>
-            <ImageCarousel data={data} autoPlay={false} pagination={true} />
-          </View>
+          {authUser?.galleryImageUrls && (
+            <>
+              <Text style={styles.sectionHeader}>Gallery</Text>
+              <View style={{ height: 240, marginTop: 20 }}>
+                <ImageCarousel data={authUser?.galleryImageUrls} autoPlay={false} pagination={true} />
+              </View>
+            </>
+          )}
         </View>
         <View style={styles.button}>
           <Button onPress={handleSignOut} text="Sign out" />

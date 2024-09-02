@@ -8,7 +8,7 @@ const ImageCarousel = ({ data, autoPlay, pagination }: Record<string, any>) => {
   const scrollViewRef = useAnimatedRef() as any;
   const interval = useRef() as any;
   const [isAutoPlay, setIsAutoPlay] = useState(autoPlay);
-  const [newData, setNewData] = useState([{ key: "spacer-left" }, ...data, { key: "spacer-right" }]);
+  const [newData, setNewData] = useState([...data, { key: "spacer-right" }]);
   const { width } = useWindowDimensions();
   const SIZE = width * 0.45;
   const SPACER = (width - SIZE) / 2;
@@ -17,7 +17,7 @@ const ImageCarousel = ({ data, autoPlay, pagination }: Record<string, any>) => {
 
   // Update newData if data change
   useEffect(() => {
-    setNewData([{ key: "spacer-left" }, ...data, { key: "spacer-right" }]);
+    setNewData([...data, { key: "spacer-right" }]);
   }, [data]);
 
   const onScroll = useAnimatedScrollHandler({
