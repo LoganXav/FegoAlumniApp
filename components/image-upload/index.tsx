@@ -27,7 +27,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect, imagePreviewSt
       const pickerResult = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4, 3],
+        // aspect: [4, 3],
         quality: 1,
       });
 
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     // alignItems: "center",
   },
   imagePreview: {
-    width: "100%",
+    width: "45%",
     height: 200,
     marginBottom: 10,
     justifyContent: "center",

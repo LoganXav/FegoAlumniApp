@@ -45,10 +45,10 @@ export default function EventDetailScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      <View style={styles.coverImageContainer}>
+      {/* <View style={styles.coverImageContainer}>
         <Image source={EventCoverImage} style={styles.coverImage} />
         <View style={styles.overlay} />
-      </View>
+      </View> */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.title}>{event?.title}</Text>
         <Text style={styles.tagline}>{event?.tagline}</Text>

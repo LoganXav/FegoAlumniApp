@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
 
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 25,
   },
 
   container_PRIMARY: {
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: "bold",
     color: "white",
+    fontFamily: "JakartaSans",
   },
 
   text_PRIMARY: {},

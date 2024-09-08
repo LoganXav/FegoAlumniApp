@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, ScrollView, Platform, Image, Linking, TouchableOpacity } from "react-native";
+import { StyleSheet, ScrollView, Platform, Image, Linking, TouchableOpacity, Modal } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Text, View, useThemeColor } from "@/components/ui/themed";
 import { AntDesign } from "@expo/vector-icons";
@@ -14,6 +14,7 @@ export default function MemoDetailScreen() {
   const backgroundColor = useThemeColor({}, "background");
 
   const [memo, setMemo] = useState<any>(null);
+  const [isModalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     async function fetchMemo() {
@@ -40,24 +41,26 @@ export default function MemoDetailScreen() {
     fetchMemo();
   }, [title]);
 
-  const announcement = {
-    title: "SAMPLE ANNOUNCEMENT",
-    desc: "This announcement is concerning xyz",
-    link: "https://meet.google.com/txv-mwgz-fsv",
-    details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa facilis rem laudantium deleniti accusamus sed explicabo at repellat, fugiat ea, tempora suscipit. Perferendis tempore modi voluptatibus quibusdam aliquam ea illum natus autem repellat soluta, culparepellendus aspernatur inventore deleniti sapiente saepe alias, totam nesciunt ducimus asperiores voluptatem. Voluptatum impedit at quasi, perferendis consequatur minima expedita? Est, magnam quibusdam cum, iusto aspernatur libero laboriosam incidunt optio molestias sapiente similiquequo, quis impedit repellendus dicta expedita. Nesciunt alias provident praesentium unde vero dolor accusantium, assumenda labore autem quo. Voluptates exercitationem assumenda non. Perferendis repellat at officiis cum placeat possimus ea commodi. Porro? repellendus aspernatur inventoredeleniti sapiente saepe alias, totam nesciunt ducimus asperiores voluptatem. Voluptatum impedit at quasi, perferendis consequatur minima expedita? Est, magnam quibusdam cum, iusto aspernatur libero laboriosam incidunt optio molestias sapiente similique quo, quis impedit repellendus dicta",
-  };
-
   const handleLinkPress = (url: string) => {
     Linking.openURL(url).catch((err) => console.error("Failed to open URL:", err));
   };
 
+  const handleImagePress = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      <View style={styles.coverImageContainer}>
-        <Image source={memo?.imageUrl ? { uri: memo?.imageUrl } : EventCoverImage} style={styles.coverImage} />
-        <View style={styles.overlay} />
-      </View>
+      <TouchableOpacity onPress={handleImagePress}>
+        <View style={styles.coverImageContainer}>
+          <Image source={memo?.imageUrl ? { uri: memo?.imageUrl } : EventCoverImage} style={styles.coverImage} />
+          <View style={styles.overlay} />
+        </View>
+      </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.title}>{memo?.title}</Text>
         <Text style={styles.desc}>{memo?.desc}</Text>
@@ -83,6 +86,15 @@ export default function MemoDetailScreen() {
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       {/* <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} /> */}
+
+      <Modal visible={isModalVisible} transparent={true} onRequestClose={closeModal}>
+        <View style={styles.modalContainer}>
+          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+            <AntDesign name="closecircle" size={30} color="white" />
+          </TouchableOpacity>
+          <Image source={{ uri: memo?.imageUrl }} style={styles.fullscreenImage} />
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -95,8 +107,6 @@ const styles = StyleSheet.create({
   coverImage: {
     width: "100%",
     height: 200,
-    // borderBottomLeftRadius: 20,
-    // borderBottomRightRadius: 20,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject, // positions the overlay to cover the entire image
@@ -134,5 +144,23 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#1e90ff", // Styling the link color to be blue
     textDecorationLine: "underline", // Underline the link to make it more identifiable
+  },
+
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  closeButton: {
+    position: "absolute",
+    top: 40,
+    right: 20,
+    zIndex: 10,
+  },
+  fullscreenImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
   },
 });

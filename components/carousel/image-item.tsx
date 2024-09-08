@@ -1,9 +1,12 @@
-import { StyleSheet, Image, View } from "react-native";
+import { StyleSheet, Image, View, Modal, TouchableOpacity } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import Animated, { useAnimatedStyle, interpolate } from "react-native-reanimated";
+import { AntDesign } from "@expo/vector-icons";
 
 const CustomImage = ({ item, x, index, size, spacer }: Record<string, any>) => {
   const [aspectRatio, setAspectRatio] = useState(1);
+
+  const [isModalVisible, setModalVisible] = useState(false);
 
   useLayoutEffect(() => {
     if (item?.image) {
@@ -31,12 +34,35 @@ const CustomImage = ({ item, x, index, size, spacer }: Record<string, any>) => {
   if (!item?.image) {
     return <View style={{ width: spacer }} key={index} />;
   }
+
+  const handleImagePress = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
-    <View style={{ width: size }} key={index}>
-      <Animated.View style={[styles.imageContainer, style]}>
-        <Image source={item?.image && { uri: item?.image }} style={[styles.image, { aspectRatio }]} />
-      </Animated.View>
-    </View>
+    <>
+      <View style={{ width: size }} key={index}>
+        <TouchableOpacity onPress={handleImagePress}>
+          <View style={[styles.imageContainer]}>
+            <Image source={{ uri: item?.image }} style={[styles.image, { aspectRatio }]} />
+          </View>
+        </TouchableOpacity>
+      </View>
+
+      {/* Modal for full-screen image preview */}
+      <Modal visible={isModalVisible} transparent={true} onRequestClose={closeModal}>
+        <View style={styles.modalContainer}>
+          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+            <AntDesign name="closecircle" size={30} color="white" />
+          </TouchableOpacity>
+          <Image source={{ uri: item?.image }} style={styles.fullscreenImage} resizeMode="contain" />
+        </View>
+      </Modal>
+    </>
   );
 };
 
@@ -52,5 +78,23 @@ const styles = StyleSheet.create({
     width: "100%",
     height: undefined,
     backgroundColor: "lightgray",
+  },
+
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  closeButton: {
+    position: "absolute",
+    top: 40,
+    right: 20,
+    zIndex: 10,
+  },
+  fullscreenImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
   },
 });

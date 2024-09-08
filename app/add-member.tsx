@@ -13,7 +13,8 @@ import { auth, db } from "@/firebaseConfig";
 import { and, collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { router } from "expo-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { PASSWORD } from "@/constants/auth";
+import { REGULAR_PASSWORD } from "@/constants/auth";
+import { ADMIN_PASSWORD } from "@/constants/auth";
 
 export default function AddMemberScreen() {
   const colorScheme = useColorScheme();
@@ -50,7 +51,7 @@ export default function AddMemberScreen() {
         isDeceased: values.isDeceased,
       });
 
-      createUserWithEmailAndPassword(auth, values?.email, PASSWORD);
+      createUserWithEmailAndPassword(auth, values?.email, values.hasAdmin === "yes" ? ADMIN_PASSWORD : REGULAR_PASSWORD);
 
       setIsLoading(false);
 
