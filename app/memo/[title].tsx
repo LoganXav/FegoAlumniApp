@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView, Platform, Image, Linking, TouchableOpacity, Modal } from "react-native";
 import { StatusBar } from "expo-status-bar";

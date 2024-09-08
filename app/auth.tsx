@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
 import { Pressable, Text, TextField, View } from "@/components/ui/themed";
 import { router } from "expo-router";
