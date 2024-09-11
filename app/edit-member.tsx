@@ -8,7 +8,7 @@ import { useColorScheme } from "@/utils/use-color-scheme";
 import colors from "@/constants/colors";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { db } from "@/firebaseConfig";
+import { db } from "../firebase/firebaseConfig";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { router } from "expo-router";
 import { useUserStore } from "@/store";

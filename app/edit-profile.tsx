@@ -2,7 +2,13 @@ import React, { useContext, useState } from "react";
 import { RadioButton } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { StatusBar } from "expo-status-bar";
-import { Alert, Platform, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Alert,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { Text, TextField, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
 import { useColorScheme } from "@/utils/use-color-scheme";
@@ -11,10 +17,15 @@ import ImageUpload from "@/components/image-upload";
 import MultiImageUpload from "@/components/image-upload/multi-image-upload";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { db, storage } from "@/firebaseConfig";
+import { db, storage } from "../firebase/firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
 import { AuthenticatedUserContext } from "@/contexts/auth-user-context";
-import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { fetchImageAsBlob } from "@/utils";
 import ImageResizer from "react-native-image-resizer";
 import { router } from "expo-router";
@@ -34,20 +45,31 @@ export default function EditProfileScreen() {
     try {
       setIsLoading(true);
 
-      const formattedDate = new Date(values.dateOfBirth).toISOString().split("T")[0];
+      const formattedDate = new Date(values.dateOfBirth)
+        .toISOString()
+        .split("T")[0];
 
       let profileImageUrl = null;
       let galleryImageUrls;
 
       if (profileImageUri) {
-        const storageRef = ref(storage, `profile/${values.email}-${Date.now()}`);
-        const uploadResult = await uploadBytes(storageRef, await fetchImageAsBlob(profileImageUri));
+        const storageRef = ref(
+          storage,
+          `profile/${values.email}-${Date.now()}`,
+        );
+        const uploadResult = await uploadBytes(
+          storageRef,
+          await fetchImageAsBlob(profileImageUri),
+        );
         profileImageUrl = await getDownloadURL(uploadResult.ref);
       }
 
       if (galleryImages && galleryImages.length > 0) {
         const uploadPromises = galleryImages.map(async (imageUri) => {
-          const storageRef = ref(storage, `gallery/${values.email}-${Date.now()}`);
+          const storageRef = ref(
+            storage,
+            `gallery/${values.email}-${Date.now()}`,
+          );
           const imageBlob = await fetchImageAsBlob(imageUri);
 
           return new Promise((resolve, reject) => {
@@ -64,9 +86,11 @@ export default function EditProfileScreen() {
                 reject(error);
               },
               async () => {
-                const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                const downloadUrl = await getDownloadURL(
+                  uploadTask.snapshot.ref,
+                );
                 resolve(downloadUrl);
-              }
+              },
             );
           });
         });
@@ -97,7 +121,13 @@ export default function EditProfileScreen() {
       };
 
       // // Remove undefined fields
-      Object.keys(updatedFields).forEach((key) => (updatedFields[key] === undefined || updatedFields[key] === "" || updatedFields[key] === null) && delete updatedFields[key]);
+      Object.keys(updatedFields).forEach(
+        (key) =>
+          (updatedFields[key] === undefined ||
+            updatedFields[key] === "" ||
+            updatedFields[key] === null) &&
+          delete updatedFields[key],
+      );
 
       await updateDoc(userRef, updatedFields);
 
@@ -155,38 +185,92 @@ export default function EditProfileScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <ImageUpload imagePreviewStyle={styles.imagePreview} imageStyle={styles.imagePreview} onImageSelect={setProfileImageUri} />
+        <ImageUpload
+          imagePreviewStyle={styles.imagePreview}
+          imageStyle={styles.imagePreview}
+          onImageSelect={setProfileImageUri}
+        />
         <View style={styles.form}>
           <Text style={styles.sectionHeader}>Personal Information</Text>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Title</Text>
-            <TextField placeholder="Type your title (e.g Mr, Mrs, Engr, Chief)" value={formik.values.title} onChangeText={formik.handleChange("title")} onBlur={formik.handleBlur("title")} error={formik.touched.title && formik.errors.title} />
+            <TextField
+              placeholder="Type your title (e.g Mr, Mrs, Engr, Chief)"
+              value={formik.values.title}
+              onChangeText={formik.handleChange("title")}
+              onBlur={formik.handleBlur("title")}
+              error={formik.touched.title && formik.errors.title}
+            />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>First Name</Text>
-            <TextField placeholder="Type your first name" value={formik.values.firstName} onChangeText={formik.handleChange("firstName")} onBlur={formik.handleBlur("firstName")} error={formik.touched.firstName && formik.errors.firstName} />
+            <TextField
+              placeholder="Type your first name"
+              value={formik.values.firstName}
+              onChangeText={formik.handleChange("firstName")}
+              onBlur={formik.handleBlur("firstName")}
+              error={formik.touched.firstName && formik.errors.firstName}
+            />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Last Name</Text>
-            <TextField placeholder="Type your last name" value={formik.values.lastName} onChangeText={formik.handleChange("lastName")} onBlur={formik.handleBlur("lastName")} error={formik.touched.lastName && formik.errors.lastName} />
+            <TextField
+              placeholder="Type your last name"
+              value={formik.values.lastName}
+              onChangeText={formik.handleChange("lastName")}
+              onBlur={formik.handleBlur("lastName")}
+              error={formik.touched.lastName && formik.errors.lastName}
+            />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Gender</Text>
             <View style={styles.radioGroup}>
-              <RadioButton.Android color={defaultBgColor} value="male" status={formik.values.gender === "male" ? "checked" : "unchecked"} onPress={() => formik.setFieldValue("gender", "male")} />
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="male"
+                status={
+                  formik.values.gender === "male" ? "checked" : "unchecked"
+                }
+                onPress={() => formik.setFieldValue("gender", "male")}
+              />
               <Text>Male</Text>
-              <RadioButton.Android color={defaultBgColor} value="female" status={formik.values.gender === "female" ? "checked" : "unchecked"} onPress={() => formik.setFieldValue("gender", "female")} />
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="female"
+                status={
+                  formik.values.gender === "female" ? "checked" : "unchecked"
+                }
+                onPress={() => formik.setFieldValue("gender", "female")}
+              />
               <Text>Female</Text>
             </View>
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Date of Birth</Text>
-            <TextField placeholder="Select your date of birth" value={formik.values.dateOfBirth.toDateString()} onPressIn={() => setShowDatePicker(true)} error={formik.touched.dateOfBirth && formik.errors.dateOfBirth} />
-            {showDatePicker && <DateTimePicker value={formik.values.dateOfBirth} mode="date" display="default" onChange={onChangeDate} />}
+            <TextField
+              placeholder="Select your date of birth"
+              value={formik.values.dateOfBirth.toDateString()}
+              onPressIn={() => setShowDatePicker(true)}
+              error={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
+            />
+            {showDatePicker && (
+              <DateTimePicker
+                value={formik.values.dateOfBirth}
+                mode="date"
+                display="default"
+                onChange={onChangeDate}
+              />
+            )}
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Bio</Text>
-            <TextField placeholder="Type something fun about yourself" value={formik.values.bio} onChangeText={formik.handleChange("bio")} onBlur={formik.handleBlur("bio")} error={formik.touched.bio && formik.errors.bio} />
+            <TextField
+              placeholder="Type something fun about yourself"
+              value={formik.values.bio}
+              onChangeText={formik.handleChange("bio")}
+              onBlur={formik.handleBlur("bio")}
+              error={formik.touched.bio && formik.errors.bio}
+            />
           </View>
           <Text style={styles.sectionHeader}>Contact Details</Text>
           {/* <View style={styles.formGroup}>
@@ -195,52 +279,149 @@ export default function EditProfileScreen() {
           </View> */}
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Phone Number (Optional)</Text>
-            <TextField placeholder="Type your phone number" value={formik.values.phoneNumber} onChangeText={formik.handleChange("phoneNumber")} onBlur={formik.handleBlur("phoneNumber")} error={formik.touched.phoneNumber && formik.errors.phoneNumber} />
+            <TextField
+              placeholder="Type your phone number"
+              value={formik.values.phoneNumber}
+              onChangeText={formik.handleChange("phoneNumber")}
+              onBlur={formik.handleBlur("phoneNumber")}
+              error={formik.touched.phoneNumber && formik.errors.phoneNumber}
+            />
           </View>
           <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Location (Country, State, City)</Text>
-            <TextField placeholder="Type your location" value={formik.values.address} onChangeText={formik.handleChange("address")} onBlur={formik.handleBlur("address")} error={formik.touched.address && formik.errors.address} />
+            <Text style={styles.formLabel}>
+              Location (Country, State, City)
+            </Text>
+            <TextField
+              placeholder="Type your location"
+              value={formik.values.address}
+              onChangeText={formik.handleChange("address")}
+              onBlur={formik.handleBlur("address")}
+              error={formik.touched.address && formik.errors.address}
+            />
           </View>
-          <Text style={styles.sectionHeader}>Professional</Text>
+          <Text style={styles.sectionHeader}>Professional Information</Text>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Current Employer (Optional)</Text>
-            <TextField placeholder="Type your organization name" value={formik.values.currentEmployer} onChangeText={formik.handleChange("currentEmployer")} onBlur={formik.handleBlur("currentEmployer")} error={formik.touched.currentEmployer && formik.errors.currentEmployer} />
+            <TextField
+              placeholder="Type your organization name"
+              value={formik.values.currentEmployer}
+              onChangeText={formik.handleChange("currentEmployer")}
+              onBlur={formik.handleBlur("currentEmployer")}
+              error={
+                formik.touched.currentEmployer && formik.errors.currentEmployer
+              }
+            />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Job Title (Optional)</Text>
-            <TextField placeholder="Type your job title" value={formik.values.jobTitle} onChangeText={formik.handleChange("jobTitle")} onBlur={formik.handleBlur("jobTitle")} error={formik.touched.jobTitle && formik.errors.jobTitle} />
+            <TextField
+              placeholder="Type your job title"
+              value={formik.values.jobTitle}
+              onChangeText={formik.handleChange("jobTitle")}
+              onBlur={formik.handleBlur("jobTitle")}
+              error={formik.touched.jobTitle && formik.errors.jobTitle}
+            />
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Industry (Optional)</Text>
-            <TextField placeholder="Type your organization's industry" value={formik.values.industry} onChangeText={formik.handleChange("industry")} onBlur={formik.handleBlur("industry")} error={formik.touched.industry && formik.errors.industry} />
+            <TextField
+              placeholder="Type your organization's industry"
+              value={formik.values.industry}
+              onChangeText={formik.handleChange("industry")}
+              onBlur={formik.handleBlur("industry")}
+              error={formik.touched.industry && formik.errors.industry}
+            />
           </View>
           <Text style={styles.sectionHeader}>Networking Preferences</Text>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Open to networking?</Text>
             <View style={styles.radioGroup}>
-              <RadioButton.Android color={defaultBgColor} value="yes" status={formik.values.networking === "yes" ? "checked" : "unchecked"} onPress={() => formik.setFieldValue("networking", "yes")} />
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="yes"
+                status={
+                  formik.values.networking === "yes" ? "checked" : "unchecked"
+                }
+                onPress={() => formik.setFieldValue("networking", "yes")}
+              />
               <Text>Yes</Text>
-              <RadioButton.Android color={defaultBgColor} value="no" status={formik.values.networking === "no" ? "checked" : "unchecked"} onPress={() => formik.setFieldValue("networking", "no")} />
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="no"
+                status={
+                  formik.values.networking === "no" ? "checked" : "unchecked"
+                }
+                onPress={() => formik.setFieldValue("networking", "no")}
+              />
               <Text>No</Text>
             </View>
           </View>
           <View style={styles.formGroup}>
-            <Text style={styles.formLabel}>Preferred Contact Method (Calls/WhatsApp/Email)</Text>
+            <Text style={styles.formLabel}>
+              Preferred Contact Method (Calls/WhatsApp/Email)
+            </Text>
             <View style={styles.radioGroup}>
-              <RadioButton.Android color={defaultBgColor} value="calls" status={formik.values.preferredContact === "calls" ? "checked" : "unchecked"} onPress={() => formik.setFieldValue("preferredContact", "calls")} />
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="calls"
+                status={
+                  formik.values.preferredContact === "calls"
+                    ? "checked"
+                    : "unchecked"
+                }
+                onPress={() =>
+                  formik.setFieldValue("preferredContact", "calls")
+                }
+              />
               <Text>Calls</Text>
-              <RadioButton.Android color={defaultBgColor} value="whatsapp" status={formik.values.preferredContact === "whatsapp" ? "checked" : "unchecked"} onPress={() => formik.setFieldValue("preferredContact", "whatsapp")} />
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="whatsapp"
+                status={
+                  formik.values.preferredContact === "whatsapp"
+                    ? "checked"
+                    : "unchecked"
+                }
+                onPress={() =>
+                  formik.setFieldValue("preferredContact", "whatsapp")
+                }
+              />
               <Text>WhatsApp</Text>
-              <RadioButton.Android color={defaultBgColor} value="email" status={formik.values.preferredContact === "email" ? "checked" : "unchecked"} onPress={() => formik.setFieldValue("preferredContact", "email")} />
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="email"
+                status={
+                  formik.values.preferredContact === "email"
+                    ? "checked"
+                    : "unchecked"
+                }
+                onPress={() =>
+                  formik.setFieldValue("preferredContact", "email")
+                }
+              />
               <Text>Email</Text>
             </View>
           </View>
           <View style={styles.formGroup}>
             <Text style={styles.formLabel}>Willing to Mentor or Coach?</Text>
             <View style={styles.radioGroup}>
-              <RadioButton.Android color={defaultBgColor} value="yes" status={formik.values.mentorship === "yes" ? "checked" : "unchecked"} onPress={() => formik.setFieldValue("mentorship", "yes")} />
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="yes"
+                status={
+                  formik.values.mentorship === "yes" ? "checked" : "unchecked"
+                }
+                onPress={() => formik.setFieldValue("mentorship", "yes")}
+              />
               <Text>Yes</Text>
-              <RadioButton.Android color={defaultBgColor} value="no" status={formik.values.mentorship === "no" ? "checked" : "unchecked"} onPress={() => formik.setFieldValue("mentorship", "no")} />
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="no"
+                status={
+                  formik.values.mentorship === "no" ? "checked" : "unchecked"
+                }
+                onPress={() => formik.setFieldValue("mentorship", "no")}
+              />
               <Text>No</Text>
             </View>
           </View>
@@ -249,7 +430,11 @@ export default function EditProfileScreen() {
         </View>
 
         <View style={styles.button}>
-          <Button disabled={isLoading} onPress={formik.handleSubmit} text={isLoading ? "Loading..." : "Update profile"} />
+          <Button
+            disabled={isLoading}
+            onPress={formik.handleSubmit}
+            text={isLoading ? "Loading..." : "Update profile"}
+          />
         </View>
 
         {/* Use a light status bar on iOS to account for the black space above the modal */}

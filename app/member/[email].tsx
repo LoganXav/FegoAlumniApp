@@ -7,7 +7,7 @@ import { useColorScheme } from "@/utils/use-color-scheme.web";
 import { useLocalSearchParams } from "expo-router";
 import Colors from "@/constants/colors";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebaseConfig";
+import { db } from "../../firebase/firebaseConfig";
 import { useUserStore } from "@/store";
 
 export default function MemberDetailsScreen() {
@@ -71,7 +71,7 @@ export default function MemberDetailsScreen() {
             <Text style={{ fontSize: 16 }}>Location</Text>
             <Text style={{ fontSize: 16 }}>{user?.address || "-"}</Text>
           </View>
-          <Text style={styles.sectionHeader}>Professional</Text>
+          <Text style={styles.sectionHeader}>Professional Information</Text>
 
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Organization name</Text>
@@ -86,7 +86,7 @@ export default function MemberDetailsScreen() {
             <Text style={{ fontSize: 16 }}>{user?.industry || "-"}</Text>
           </View>
 
-          <Text style={styles.sectionHeader}>Networking</Text>
+          <Text style={styles.sectionHeader}>Networking Preferences</Text>
 
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Open to networking</Text>

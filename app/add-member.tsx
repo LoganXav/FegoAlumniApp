@@ -9,7 +9,7 @@ import { useColorScheme } from "@/utils/use-color-scheme";
 import colors from "@/constants/colors";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { auth, db } from "@/firebaseConfig";
+import { auth, db } from "../firebase/firebaseConfig";
 import { and, collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { router } from "expo-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -44,7 +44,7 @@ export default function AddMemberScreen() {
         lastName: values.lastName,
         gender: values.gender,
         dateOfBirth: formattedDate,
-        email: values.email,
+        email: values.email.trim(),
         phoneNumber: values.phoneNumber,
         address: values.address,
         hasAdmin: values.hasAdmin,

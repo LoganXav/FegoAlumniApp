@@ -5,7 +5,7 @@ import Button from "@/components/ui/button";
 import Colors from "@/constants/colors";
 import ImageCarousel from "@/components/carousel/image-carousel";
 import { signOut } from "firebase/auth";
-import { auth, db } from "@/firebaseConfig";
+import { auth, db } from "../../firebase/firebaseConfig";
 import { AuthenticatedUserContext } from "@/contexts/auth-user-context";
 import { useContext, useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
@@ -77,7 +77,7 @@ export default function TabFourScreen() {
             <Text style={{ fontSize: 16 }}>Location</Text>
             <Text style={{ fontSize: 16 }}>{authUser?.address || "-"}</Text>
           </View>
-          <Text style={styles.sectionHeader}>Professional</Text>
+          <Text style={styles.sectionHeader}>Professional Information</Text>
 
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Organization name</Text>
@@ -92,7 +92,7 @@ export default function TabFourScreen() {
             <Text style={{ fontSize: 16 }}>{authUser?.industry || "-"}</Text>
           </View>
 
-          <Text style={styles.sectionHeader}>Networking</Text>
+          <Text style={styles.sectionHeader}>Networking Preferences</Text>
 
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Open to networking</Text>

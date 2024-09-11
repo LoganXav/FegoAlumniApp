@@ -7,7 +7,7 @@ import { Text, View, useThemeColor } from "@/components/ui/themed";
 import { AntDesign } from "@expo/vector-icons";
 import EventCoverImage from "@/assets/images/cover.jpg";
 import { doc, getDoc, Timestamp } from "firebase/firestore";
-import { db } from "@/firebaseConfig";
+import { db } from "../../firebase/firebaseConfig";
 import { useLocalSearchParams } from "expo-router";
 import { formatDate, formatTime } from "@/utils";
 
@@ -53,22 +53,24 @@ export default function EventDetailScreen() {
       </View> */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.title}>{event?.title}</Text>
-        <Text style={styles.tagline}>{event?.tagline}</Text>
+        {event?.tagline && <Text style={styles.tagline}>{event?.tagline}</Text>}
         <View style={styles.detailGroup}>
-          <AntDesign name="find" size={15} color="grey" />
+          <AntDesign name="find" size={18} color="grey" />
           <Text>{event?.venue}</Text>
         </View>
         <View style={styles.detailGroup}>
-          <AntDesign name="calendar" size={15} color="grey" />
+          <AntDesign name="calendar" size={18} color="grey" />
           <Text>
-            From: {event?.startDate} To: {event?.endDate}
+            FROM: {event?.startDate} {"        "} TO: {event?.endDate}
           </Text>
         </View>
-        <View>
-          <Text style={styles.label}>About this Programme</Text>
-          <Text style={{ fontSize: 18 }}>{event?.description}</Text>
-        </View>
-        <Text style={styles.sectionHeader}>Day Activities</Text>
+        {event?.description && (
+          <View>
+            <Text style={styles.sectionHeader}>About this Programme</Text>
+            <Text style={{ fontSize: 18 }}>{event?.description}</Text>
+          </View>
+        )}
+        {event?.activities.length && <Text style={styles.sectionHeader}>Day Activities</Text>}
         {event?.activities.map((activity: any, index: any) => (
           <View key={index} style={styles.activityContainer}>
             <Text style={styles.activityTitle}>
@@ -118,6 +120,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    textTransform: "uppercase",
   },
   tagline: {
     fontSize: 16,
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
   detailGroup: {
     marginBottom: 15,
     flexDirection: "row",
-    gap: 5,
+    gap: 10,
     alignItems: "center",
   },
   label: {

@@ -8,7 +8,7 @@ import MemoListItem from "@/components/memo-list-item";
 import { Animations } from "@/constants/animations";
 import EmptyListInfo from "@/components/empty-list-info";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/firebaseConfig";
+import { db } from "../../firebase/firebaseConfig";
 import { formatDateTime } from "@/utils";
 
 export default function TabThreeScreen() {

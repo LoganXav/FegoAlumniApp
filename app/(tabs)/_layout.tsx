@@ -8,7 +8,7 @@ import TabBar from "@/components/layout/tab-bar";
 import { AntDesign } from "@expo/vector-icons";
 import { AuthenticatedUserContext } from "@/contexts/auth-user-context";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebaseConfig";
+import { db } from "../../firebase/firebaseConfig";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: { name: React.ComponentProps<typeof AntDesign>["name"]; color: string }) {

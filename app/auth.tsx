@@ -1,6 +1,12 @@
 // @ts-nocheck
 
-import React, { useCallback, useContext, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Pressable, Text, TextField, View } from "@/components/ui/themed";
 import { router } from "expo-router";
 import { Alert, Image, StyleSheet } from "react-native";
@@ -12,7 +18,7 @@ import EventCoverImage from "@/assets/images/cover.avif";
 import LogoImage from "@/assets/images/logo.png";
 import { useColorScheme } from "@/utils/use-color-scheme";
 import colors from "@/constants/colors";
-import { auth, db } from "@/firebaseConfig";
+import { auth, db } from "../firebase/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 // import { collection, getDocs, query, where } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
@@ -56,7 +62,11 @@ export default function LoginScreen() {
     try {
       setIsLoading(true);
 
-      const userCredential = await signInWithEmailAndPassword(auth, values.email.trim(), values.password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        values.email.trim(),
+        values.password,
+      );
 
       const authUser = userCredential?.user;
 
@@ -85,7 +95,16 @@ export default function LoginScreen() {
           <Image source={LogoImage} style={styles.logoImage} />
         </View>
         <View style={styles.logoText}>
-          <Text style={{ color: "white", fontSize: 30, fontWeight: 500, textAlign: "center" }}>FEGO 81-83 A'level Set</Text>
+          <Text
+            style={{
+              color: "white",
+              fontSize: 30,
+              fontWeight: 500,
+              textAlign: "center",
+            }}
+          >
+            FEGO 81-83 A'level Set
+          </Text>
         </View>
         {/* <View style={styles.introText}>
           <Text style={{ color: "white", fontSize: 65, fontFamily: "JakartaBold", lineHeight: 65 }}>The future is ours to live</Text>
@@ -93,16 +112,28 @@ export default function LoginScreen() {
 
         <View style={styles.getStarted}>
           <View />
-          <Pressable style={styles.socialButton} onPress={() => handleSnapPress(0)}>
+          <Pressable
+            style={styles.socialButton}
+            onPress={() => handleSnapPress(0)}
+          >
             <View style={[styles.getStartedButton, { backgroundColor }]}>
-              <Text style={{ color: "white", fontSize: 16, fontWeight: 600 }}>Get Started</Text>
+              <Text style={{ color: "white", fontSize: 16, fontWeight: 600 }}>
+                Get Started
+              </Text>
             </View>
           </Pressable>
         </View>
 
-        <BottomSheet ref={sheetRef} snapPoints={snapPoints} onChange={handleSheetChange} enablePanDownToClose={true}>
+        <BottomSheet
+          ref={sheetRef}
+          snapPoints={snapPoints}
+          onChange={handleSheetChange}
+          enablePanDownToClose={true}
+        >
           <BottomSheetView style={styles.contentContainer}>
-            <Text style={[styles.sheetHeader, { borderColor }]}>Let's get started</Text>
+            <Text style={[styles.sheetHeader, { borderColor }]}>
+              Let's get started
+            </Text>
             <Formik
               initialValues={{
                 email: "",
@@ -111,31 +142,82 @@ export default function LoginScreen() {
               validationSchema={validationSchema}
               onSubmit={(values) => handleSignIn(values)}
             >
-              {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
+              {({
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                values,
+                errors,
+                touched,
+                setFieldValue,
+              }) => (
                 <View style={styles.form}>
                   <View style={styles.formGroup}>
                     <Text style={styles.formLabel}>Email</Text>
-                    <TextField style={{ borderColor: borderColor, color: "black" }} onChangeText={handleChange("email")} onFocus={() => handleSnapPress(1)} onBlur={() => handleBlur("email")} value={values.email} placeholder="Enter your email address" />
-                    {touched.email && errors.email && <Text style={{ fontSize: 14, color: "red" }}>{errors.email}</Text>}
+                    <TextField
+                      style={{ borderColor: borderColor, color: "black" }}
+                      onChangeText={handleChange("email")}
+                      onFocus={() => handleSnapPress(1)}
+                      onBlur={() => handleBlur("email")}
+                      value={values.email}
+                      placeholder="Enter your email address"
+                    />
+                    {touched.email && errors.email && (
+                      <Text style={{ fontSize: 14, color: "red" }}>
+                        {errors.email}
+                      </Text>
+                    )}
                   </View>
 
                   <View style={styles.formGroup}>
                     <Text style={styles.formLabel}>Password</Text>
-                    <TextField style={{ color: "black" }} onChangeText={handleChange("password")} onFocus={() => handleSnapPress(1)} onBlur={handleBlur("password")} value={values.password} placeholder="Enter your password" />
-                    {touched.password && errors.password && <Text style={{ fontSize: 14, color: "red" }}>{errors.password}</Text>}
+                    <TextField
+                      style={{ color: "black" }}
+                      onChangeText={handleChange("password")}
+                      onFocus={() => handleSnapPress(1)}
+                      onBlur={handleBlur("password")}
+                      value={values.password}
+                      placeholder="Enter your password"
+                    />
+                    {touched.password && errors.password && (
+                      <Text style={{ fontSize: 14, color: "red" }}>
+                        {errors.password}
+                      </Text>
+                    )}
                   </View>
 
                   <View style={styles.socialButtonContainer}>
-                    <Pressable style={styles.socialButton} disabled={isLoading} onPress={() => handleSubmit()}>
-                      <View style={[styles.getStartedButton, { backgroundColor }]}>
-                        <Text style={{ color: "white", fontSize: 16, fontWeight: 600 }}>Sign in</Text>
+                    <Pressable
+                      style={styles.socialButton}
+                      disabled={isLoading}
+                      onPress={() => handleSubmit()}
+                    >
+                      <View
+                        style={[styles.getStartedButton, { backgroundColor }]}
+                      >
+                        <Text
+                          style={{
+                            color: "white",
+                            fontSize: 16,
+                            fontWeight: 600,
+                          }}
+                        >
+                          Sign in
+                        </Text>
                       </View>
                     </Pressable>
                   </View>
                 </View>
               )}
             </Formik>
-            <View style={{ width: "100%", height: "100%", marginTop: 50 }}>
+            <View
+              style={{
+                width: "100%",
+                height: "100%",
+                marginTop: 80,
+                backgroundColor: "white",
+              }}
+            >
               <Image source={LogoImage} style={styles.bottomImage} />
             </View>
           </BottomSheetView>

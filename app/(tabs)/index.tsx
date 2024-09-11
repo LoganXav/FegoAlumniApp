@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { StyleSheet } from "react-native";
 import { Text, View, Pressable } from "@/components/ui/themed";
 import { Agenda, AgendaEntry } from "react-native-calendars";
@@ -6,7 +7,7 @@ import { CalendarData, RootTabScreenProps } from "@/types";
 import { router } from "expo-router";
 import colors from "@/constants/colors";
 import { Timestamp, collection, getDocs } from "firebase/firestore";
-import { db } from "@/firebaseConfig";
+import { db } from "../../firebase/firebaseConfig";
 import { useEffect, useState } from "react";
 import { Event, processEventForCalendar } from "@/utils";
 
@@ -19,12 +20,17 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events"
   const textColor = colors[colorScheme ?? "light"].text;
 
   const renderItem = (event: AgendaEntry, isFirst: boolean) => {
-    const fontSize = isFirst ? 23 : 18;
+    const fontSize = isFirst ? 20 : 18;
 
     return (
       <Pressable style={[styles.item, { height: event.height }]} onPress={() => router.push(`/event/${event.title}`)}>
-        <Text style={{ fontSize, fontWeight: "500" }}>{event.title}</Text>
-        {!isFirst && <Text style={{ fontSize: 15 }}>{event.desc}</Text>}
+        <Text style={{ fontSize, fontWeight: "bold", textTransform: "uppercase" }}>{event.title}</Text>
+        {!isFirst && (
+          <View style={{ flexDirection: "row", gap: 20 }}>
+            <Text style={{ fontSize: 15 }}>{event.desc}</Text>
+            <Text style={{ fontSize: 15 }}>(activity)</Text>
+          </View>
+        )}
         {isFirst && (
           <>
             <Text style={{ fontSize: 15 }}>Venue: {event.venue}</Text>

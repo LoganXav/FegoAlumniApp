@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
-import { db, storage } from "@/firebaseConfig";
+import { db, storage } from "../firebase/firebaseConfig";
 import { router } from "expo-router";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { fetchImageAsBlob } from "@/utils";
@@ -30,7 +30,7 @@ export default function AddMemoScreen() {
       }
 
       await setDoc(doc(db, "memo", values.title), {
-        title: values.title,
+        title: values.title.trim(),
         desc: values.desc,
         link: values.link,
         details: values.details,

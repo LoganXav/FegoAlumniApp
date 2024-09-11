@@ -7,7 +7,7 @@ import { AntDesign } from "@expo/vector-icons";
 import EventCoverImage from "@/assets/images/cover.jpg";
 import { useLocalSearchParams } from "expo-router";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebaseConfig";
+import { db } from "../../firebase/firebaseConfig";
 import { formatDateTime } from "@/utils";
 
 export default function MemoDetailScreen() {
@@ -42,6 +42,8 @@ export default function MemoDetailScreen() {
     fetchMemo();
   }, [title]);
 
+  console.log(memo, "===");
+
   const handleLinkPress = (url: string) => {
     Linking.openURL(url).catch((err) => console.error("Failed to open URL:", err));
   };
@@ -58,7 +60,7 @@ export default function MemoDetailScreen() {
     <View style={[styles.container, { backgroundColor }]}>
       <TouchableOpacity onPress={handleImagePress}>
         <View style={styles.coverImageContainer}>
-          <Image source={memo?.imageUrl ? { uri: memo?.imageUrl } : EventCoverImage} style={styles.coverImage} />
+          <Image source={memo?.imageUrl && { uri: memo?.imageUrl }} style={styles.coverImage} />
           <View style={styles.overlay} />
         </View>
       </TouchableOpacity>
@@ -108,6 +110,7 @@ const styles = StyleSheet.create({
   coverImage: {
     width: "100%",
     height: 200,
+    backgroundColor: "lightgray",
   },
   overlay: {
     ...StyleSheet.absoluteFillObject, // positions the overlay to cover the entire image
@@ -126,6 +129,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    textTransform: "uppercase",
   },
   desc: {
     fontSize: 16,
@@ -139,12 +143,13 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 20,
-    fontWeight: "500",
+    fontWeight: "bold",
+    marginVertical: 20,
   },
   link: {
     fontSize: 18,
-    color: "#1e90ff", // Styling the link color to be blue
-    textDecorationLine: "underline", // Underline the link to make it more identifiable
+    color: "#1e90ff",
+    textDecorationLine: "underline",
   },
 
   modalContainer: {

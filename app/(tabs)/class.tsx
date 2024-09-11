@@ -7,7 +7,7 @@ import { Animations } from "@/constants/animations";
 import EmptyListInfo from "@/components/empty-list-info";
 import { useNavigation } from "expo-router";
 import ClassListItem from "@/components/class-list-item";
-import { db } from "@/firebaseConfig";
+import { db } from "../../firebase/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 
 export default function TabTwoScreen({}) {
