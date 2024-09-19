@@ -4,15 +4,21 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView, Platform, Image } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Text, View, useThemeColor } from "@/components/ui/themed";
-import { AntDesign } from "@expo/vector-icons";
 import EventCoverImage from "@/assets/images/cover.jpg";
 import { doc, getDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import { useLocalSearchParams } from "expo-router";
 import { formatDate, formatTime } from "@/utils";
+import { AntDesign } from "@expo/vector-icons";
+import { ActivityIndicator } from "react-native-paper";
+import Colors from "@/constants/colors";
+import { useColorScheme } from "@/utils/use-color-scheme.web";
 
 export default function EventDetailScreen() {
   const backgroundColor = useThemeColor({}, "background");
+  const colorScheme = useColorScheme();
+  const defaultBgColor = Colors[colorScheme ?? "light"].tabIconSelected;
+  const [isLoading, setIsLoading] = useState(true);
   const { title } = useLocalSearchParams();
   const [event, setEvent] = useState<any>(null);
 
@@ -40,10 +46,21 @@ export default function EventDetailScreen() {
         }
       } catch (error) {
         console.error("Error while fetching event <---->", error);
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchEvent();
   }, [title]);
+
+  if (isLoading) {
+    // Show loading spinner in the center of the screen
+    return (
+      <View style={[styles.loadingContainer, { backgroundColor }]}>
+        <ActivityIndicator size="large" color={defaultBgColor} />
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
@@ -164,5 +181,10 @@ const styles = StyleSheet.create({
   },
   timeValue: {
     fontSize: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

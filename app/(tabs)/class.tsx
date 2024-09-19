@@ -1,6 +1,6 @@
 import { Dimensions, FlatList, StyleSheet } from "react-native";
 
-import { View } from "@/components/ui/themed";
+import { useThemeColor, View } from "@/components/ui/themed";
 import * as Animatable from "react-native-animatable";
 import { useEffect, useRef, useState } from "react";
 import { Animations } from "@/constants/animations";
@@ -9,12 +9,18 @@ import { useNavigation } from "expo-router";
 import ClassListItem from "@/components/class-list-item";
 import { db } from "../../firebase/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
+import Colors from "@/constants/colors";
+import { useColorScheme } from "@/utils/use-color-scheme.web";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function TabTwoScreen({}) {
   const navigation = useNavigation();
   const viewRef = useRef(null) as any;
   const animation = Animations[Math.floor(Math.random() * Animations.length)];
-
+  const colorScheme = useColorScheme();
+  const backgroundColor = useThemeColor({}, "background");
+  const defaultBgColor = Colors[colorScheme ?? "light"].tabIconSelected;
+  const [isLoading, setIsLoading] = useState(true);
   const [members, setMembers] = useState<any>([]);
 
   useEffect(() => {
@@ -31,6 +37,8 @@ export default function TabTwoScreen({}) {
         setMembers(membersArray);
       } catch (error) {
         console.error("Error fetching members <----->", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -59,6 +67,15 @@ export default function TabTwoScreen({}) {
     };
   }, [navigation]);
 
+  if (isLoading) {
+    // Show loading spinner in the center of the screen
+    return (
+      <View style={[styles.loadingContainer, { backgroundColor }]}>
+        <ActivityIndicator size="large" color={defaultBgColor} />
+      </View>
+    );
+  }
+
   return (
     <Animatable.View ref={viewRef} easing={"ease-in-out-circ"} duration={500}>
       <FlatList data={members} keyExtractor={(_, i) => String(i)} numColumns={2} renderItem={renderItem} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }} ListEmptyComponent={ListEmptyComponent} />
@@ -71,5 +88,10 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
     alignItems: "center",
     justifyContent: "center",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

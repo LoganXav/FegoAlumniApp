@@ -1,7 +1,7 @@
 import { Dimensions, FlatList, StyleSheet } from "react-native";
 
 import * as Animatable from "react-native-animatable";
-import { View } from "@/components/ui/themed";
+import { useThemeColor, View } from "@/components/ui/themed";
 import { useEffect, useRef, useState } from "react";
 import { useNavigation } from "expo-router";
 import MemoListItem from "@/components/memo-list-item";
@@ -10,10 +10,17 @@ import EmptyListInfo from "@/components/empty-list-info";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import { formatDateTime } from "@/utils";
+import Colors from "@/constants/colors";
+import { useColorScheme } from "@/utils/use-color-scheme.web";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function TabThreeScreen() {
   const viewRef = useRef(null) as any;
   const navigation = useNavigation();
+  const colorScheme = useColorScheme();
+  const backgroundColor = useThemeColor({}, "background");
+  const defaultBgColor = Colors[colorScheme ?? "light"].tabIconSelected;
+  const [isLoading, setIsLoading] = useState(true);
   const animation = Animations[Math.floor(Math.random() * Animations.length)];
 
   const [memo, setMemo] = useState<any>([]);
@@ -38,6 +45,8 @@ export default function TabThreeScreen() {
         setMemo(memoArray);
       } catch (error) {
         console.error("Error fetching memo <----->", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -66,6 +75,15 @@ export default function TabThreeScreen() {
     };
   }, [navigation]);
 
+  if (isLoading) {
+    // Show loading spinner in the center of the screen
+    return (
+      <View style={[styles.loadingContainer, { backgroundColor }]}>
+        <ActivityIndicator size="large" color={defaultBgColor} />
+      </View>
+    );
+  }
+
   return (
     <Animatable.View ref={viewRef} easing={"ease-in-out-circ"} duration={500}>
       <FlatList data={memo} keyExtractor={(_, i) => String(i)} numColumns={1} renderItem={renderItem} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }} ListEmptyComponent={ListEmptyComponent} />
@@ -78,5 +96,10 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
     alignItems: "center",
     justifyContent: "center",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

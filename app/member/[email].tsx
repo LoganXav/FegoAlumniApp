@@ -9,10 +9,16 @@ import Colors from "@/constants/colors";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import { useUserStore } from "@/store";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function MemberDetailsScreen() {
   const { email } = useLocalSearchParams();
   const { setEmail } = useUserStore();
+  const backgroundColor = useThemeColor({}, "background");
+  const colorScheme = useColorScheme();
+  const borderColor = Colors[colorScheme ?? "light"].grey;
+  const defaultBgColor = Colors[colorScheme ?? "light"].tabIconSelected;
+  const [isLoading, setIsLoading] = useState(true);
 
   const [user, setUser] = useState<Record<string, any>>({});
 
@@ -32,14 +38,21 @@ export default function MemberDetailsScreen() {
         }
       } catch (error) {
         console.error("Error while fetching member <---->", error);
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchMember();
   }, [email]);
 
-  const colorScheme = useColorScheme();
-
-  const borderColor = Colors[colorScheme ?? "light"].grey;
+  if (isLoading) {
+    // Show loading spinner in the center of the screen
+    return (
+      <View style={[styles.loadingContainer, { backgroundColor }]}>
+        <ActivityIndicator size="large" color={defaultBgColor} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -161,5 +174,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderWidth: 0.1669,
     borderRadius: 8,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

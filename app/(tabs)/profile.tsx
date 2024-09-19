@@ -1,6 +1,6 @@
 import { Image, ScrollView, StyleSheet } from "react-native";
 import { useColorScheme } from "@/utils/use-color-scheme";
-import { Text, View } from "@/components/ui/themed";
+import { Text, useThemeColor, View } from "@/components/ui/themed";
 import Button from "@/components/ui/button";
 import Colors from "@/constants/colors";
 import ImageCarousel from "@/components/carousel/image-carousel";
@@ -9,10 +9,16 @@ import { auth, db } from "../../firebase/firebaseConfig";
 import { AuthenticatedUserContext } from "@/contexts/auth-user-context";
 import { useContext, useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function TabFourScreen() {
   const { user, setUser } = useContext(AuthenticatedUserContext);
 
+  const colorScheme = useColorScheme();
+  const borderColor = Colors[colorScheme ?? "light"].grey;
+  const defaultBgColor = Colors[colorScheme ?? "light"].tabIconSelected;
+  const backgroundColor = useThemeColor({}, "background");
+  const [isLoading, setIsLoading] = useState(true);
   const [authUser, setAuthUser] = useState<Record<string, any>>({});
 
   useEffect(() => {
@@ -30,6 +36,8 @@ export default function TabFourScreen() {
         }
       } catch (error) {
         console.error("Error while fetching member <---->", error);
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchMember();
@@ -44,8 +52,14 @@ export default function TabFourScreen() {
     }
   }
 
-  const colorScheme = useColorScheme();
-  const borderColor = Colors[colorScheme ?? "light"].grey;
+  if (isLoading) {
+    // Show loading spinner in the center of the screen
+    return (
+      <View style={[styles.loadingContainer, { backgroundColor }]}>
+        <ActivityIndicator size="large" color={defaultBgColor} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -170,5 +184,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderWidth: 0.1669,
     borderRadius: 8,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

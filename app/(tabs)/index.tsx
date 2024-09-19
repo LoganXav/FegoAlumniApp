@@ -11,20 +11,30 @@ import { db } from "../../firebase/firebaseConfig";
 import { useEffect, useState } from "react";
 import { Event, processEventForCalendar } from "@/utils";
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events">) {
+export default function TabOneScreen({
+  navigation,
+}: RootTabScreenProps<"Events">) {
   const colorScheme = useColorScheme();
   const [events, setEvents] = useState<CalendarData>({});
 
   const backgroundColor = colors[colorScheme ?? "light"].background;
-  const selectedBackgroundColor = colors[colorScheme ?? "light"].tabIconSelected;
+  const selectedBackgroundColor =
+    colors[colorScheme ?? "light"].tabIconSelected;
   const textColor = colors[colorScheme ?? "light"].text;
 
   const renderItem = (event: AgendaEntry, isFirst: boolean) => {
     const fontSize = isFirst ? 20 : 18;
 
     return (
-      <Pressable style={[styles.item, { height: event.height }]} onPress={() => router.push(`/event/${event.title}`)}>
-        <Text style={{ fontSize, fontWeight: "bold", textTransform: "uppercase" }}>{event.title}</Text>
+      <Pressable
+        style={[styles.item, { height: event.height }]}
+        onPress={() => router.push(`/event/${event.title}`)}
+      >
+        <Text
+          style={{ fontSize, fontWeight: "bold", textTransform: "uppercase" }}
+        >
+          {event.title}
+        </Text>
         {!isFirst && (
           <View style={{ flexDirection: "row", gap: 20 }}>
             <Text style={{ fontSize: 15 }}>{event.desc}</Text>
@@ -43,8 +53,15 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events"
 
   const renderEmptyDate = () => {
     return (
-      <View style={[styles.emptyDate, { backgroundColor: "lightgrey" }]}>
-        <Text style={[{ color: "white" }]}>No event</Text>
+      <View style={styles.emptyContainer}>
+        {/* <Image */}
+        {/*   source={{ uri: "https://example.com/empty-calendar.png" }} // Replace with an actual image URL */}
+        {/*   style={styles.image} */}
+        {/* /> */}
+        <Text style={styles.message}>
+          No events scheduled for this day. Take some time to relax or plan
+          something special!
+        </Text>
       </View>
     );
   };
@@ -57,8 +74,14 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<"Events"
 
         querySnapshot.forEach((doc) => {
           const docData = doc.data();
-          const startDate = docData.startDate instanceof Timestamp ? docData.startDate.toDate() : new Date(docData.startDate);
-          const endDate = docData.endDate instanceof Timestamp ? docData.endDate.toDate() : new Date(docData.endDate);
+          const startDate =
+            docData.startDate instanceof Timestamp
+              ? docData.startDate.toDate()
+              : new Date(docData.startDate);
+          const endDate =
+            docData.endDate instanceof Timestamp
+              ? docData.endDate.toDate()
+              : new Date(docData.endDate);
 
           const event = {
             ...docData,
@@ -124,9 +147,24 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 17,
   },
-  emptyDate: {
-    height: 50,
+  emptyContainer: {
     flex: 1,
-    paddingTop: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: 80,
+    paddingHorizontal: 20,
+    backgroundColor: "#f0f0f5",
+  },
+  image: {
+    width: 150,
+    height: 150,
+    marginBottom: 20,
+    opacity: 0.7, // Adds a subtle transparency effect
+  },
+  message: {
+    fontSize: 18,
+    textAlign: "center",
+    color: "#555",
+    fontWeight: "600",
   },
 });

@@ -1,18 +1,23 @@
-// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView, Platform, Image, Linking, TouchableOpacity, Modal } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Text, View, useThemeColor } from "@/components/ui/themed";
 import { AntDesign } from "@expo/vector-icons";
-import EventCoverImage from "@/assets/images/cover.jpg";
+
 import { useLocalSearchParams } from "expo-router";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
+import Colors from "@/constants/colors";
+import { useColorScheme } from "@/utils/use-color-scheme.web";
+import { ActivityIndicator } from "react-native-paper";
 import { formatDateTime } from "@/utils";
 
 export default function MemoDetailScreen() {
   const { title } = useLocalSearchParams();
+  const colorScheme = useColorScheme();
   const backgroundColor = useThemeColor({}, "background");
+  const defaultBgColor = Colors[colorScheme ?? "light"].tabIconSelected;
+  const [isLoading, setIsLoading] = useState(true);
 
   const [memo, setMemo] = useState<any>(null);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -37,12 +42,12 @@ export default function MemoDetailScreen() {
         }
       } catch (error) {
         console.error("Error while fetching memo <---->", error);
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchMemo();
   }, [title]);
-
-  console.log(memo, "===");
 
   const handleLinkPress = (url: string) => {
     Linking.openURL(url).catch((err) => console.error("Failed to open URL:", err));
@@ -64,28 +69,36 @@ export default function MemoDetailScreen() {
           <View style={styles.overlay} />
         </View>
       </TouchableOpacity>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>{memo?.title}</Text>
-        <Text style={styles.desc}>{memo?.desc}</Text>
 
-        <View style={styles.detailGroup}>
-          <AntDesign name="calendar" size={15} color="grey" />
-          <Text>{memo?.time}</Text>
+      {isLoading ? (
+        // Show loading spinner in the center of the screen
+        <View style={[styles.loadingContainer, { backgroundColor }]}>
+          <ActivityIndicator size="large" color={defaultBgColor} />
         </View>
+      ) : (
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <Text style={styles.title}>{memo?.title}</Text>
+          <Text style={styles.desc}>{memo?.desc}</Text>
 
-        <View>
-          <Text style={styles.label}>Announcement</Text>
-          <Text style={{ fontSize: 18 }}>{memo?.details}</Text>
-        </View>
-        {memo?.link && (
           <View style={styles.detailGroup}>
-            <Text style={styles.label}>Related Link: </Text>
-            <TouchableOpacity onPress={() => handleLinkPress(memo?.link)}>
-              <Text style={styles.link}>{memo?.link}</Text>
-            </TouchableOpacity>
+            <AntDesign name="calendar" size={15} color="grey" />
+            <Text>{memo?.time}</Text>
           </View>
-        )}
-      </ScrollView>
+
+          <View>
+            <Text style={styles.label}>Announcement</Text>
+            <Text style={{ fontSize: 18 }}>{memo?.details}</Text>
+          </View>
+          {memo?.link && (
+            <View style={styles.detailGroup}>
+              <Text style={styles.label}>Related Link: </Text>
+              <TouchableOpacity onPress={() => handleLinkPress(memo?.link)}>
+                <Text style={styles.link}>{memo?.link}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </ScrollView>
+      )}
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       {/* <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} /> */}
@@ -168,5 +181,10 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "contain",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
