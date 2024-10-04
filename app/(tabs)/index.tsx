@@ -25,11 +25,8 @@ export default function TabOneScreen({
   const renderItem = (event: AgendaEntry, isFirst: boolean) => {
     const fontSize = isFirst ? 20 : 18;
 
-    return (
-      <Pressable
-        style={[styles.item, { height: event.height }]}
-        onPress={() => router.push(`/event/${event.title}`)}
-      >
+    const content = (
+      <>
         <Text
           style={{ fontSize, fontWeight: "bold", textTransform: "uppercase" }}
         >
@@ -47,7 +44,18 @@ export default function TabOneScreen({
             <Text style={{ fontSize: 15 }}>Tag: {event.tag}</Text>
           </>
         )}
+      </>
+    );
+
+    return isFirst ? (
+      <Pressable
+        style={[styles.item, { height: event.height }]}
+        onPress={() => router.push(`/event/${event.title}`)}
+      >
+        {content}
       </Pressable>
+    ) : (
+      <View style={[styles.item, { height: event.height }]}>{content}</View>
     );
   };
 

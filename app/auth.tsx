@@ -14,7 +14,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 // import Button from "@/components/ui/button";
 // import { Dimensions } from "react-native";
-import EventCoverImage from "@/assets/images/cover.avif";
+import EventCoverImage from "../assets/images/cover.jpg";
 import LogoImage from "@/assets/images/logo.png";
 import { useColorScheme } from "@/utils/use-color-scheme";
 import colors from "@/constants/colors";

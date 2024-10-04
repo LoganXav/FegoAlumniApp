@@ -57,7 +57,10 @@ export default function MemberDetailsScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Image source={user?.profileImageUrl && { uri: user?.profileImageUrl }} style={styles.avatar} />
+        <Image
+          source={user?.profileImageUrl && { uri: user?.profileImageUrl }}
+          style={styles.avatar}
+        />
         <Text style={styles.name}>
           {user?.firstName} {user?.lastName}
         </Text>
@@ -79,7 +82,10 @@ export default function MemberDetailsScreen() {
             <Text style={{ fontSize: 16 }}>Phone number</Text>
             <Text style={{ fontSize: 16 }}>{user?.phoneNumber || "-"}</Text>
           </View>
-
+          <View style={[styles.infoCard, { borderColor }]}>
+            <Text style={{ fontSize: 16 }}>School House</Text>
+            <Text style={{ fontSize: 16 }}>{user?.house || "-"}</Text>
+          </View>
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Location</Text>
             <Text style={{ fontSize: 16 }}>{user?.address || "-"}</Text>
@@ -103,19 +109,27 @@ export default function MemberDetailsScreen() {
 
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Open to networking</Text>
-            <Text style={{ fontSize: 16 }}>{user?.networking === "yes" ? "Yes" : "No"}</Text>
+            <Text style={{ fontSize: 16 }}>
+              {user?.networking === "yes" ? "Yes" : "No"}
+            </Text>
           </View>
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Preferred contact method</Text>
             <Text style={{ fontSize: 16 }}>{user?.preferredContact}</Text>
           </View>
           <View style={[styles.infoCard, { borderColor }]}>
-            <Text style={{ fontSize: 16 }}>Industry</Text>
-            <Text style={{ fontSize: 16 }}>{user?.mentorship === "yes" ? "Yes" : "No"}</Text>
+            <Text style={{ fontSize: 16 }}>Willing to Mentor</Text>
+            <Text style={{ fontSize: 16 }}>
+              {user?.mentorship === "yes" ? "Yes" : "No"}
+            </Text>
           </View>
           <Text style={styles.sectionHeader}>Gallery</Text>
           <View style={{ height: 240, marginTop: 20 }}>
-            <ImageCarousel data={user?.galleryImageUrls} autoPlay={false} pagination={true} />
+            <ImageCarousel
+              data={user?.galleryImageUrls}
+              autoPlay={false}
+              pagination={true}
+            />
           </View>
         </View>
       </ScrollView>

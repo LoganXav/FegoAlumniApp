@@ -64,7 +64,12 @@ export default function TabFourScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Image source={authUser?.profileImageUrl && { uri: authUser?.profileImageUrl }} style={styles.avatar} />
+        <Image
+          source={
+            authUser?.profileImageUrl && { uri: authUser?.profileImageUrl }
+          }
+          style={styles.avatar}
+        />
 
         <Text style={styles.name}>
           {authUser?.title} {authUser?.firstName} {authUser?.lastName}
@@ -86,7 +91,10 @@ export default function TabFourScreen() {
             <Text style={{ fontSize: 16 }}>Phone number</Text>
             <Text style={{ fontSize: 16 }}>{authUser?.phoneNumber || "-"}</Text>
           </View>
-
+          <View style={[styles.infoCard, { borderColor }]}>
+            <Text style={{ fontSize: 16 }}>School House</Text>
+            <Text style={{ fontSize: 16 }}>{authUser?.house || "-"}</Text>
+          </View>
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Location</Text>
             <Text style={{ fontSize: 16 }}>{authUser?.address || "-"}</Text>
@@ -95,7 +103,9 @@ export default function TabFourScreen() {
 
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Organization name</Text>
-            <Text style={{ fontSize: 16 }}>{authUser?.currentEmployer || "-"}</Text>
+            <Text style={{ fontSize: 16 }}>
+              {authUser?.currentEmployer || "-"}
+            </Text>
           </View>
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Job title</Text>
@@ -110,19 +120,27 @@ export default function TabFourScreen() {
 
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Open to networking</Text>
-            <Text style={{ fontSize: 16 }}>{authUser?.networking === "yes" ? "Yes" : "No"}</Text>
+            <Text style={{ fontSize: 16 }}>
+              {authUser?.networking === "yes" ? "Yes" : "No"}
+            </Text>
           </View>
           <View style={[styles.infoCard, { borderColor }]}>
             <Text style={{ fontSize: 16 }}>Preferred contact method</Text>
             <Text style={{ fontSize: 16 }}>{authUser?.preferredContact}</Text>
           </View>
           <View style={[styles.infoCard, { borderColor }]}>
-            <Text style={{ fontSize: 16 }}>Industry</Text>
-            <Text style={{ fontSize: 16 }}>{authUser?.mentorship === "yes" ? "Yes" : "No"}</Text>
+            <Text style={{ fontSize: 16 }}>Willing to Mentor</Text>
+            <Text style={{ fontSize: 16 }}>
+              {authUser?.mentorship === "yes" ? "Yes" : "No"}
+            </Text>
           </View>
           <Text style={styles.sectionHeader}>Gallery</Text>
           <View style={{ height: 240, marginTop: 20 }}>
-            <ImageCarousel data={authUser?.galleryImageUrls} autoPlay={false} pagination={true} />
+            <ImageCarousel
+              data={authUser?.galleryImageUrls}
+              autoPlay={false}
+              pagination={true}
+            />
           </View>
         </View>
         <View style={styles.button}>

@@ -108,6 +108,7 @@ export default function EditProfileScreen() {
         firstName: values.firstName.trim(),
         lastName: values.lastName.trim(),
         gender: values.gender.trim(),
+        house: values.house,
         dateOfBirth: formattedDate,
         bio: values.bio.trim(),
         phoneNumber: values.phoneNumber.trim(),
@@ -146,6 +147,7 @@ export default function EditProfileScreen() {
       firstName: "",
       lastName: "",
       gender: "male",
+      house: "",
       dateOfBirth: new Date(),
       bio: "",
       email: "",
@@ -243,6 +245,50 @@ export default function EditProfileScreen() {
                 onPress={() => formik.setFieldValue("gender", "female")}
               />
               <Text>Female</Text>
+            </View>
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.formLabel}>School House</Text>
+            <View style={styles.radioGroup}>
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="Chad"
+                status={
+                  formik.values.house === "Chad" ? "checked" : "unchecked"
+                }
+                onPress={() => formik.setFieldValue("house", "Chad")}
+              />
+              <Text>Chad</Text>
+
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="Cross"
+                status={
+                  formik.values.house === "Cross" ? "checked" : "unchecked"
+                }
+                onPress={() => formik.setFieldValue("house", "Cross")}
+              />
+              <Text>Cross</Text>
+
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="Niger"
+                status={
+                  formik.values.house === "Niger" ? "checked" : "unchecked"
+                }
+                onPress={() => formik.setFieldValue("house", "Niger")}
+              />
+              <Text>Niger</Text>
+
+              <RadioButton.Android
+                color={defaultBgColor}
+                value="Osun"
+                status={
+                  formik.values.house === "Osun" ? "checked" : "unchecked"
+                }
+                onPress={() => formik.setFieldValue("house", "Osun")}
+              />
+              <Text>Osun</Text>
             </View>
           </View>
           <View style={styles.formGroup}>
@@ -363,40 +409,40 @@ export default function EditProfileScreen() {
             <View style={styles.radioGroup}>
               <RadioButton.Android
                 color={defaultBgColor}
-                value="calls"
+                value="Calls"
                 status={
-                  formik.values.preferredContact === "calls"
+                  formik.values.preferredContact === "Calls"
                     ? "checked"
                     : "unchecked"
                 }
                 onPress={() =>
-                  formik.setFieldValue("preferredContact", "calls")
+                  formik.setFieldValue("preferredContact", "Calls")
                 }
               />
               <Text>Calls</Text>
               <RadioButton.Android
                 color={defaultBgColor}
-                value="whatsapp"
+                value="Whatsapp"
                 status={
-                  formik.values.preferredContact === "whatsapp"
+                  formik.values.preferredContact === "Whatsapp"
                     ? "checked"
                     : "unchecked"
                 }
                 onPress={() =>
-                  formik.setFieldValue("preferredContact", "whatsapp")
+                  formik.setFieldValue("preferredContact", "Whatsapp")
                 }
               />
               <Text>WhatsApp</Text>
               <RadioButton.Android
                 color={defaultBgColor}
-                value="email"
+                value="Email"
                 status={
-                  formik.values.preferredContact === "email"
+                  formik.values.preferredContact === "Email"
                     ? "checked"
                     : "unchecked"
                 }
                 onPress={() =>
-                  formik.setFieldValue("preferredContact", "email")
+                  formik.setFieldValue("preferredContact", "Email")
                 }
               />
               <Text>Email</Text>
